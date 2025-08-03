@@ -56,7 +56,11 @@ Home Security Support Project.
 4. Faça upload do firmware.
 5. Remova GPIO0 do GND e reinicie para rodar o projeto.
 
----
 
-Se precisar de esquema visual ou passo a passo para um caso específico (relé, sensor, automação), só pedir!
+
+## Referências
+
+* [ESP-01 functional features, pin configuration, applications and relationship with ESP-01s and ESP8266](https://www.ariat-tech.com/blog/esp-01-functional-features,pin-configuration,applications-and-relationship-with-esp-01s-and-esp8266.html)
+
+
 
