@@ -1,58 +1,58 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
-// Configuração da rede Wi-Fi
+// Wi-Fi network configuration
 const char* ssid = "PU2CLR";
 const char* password = "pu2clr123456";
 
-// Defina o IP fixo e os parâmetros da rede
-IPAddress local_IP(10, 0, 0, 191);     // <--- Troque para o IP desejado
-IPAddress gateway(10, 0, 0, 1);        // IP do seu roteador/gateway
+// Set fixed IP and network parameters
+IPAddress local_IP(10, 0, 0, 191);     // <--- Change to desired IP
+IPAddress gateway(10, 0, 0, 1);        // Your router/gateway IP
 IPAddress subnet(255, 255, 255, 0);
-IPAddress primaryDNS(8, 8, 8, 8);          // Opcional
-IPAddress secondaryDNS(8, 8, 4, 4);        // Opcional
+IPAddress primaryDNS(8, 8, 8, 8);          // Optional
+IPAddress secondaryDNS(8, 8, 4, 4);        // Optional
 
-#define PIN_RELE 0 // Pino de controle do relé (Geralmente GPIO0 no ESP-01S)
+#define PIN_RELAY 0 // Relay control pin (Usually GPIO0 on ESP-01S)
 
 ESP8266WebServer server(80);
-bool releLigado = false;
+bool relayOn = false;
 
-// Funções de controle do relé
-void ligaRele() {
-  digitalWrite(PIN_RELE, LOW); // Relé ativo em LOW na maioria dos módulos
-  releLigado = true;
-  server.send(200, "text/plain", "Relé LIGADO");
+// Relay control functions
+void turnOnRelay() {
+  digitalWrite(PIN_RELAY, LOW); // Relay active LOW on most modules
+  relayOn = true;
+  server.send(200, "text/plain", "Relay ON");
 }
-void desligaRele() {
-  digitalWrite(PIN_RELE, HIGH); // Desativa o relé
-  releLigado = false;
-  server.send(200, "text/plain", "Relé DESLIGADO");
+void turnOffRelay() {
+  digitalWrite(PIN_RELAY, HIGH); // Deactivate relay
+  relayOn = false;
+  server.send(200, "text/plain", "Relay OFF");
 }
-void statusRele() {
-  String msg = "<html><body><h2>Status do Relé:</h2>";
-  msg += "<p>Relé está: <b>" + String(releLigado ? "LIGADO" : "DESLIGADO") + "</b></p>";
-  msg += "<a href=\"/on\">Ligar</a> | <a href=\"/off\">Desligar</a>";
+void relayStatus() {
+  String msg = "<html><body><h2>Relay Status:</h2>";
+  msg += "<p>Relay is: <b>" + String(relayOn ? "ON" : "OFF") + "</b></p>";
+  msg += "<a href=\"/on\">Turn On</a> | <a href=\"/off\">Turn Off</a>";
   msg += "</body></html>";
   server.send(200, "text/html", msg);
 }
 
 void setup() {
-  pinMode(PIN_RELE, OUTPUT);
-  digitalWrite(PIN_RELE, HIGH); // Relé começa desligado
+  pinMode(PIN_RELAY, OUTPUT);
+  digitalWrite(PIN_RELAY, HIGH); // Relay starts off
 
-  // Configura Wi-Fi com IP fixo
+  // Configure Wi-Fi with fixed IP
   WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS);
   WiFi.begin(ssid, password);
 
-  // Aguarda conexão
+  // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
 
-  // Inicializa o servidor web
-  server.on("/", statusRele);
-  server.on("/on", ligaRele);
-  server.on("/off", desligaRele);
+  // Initialize web server
+  server.on("/", relayStatus);
+  server.on("/on", turnOnRelay);
+  server.on("/off", turnOffRelay);
   server.begin();
 }
 

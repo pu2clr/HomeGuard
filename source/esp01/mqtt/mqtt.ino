@@ -1,33 +1,33 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-// ======== Configurações da REDE Wi-Fi ========
-const char* ssid = "SEU_SSID";
-const char* password = "SUA_SENHA";
+// ======== Wi-Fi Network Configuration ========
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
 
-// IP fixo do ESP-01S
-IPAddress local_IP(192, 168, 18, 101);  // Escolha um IP livre
+// ESP-01S fixed IP
+IPAddress local_IP(192, 168, 18, 101);  // Choose a free IP
 IPAddress gateway(192, 168, 18, 1);
 IPAddress subnet(255, 255, 255, 0);
 
-// ======== Configurações do BROKER MQTT ========
-const char* mqtt_server = "192.168.18.2"; // IP do broker MQTT local (ajuste para o seu)
-const int   mqtt_port   = 1883;           // Porta padrão MQTT
-const char* mqtt_user   = "";             // Usuário, se configurado (ou deixe "")
-const char* mqtt_pass   = "";             // Senha, se configurado (ou deixe "")
+// ======== MQTT Broker Configuration ========
+const char* mqtt_server = "192.168.18.2"; // Local MQTT broker IP (adjust to yours)
+const int   mqtt_port   = 1883;           // Standard MQTT port
+const char* mqtt_user   = "";             // Username, if configured (or leave "")
+const char* mqtt_pass   = "";             // Password, if configured (or leave "")
 
-// ======== Configuração do RELÉ ========
-#define PIN_RELE 0    // Use 0 (GPIO0) ou 2 (GPIO2), depende do seu módulo
+// ======== Relay Configuration ========
+#define PIN_RELAY 0    // Use 0 (GPIO0) or 2 (GPIO2), depends on your module
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-const char* TOPICO_CMD = "casa/rele1/cmnd";  // Tópico para comandos
-const char* TOPICO_STA = "casa/rele1/stat";  // Tópico para status
+const char* TOPIC_CMD = "home/relay1/cmnd";  // Topic for commands
+const char* TOPIC_STA = "home/relay1/stat";  // Topic for status
 
-bool releLigado = false;
+bool relayOn = false;
 
-// ======== Função para processar mensagens MQTT ========
+// ======== Function to process MQTT messages ========
 void callback(char* topic, byte* payload, unsigned int length) {
   String msg;
   for (unsigned int i = 0; i < length; i++) {
@@ -36,22 +36,22 @@ void callback(char* topic, byte* payload, unsigned int length) {
   msg.trim();
 
   if (msg.equalsIgnoreCase("ON")) {
-    digitalWrite(PIN_RELE, LOW);    // Ativo em LOW na maioria dos módulos
-    releLigado = true;
-    client.publish(TOPICO_STA, "ON");
+    digitalWrite(PIN_RELAY, LOW);    // Active LOW on most modules
+    relayOn = true;
+    client.publish(TOPIC_STA, "ON");
   } else if (msg.equalsIgnoreCase("OFF")) {
-    digitalWrite(PIN_RELE, HIGH);
-    releLigado = false;
-    client.publish(TOPICO_STA, "OFF");
+    digitalWrite(PIN_RELAY, HIGH);
+    relayOn = false;
+    client.publish(TOPIC_STA, "OFF");
   }
 }
 
-// ======== Reconectar ao MQTT se necessário ========
+// ======== Reconnect to MQTT if necessary ========
 void reconnect() {
   while (!client.connected()) {
     if (client.connect("ESP01S_Relay", mqtt_user, mqtt_pass)) {
-      client.subscribe(TOPICO_CMD);
-      client.publish(TOPICO_STA, releLigado ? "ON" : "OFF");
+      client.subscribe(TOPIC_CMD);
+      client.publish(TOPIC_STA, relayOn ? "ON" : "OFF");
     } else {
       delay(3000);
     }
@@ -59,8 +59,8 @@ void reconnect() {
 }
 
 void setup() {
-  pinMode(PIN_RELE, OUTPUT);
-  digitalWrite(PIN_RELE, HIGH);  // Relé começa desligado
+  pinMode(PIN_RELAY, OUTPUT);
+  digitalWrite(PIN_RELAY, HIGH);  // Relay starts off
 
   WiFi.config(local_IP, gateway, subnet);
   WiFi.begin(ssid, password);

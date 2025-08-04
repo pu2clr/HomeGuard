@@ -1,0 +1,9 @@
+{
+  "active": true,
+  "hour": 23,
+  "minute": 0,
+  "duration": 0,
+  "action": false,
+  "days": "1234567",
+  "description": "Security mode - turn off all devices at 11:00 PM daily"
+}

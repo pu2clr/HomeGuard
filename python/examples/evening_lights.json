@@ -1,0 +1,9 @@
+{
+  "active": true,
+  "hour": 20,
+  "minute": 30,
+  "duration": 120,
+  "action": true,
+  "days": "1234567",
+  "description": "Turn on lights every day at 8:30 PM for 2 hours"
+}
