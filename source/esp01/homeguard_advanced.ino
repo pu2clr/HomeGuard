@@ -11,14 +11,14 @@
 #include <EEPROM.h>
 
 // ======== Wi-Fi Configuration ========
-const char* ssid = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
+const char* ssid = "APRC";
+const char* password = "Ap69Rc642023";
 
 // ======== MQTT Broker Configuration ========
-const char* mqtt_server = "YOUR_MQTT_BROKER_IP";   // e.g., "192.168.1.100"
+const char* mqtt_server = "192.168.18.6";   // e.g., "192.168.1.100"
 const int   mqtt_port = 1883;
-const char* mqtt_user = "deviceuser";              // MQTT username
-const char* mqtt_pass = "your_device_password";    // MQTT password
+const char* mqtt_user = "homeguard";              // MQTT username
+const char* mqtt_pass = "pu2clr123456";    // MQTT password
 
 // ======== Hardware Configuration ========
 #define PIN_RELAY 0      // GPIO0 for relay control

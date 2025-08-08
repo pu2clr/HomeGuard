@@ -2,12 +2,12 @@
 #include <ESP8266WebServer.h>
 
 // Wi-Fi network configuration
-const char* ssid = "PU2CLR";
-const char* password = "pu2clr123456";
+const char* ssid = "APRC";
+const char* password = "Ap69Rc642023";
 
-// Set fixed IP and network parameters
-IPAddress local_IP(10, 0, 0, 191);     // <--- Change to desired IP
-IPAddress gateway(10, 0, 0, 1);        // Your router/gateway IP
+// Set fixed IP and network parameters 
+IPAddress local_IP(192, 168, 18, 191);     // <--- Change to desired IP
+IPAddress gateway(192, 168, 18, 1);        // Your router/gateway IP
 IPAddress subnet(255, 255, 255, 0);
 IPAddress primaryDNS(8, 8, 8, 8);          // Optional
 IPAddress secondaryDNS(8, 8, 4, 4);        // Optional
