@@ -60,9 +60,9 @@ unsigned long lastMotionTime = 0;
 unsigned long lastHeartbeat = 0;
 
 // ======== Configuration Variables ========
-unsigned long motionTimeout = 30000;        // 30 seconds - time to keep "DETECTED" status
-unsigned long heartbeatInterval = 60000;    // 60 seconds - heartbeat interval
-unsigned long debounceDelay = 2000;         // 2 seconds - debounce delay to avoid false triggers
+unsigned long motionTimeout = 10000;        // 30 seconds - time to keep "DETECTED" status
+unsigned long heartbeatInterval = 20000;    // 60 seconds - heartbeat interval
+unsigned long debounceDelay = 1000;         // 2 seconds - debounce delay to avoid false triggers
 bool enableHeartbeat = true;
 String deviceLocation = "Living Room";       // Configurable location name
 
