@@ -22,6 +22,14 @@ esp01/
 - Basic authentication support
 - Status reporting
 
+### Motion Detector (`mqtt/motion_detector.ino`)
+- **New Feature!** PIR motion sensor integration
+- Remote monitoring via MQTT
+- Configurable sensitivity and timeout
+- JSON event reporting
+- Device identification by MAC address
+- Real-time alerts and status
+
 ### Advanced MQTT Example (`mqtt/homeguard_advanced.ino`)
 - **Features:**
   - DHCP support for automatic IP assignment
@@ -74,7 +82,15 @@ const char* mqtt_user = "deviceuser";
 const char* mqtt_pass = "your_password";
 ```
 
-### Hardware Settings
+### Motion Sensor Setup (`mqtt/motion_detector.ino`)
+```
+PIR Sensor VCC -> 3.3V
+PIR Sensor GND -> GND
+PIR Sensor OUT -> GPIO2
+Optional LED   -> GPIO0 (with 220Ω resistor)
+```
+
+### Basic Relay Setup
 ```cpp
 #define PIN_RELAY 0    // Relay control pin
 #define PIN_SENSOR 2   // Motion sensor pin (if available)
@@ -82,7 +98,22 @@ const char* mqtt_pass = "your_password";
 
 ## Usage Examples
 
-### Basic Commands
+### Motion Detection Commands
+```bash
+# Monitor motion events
+mosquitto_sub -h BROKER_IP -t "home/motion1/motion" -u USER -P PASS
+
+# Get motion detector status  
+mosquitto_pub -h BROKER_IP -t "home/motion1/cmnd" -m "STATUS" -u USER -P PASS
+
+# Configure sensitivity
+mosquitto_pub -h BROKER_IP -t "home/motion1/cmnd" -m "SENSITIVITY_HIGH" -u USER -P PASS
+
+# Set location
+mosquitto_pub -h BROKER_IP -t "home/motion1/cmnd" -m "LOCATION_Kitchen" -u USER -P PASS
+```
+
+### Basic Relay Commands
 ```bash
 # Turn relay ON
 mosquitto_pub -h BROKER_IP -t "homeguard/DEVICE_ID/cmnd" -m "ON"

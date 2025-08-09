@@ -1,4 +1,10 @@
 /**
+  HomeGuard Relay Control Module for ESP-01S
+  
+  Hardware connections:
+  - Relay Module IN -> GPIO0 (PIN 0)
+  - Relay Module VCC -> 3.3V
+  - Relay Module GND -> GND
 
   Install mosquitto broker
 
@@ -6,9 +12,9 @@
 
   Start service:  brew services restart mosquitto   (on macOS)
 
-  Monitoring  mosquitto_sub -h 127.0.0.1 -u homeguard -P pu2clr123456  -t "#" -v 
+  Monitoring: mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "#" -v 
 
-  Send command: Example: mosquitto_pub -h <BROKER_IP> -t home/relay1/cmnd -m "ON" -u <USUARIO> -P <SENHA>
+  Send command: mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
 
 */
 
@@ -42,7 +48,7 @@ PubSubClient client(espClient);
 const char* TOPIC_CMD = "home/relay1/cmnd";  // Topic for commands
 const char* TOPIC_STA = "home/relay1/stat";  // Topic for status
 
-// Monitoring: mosquitto_sub -h 127.0.0.1 -u homeguard -P pu2clr123456  -t "#" -v 
+// Monitoring: mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "#" -v 
 
 bool relayOn = false;
 
