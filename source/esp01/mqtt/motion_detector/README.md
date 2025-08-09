@@ -1,25 +1,25 @@
 # HomeGuard Motion Detector Module
 
-Este sketch transforma o ESP-01S em um detector de movimento inteligente, baseado no código `mqtt.ino` que já está funcionando perfeitamente em seu ambiente.
+This sketch transforms the ESP-01S into an intelligent motion detector, based on the working `mqtt.ino` code that is already functioning perfectly in your environment.
 
-## Características
+## Features
 
-- **Detecção de Movimento:** Usando sensor PIR para monitoramento de presença
-- **Comunicação MQTT:** Integração completa com broker Mosquitto
-- **Configuração Remota:** Ajuste de sensibilidade e timeout via MQTT
-- **Identificação Única:** ID baseado no MAC address do dispositivo
-- **Monitoramento em Tempo Real:** Status e eventos via MQTT
-- **Heartbeat:** Verificação periódica de conectividade
+- **Motion Detection:** Using PIR sensor for presence monitoring
+- **MQTT Communication:** Complete integration with Mosquitto broker
+- **Remote Configuration:** Sensitivity and timeout adjustment via MQTT
+- **Unique Identification:** ID based on device MAC address
+- **Real-time Monitoring:** Status and events via MQTT
+- **Heartbeat:** Periodic connectivity verification
 
-## Hardware Necessário
+## Required Hardware
 
-### Componentes:
+### Components:
 - 1x ESP-01S
-- 1x Sensor PIR (HC-SR501 ou similar)
-- 1x Fonte 3.3V estável
-- Cabos de conexão
+- 1x PIR Sensor (HC-SR501 or similar)
+- 1x Stable 3.3V power supply
+- Connection wires
 
-### Conexões:
+### Connections:
 
 ```
 ESP-01S          PIR Sensor
@@ -28,95 +28,95 @@ ESP-01S          PIR Sensor
 GND       <----> GND
 GPIO2     <----> OUT
 
-Opcional (LED de status):
-GPIO0     <----> LED (através de resistor 220Ω)
+Optional (Status LED):
+GPIO0     <----> LED (through 220Ω resistor)
 ```
 
-**⚠️ IMPORTANTE:** Use apenas 3.3V! Nunca 5V no ESP-01S.
+**⚠️ IMPORTANT:** Use only 3.3V! Never 5V on ESP-01S.
 
-## Configuração do Código
+## Code Configuration
 
-### IP e Rede (baseado no seu mqtt.ino funcionando):
+### IP and Network (based on your working mqtt.ino):
 ```cpp
 const char* ssid = "APRC";
 const char* password = "Ap69Rc642023";
-IPAddress local_IP(192, 168, 18, 193);  // IP diferente do relé
+IPAddress local_IP(192, 168, 18, 193);  // Different IP from relay
 ```
 
-### Broker MQTT (mesmas configurações que funcionam):
+### MQTT Broker (same settings that work):
 ```cpp
 const char* mqtt_server = "192.168.18.6";
 const char* mqtt_user = "homeguard";
 const char* mqtt_pass = "pu2clr123456";
 ```
 
-## Estrutura dos Tópicos MQTT
+## MQTT Topic Structure
 
 ```
 home/motion1/
-├── cmnd        # Comandos para o dispositivo
-├── status      # Status geral do dispositivo (JSON)
-├── motion      # Eventos de movimento (JSON)
-├── heartbeat   # Heartbeat do dispositivo (JSON)
-└── config      # Confirmações de configuração
+├── cmnd        # Commands to the device
+├── status      # General device status (JSON)
+├── motion      # Motion events (JSON)
+├── heartbeat   # Device heartbeat (JSON)
+└── config      # Configuration confirmations
 ```
 
-## Comandos MQTT Disponíveis
+## Available MQTT Commands
 
-### Monitoramento Geral:
+### General Monitoring:
 ```bash
-# Monitorar todos os eventos do detector
+# Monitor all detector events
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
 
-# Monitorar apenas detecções de movimento
+# Monitor only motion detections
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/motion1/motion" -v
 ```
 
-### Comandos de Controle:
+### Control Commands:
 ```bash
-# Obter status completo do dispositivo
+# Get complete device status
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 
-# Reiniciar o dispositivo
+# Restart device
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "RESET" -u homeguard -P pu2clr123456
 
-# Configurar localização
+# Configure location
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
 ```
 
-### Configuração de Sensibilidade:
+### Sensitivity Configuration:
 ```bash
-# Alta sensibilidade (1 segundo de debounce)
+# High sensitivity (1 second debounce)
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
 
-# Sensibilidade normal (2 segundos de debounce) 
+# Normal sensitivity (2 seconds debounce) 
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "SENSITIVITY_NORMAL" -u homeguard -P pu2clr123456
 
-# Baixa sensibilidade (5 segundos de debounce)
+# Low sensitivity (5 seconds debounce)
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "SENSITIVITY_LOW" -u homeguard -P pu2clr123456
 ```
 
-### Configuração de Timeout:
+### Timeout Configuration:
 ```bash
-# Definir timeout de movimento para 30 segundos
+# Set motion timeout to 30 seconds
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "TIMEOUT_30" -u homeguard -P pu2clr123456
 
-# Definir timeout de movimento para 60 segundos
+# Set motion timeout to 60 seconds
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "TIMEOUT_60" -u homeguard -P pu2clr123456
 ```
 
-### Controle de Heartbeat:
+### Heartbeat Control:
 ```bash
-# Habilitar heartbeat
+# Enable heartbeat
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
 
-# Desabilitar heartbeat
+# Disable heartbeat
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "HEARTBEAT_OFF" -u homeguard -P pu2clr123456
 ```
 
-## Exemplos de Mensagens
+## Message Examples
 
-### Status do Dispositivo:
+### Device Status:
 ```json
 {
   "device_id": "motion_a1b2c3",
@@ -132,7 +132,7 @@ mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "HEARTBEAT_OFF" -u homegua
 }
 ```
 
-### Evento de Movimento Detectado:
+### Motion Detected Event:
 ```json
 {
   "device_id": "motion_a1b2c3",
@@ -143,7 +143,7 @@ mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "HEARTBEAT_OFF" -u homegua
 }
 ```
 
-### Evento de Movimento Limpo:
+### Motion Cleared Event:
 ```json
 {
   "device_id": "motion_a1b2c3",
@@ -165,92 +165,92 @@ mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "HEARTBEAT_OFF" -u homegua
 }
 ```
 
-## Configurações Padrão
+## Default Settings
 
-| Parâmetro | Valor Padrão | Descrição |
-|-----------|--------------|-----------|
-| IP Address | 192.168.18.193 | IP fixo (diferente do relé) |
-| Motion Timeout | 30 segundos | Tempo para limpar detecção |
-| Debounce Delay | 2 segundos | Delay anti-ruído |
-| Heartbeat Interval | 60 segundos | Intervalo do heartbeat |
-| Location | "Living Room" | Localização configurável |
+| Parameter | Default Value | Description |
+|-----------|---------------|-------------|
+| IP Address | 192.168.18.193 | Fixed IP (different from relay) |
+| Motion Timeout | 30 seconds | Time to clear detection |
+| Debounce Delay | 2 seconds | Anti-noise delay |
+| Heartbeat Interval | 60 seconds | Heartbeat interval |
+| Location | "Living Room" | Configurable location |
 
-## Instalação e Teste
+## Installation and Testing
 
-### 1. Programação:
+### 1. Programming:
 ```
-1. Conecte GPIO0 ao GND
-2. Faça upload do sketch motion_detector.ino
-3. Desconecte GPIO0 do GND
-4. Reinicie o ESP-01S
+1. Connect GPIO0 to GND
+2. Upload motion_detector.ino sketch
+3. Disconnect GPIO0 from GND
+4. Restart ESP-01S
 ```
 
-### 2. Verificação:
+### 2. Verification:
 ```bash
-# Verifique se o dispositivo está online
+# Check if device is online
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/motion1/status" -v
 
-# Teste um comando
+# Test a command
 mosquitto_pub -h 192.168.18.6 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
-### 3. Monitoramento:
+### 3. Monitoring:
 ```bash
-# Monitore detecções de movimento em tempo real
+# Monitor motion detections in real-time
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/motion1/motion" -v
 ```
 
-## Ajustes do Sensor PIR
+## PIR Sensor Adjustments
 
-### Configurações Físicas do HC-SR501:
-- **Sensitivity (Sens):** Ajusta distância de detecção (3-7 metros)
-- **Time Delay (Time):** Ajusta tempo de saída alta (5s-300s)
+### HC-SR501 Physical Settings:
+- **Sensitivity (Sens):** Adjusts detection distance (3-7 meters)
+- **Time Delay (Time):** Adjusts high output time (5s-300s)
 - **Trigger Mode:** 
-  - H = Repeatable trigger (recomendado)
+  - H = Repeatable trigger (recommended)
   - L = Non-repeatable trigger
 
-### Recomendações:
-- **Sensitivity:** Medio (posição central do potenciômetro)
-- **Time Delay:** Mínimo (totalmente anti-horário)
-- **Trigger Mode:** H (jumper na posição H)
+### Recommendations:
+- **Sensitivity:** Medium (potentiometer center position)
+- **Time Delay:** Minimum (fully counterclockwise)
+- **Trigger Mode:** H (jumper in H position)
 
-*O timeout é controlado via software, não pelo sensor.*
+*Timeout is controlled via software, not by the sensor.*
 
 ## Troubleshooting
 
-### Problemas Comuns:
+### Common Issues:
 
-1. **Sensor não detecta movimento:**
-   - Verifique conexões (VCC, GND, OUT)
-   - Aguarde 1-2 minutos para calibração inicial do PIR
-   - Ajuste sensitivity no sensor fisicamente
+1. **Sensor doesn't detect motion:**
+   - Check connections (VCC, GND, OUT)
+   - Wait 1-2 minutes for initial PIR calibration
+   - Adjust sensitivity physically on sensor
 
-2. **Muitos falsos positivos:**
-   - Use comando `SENSITIVITY_LOW`
-   - Verifique interferências (calor, luz solar)
-   - Ajuste posição do sensor
+2. **Too many false positives:**
+   - Use `SENSITIVITY_LOW` command
+   - Check for interference (heat, sunlight)
+   - Adjust sensor position
 
-3. **Dispositivo não aparece no MQTT:**
-   - Verifique IP (deve ser diferente do relé: 192.168.18.193)
-   - Teste conexão: `ping 192.168.18.193`
-   - Verifique logs no Serial Monitor
+3. **Device doesn't appear on MQTT:**
+   - Check IP (must be different from relay: 192.168.18.193)
+   - Test connection: `ping 192.168.18.193`
+   - Check Serial Monitor logs
 
-4. **Detecção muito rápida:**
-   - Ajuste timeout: `TIMEOUT_60` para 60 segundos
-   - Use `SENSITIVITY_NORMAL` ou `SENSITIVITY_LOW`
+4. **Detection too fast:**
+   - Adjust timeout: `TIMEOUT_60` for 60 seconds
+   - Use `SENSITIVITY_NORMAL` or `SENSITIVITY_LOW`
 
 ### Debug via Serial:
 ```
 115200 baud
-Mensagens incluem:
-- Status de conexão WiFi/MQTT
-- Eventos de movimento detectados
-- Confirmações de comandos recebidos
+Messages include:
+- WiFi/MQTT connection status
+- Motion events detected
+- Command confirmations received
 ```
 
-## Integração com Sistema Existente
+## Integration with Existing System
 
-### Script Python para Monitoramento:
+### Python Script for Monitoring:
 ```python
 import paho.mqtt.client as mqtt
 import json
@@ -270,7 +270,7 @@ client.subscribe("home/motion1/motion")
 client.loop_forever()
 ```
 
-### Integração com Home Assistant:
+### Home Assistant Integration:
 ```yaml
 # configuration.yaml
 binary_sensor:
@@ -283,12 +283,12 @@ binary_sensor:
     device_class: motion
 ```
 
-## Próximos Passos
+## Next Steps
 
-1. **Teste o sensor PIR** separadamente antes da integração
-2. **Configure a localização** adequada via comando MQTT
-3. **Ajuste sensibilidade** conforme necessário
-4. **Monitore por algumas horas** para validar funcionamento
-5. **Integre com sistema de automação** existente
+1. **Test the PIR sensor** separately before integration
+2. **Configure the location** appropriately via MQTT command
+3. **Adjust sensitivity** as needed
+4. **Monitor for several hours** to validate functionality
+5. **Integrate with existing automation system**
 
-O código está baseado exatamente no seu `mqtt.ino` funcionando, apenas adaptado para detecção de movimento em vez de controle de relé.
+The code is based exactly on your working `mqtt.ino`, just adapted for motion detection instead of relay control.
