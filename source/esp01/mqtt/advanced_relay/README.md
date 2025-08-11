@@ -8,10 +8,13 @@ Esta pasta contém a versão avançada do controlador de relé HomeGuard, uma ev
 
 ```
 advanced_relay/
-├── advanced_relay.ino      # Sketch principal do Arduino
-├── README.md              # Este arquivo (documentação completa)
-├── COMPARISON.md          # Comparação com versão original
-└── test_advanced_relay.sh # Script de teste automatizado
+├── advanced_relay.ino              # Sketch principal do Arduino
+├── advanced_relay_controller.py    # Script Python para controle e monitoramento
+├── examples.py                     # Exemplos de uso do controlador Python
+├── requirements.txt                # Dependências Python
+├── README.md                       # Este arquivo (documentação completa)
+├── COMPARISON.md                   # Comparação com versão original
+└── test_advanced_relay.sh         # Script de teste automatizado
 ```
 
 O `advanced_relay.ino` é uma versão aprimorada do controlador de relé original, incorporando mensagens JSON, identificação de dispositivo e recursos avançados de monitoramento.
@@ -38,7 +41,79 @@ O `advanced_relay.ino` é uma versão aprimorada do controlador de relé origina
 - Configuração remota de parâmetros
 - LED de status opcional
 
-## 🔌 Conexões de Hardware
+## � Script Python para Controle
+
+### Instalação das Dependências
+```bash
+cd advanced_relay
+pip install -r requirements.txt
+```
+
+### Uso Básico do Script Python
+
+#### Modo Interativo (Recomendado)
+```bash
+python advanced_relay_controller.py
+```
+
+O modo interativo oferece uma interface CLI completa com comandos:
+- `on/off/toggle` - Controla o relé
+- `status` - Solicita status do dispositivo
+- `info` - Mostra informações detalhadas
+- `history [n]` - Mostra últimos n eventos
+- `location <name>` - Define localização
+- `heartbeat on/off` - Controla heartbeat
+- `led on/off` - Controla LED de status
+- `monitor on/off` - Liga/desliga monitoramento
+- `quit` - Sair
+
+#### Comandos Rápidos
+```bash
+# Comando único
+python advanced_relay_controller.py --command on
+python advanced_relay_controller.py --command off
+python advanced_relay_controller.py --command status
+
+# Definir localização
+python advanced_relay_controller.py --location Kitchen
+
+# Apenas monitoramento
+python advanced_relay_controller.py --monitor-only
+```
+
+#### Exemplos Práticos
+```bash
+# Executar exemplos interativos
+python examples.py
+```
+
+### Funcionalidades do Script Python
+
+#### 🎛️ **Controle Completo**
+- Controle de relé (ON/OFF/TOGGLE)
+- Configuração remota (localização, heartbeat, LED)
+- Solicitação de status detalhado
+- Reinicialização remota
+
+#### 📊 **Monitoramento Avançado**
+- Monitoramento em tempo real de eventos
+- Histórico de eventos com timestamps
+- Informações detalhadas do dispositivo
+- Monitoramento de heartbeat
+
+#### 🔧 **Interface Amigável**
+- CLI interativo com comandos intuitivos
+- Modo monitor-only para observação
+- Execução de comandos únicos
+- Exemplos práticos incluídos
+
+#### 🚀 **Recursos Técnicos**
+- Reconexão automática MQTT
+- Parsing completo de mensagens JSON
+- Threading para interface não-bloqueante
+- Tratamento robusto de erros
+
+## �🔌 Conexões de Hardware
 
 ```
 ESP-01S Pinout:
