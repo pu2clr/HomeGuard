@@ -4,15 +4,29 @@ This directory contains MQTT-based modules for the HomeGuard system using ESP-01
 
 ## Available Modules
 
-### 1. Relay Control Module
+### 1. Relay Control Module (Basic)
 - **Location**: `relay/relay.ino`
-- **Purpose**: Controls relay modules for switching electrical devices
+- **Purpose**: Simple relay control with text-based MQTT commands
 - **IP Address**: 192.168.18.192
 - **MQTT Topics**: 
   - Commands: `home/relay1/cmnd`
   - Status: `home/relay1/stat`
+- **Message Format**: Plain text (`ON`, `OFF`)
 
-### 2. Motion Detection Module  
+### 2. Advanced Relay Control Module
+- **Location**: `advanced_relay/advanced_relay.ino`
+- **Purpose**: Enhanced relay control with JSON messaging and advanced features
+- **IP Address**: 192.168.18.192 (same as basic relay - use only one)
+- **MQTT Topics**:
+  - Commands: `home/relay1/cmnd`
+  - Status: `home/relay1/status`
+  - Relay Events: `home/relay1/relay`
+  - Heartbeat: `home/relay1/heartbeat`
+  - Configuration: `home/relay1/config`
+- **Message Format**: JSON with metadata
+- **Features**: Device ID, location config, heartbeat, status LED
+
+### 3. Motion Detection Module  
 - **Location**: `motion_detector/motion_detector.ino`
 - **Purpose**: PIR motion sensor monitoring with event reporting
 - **IP Address**: 192.168.18.193
@@ -38,13 +52,29 @@ This directory contains MQTT-based modules for the HomeGuard system using ESP-01
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "#" -v
 ```
 
-### Control Relay
+### Control Relay (Basic)
 ```bash
 # Turn ON
 mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
 
 # Turn OFF
 mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+```
+
+### Control Advanced Relay
+```bash
+# Basic control (compatible with basic relay)
+mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "TOGGLE" -u homeguard -P pu2clr123456
+
+# Advanced features
+mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
+
+# Monitor all advanced relay topics
+mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
 ```
 
 ### Monitor Motion Detector
