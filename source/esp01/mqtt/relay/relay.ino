@@ -12,9 +12,9 @@
 
   Start service:  brew services restart mosquitto   (on macOS)
 
-  Monitoring: mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "#" -v 
+  Monitoring: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v 
 
-  Send command: mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+  Send command: mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
 
 */
 
@@ -32,7 +32,7 @@ IPAddress gateway(192, 168, 18, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 // ======== MQTT Broker Configuration ========
-const char* mqtt_server = "192.168.18.6"; // Local MQTT broker IP (adjust to yours)
+const char* mqtt_server = "192.168.18.236"; // Local MQTT broker IP (adjust to yours)
 const int   mqtt_port   = 1883;           // Standard MQTT port
 const char* mqtt_user   = "homeguard";             // Username, if configured (or leave "")
 const char* mqtt_pass   = "pu2clr123456";             // Password, if configured (or leave "")
@@ -44,11 +44,11 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 
-// mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456 
+// mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456 
 const char* TOPIC_CMD = "home/relay1/cmnd";  // Topic for commands
 const char* TOPIC_STA = "home/relay1/stat";  // Topic for status
 
-// Monitoring: mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "#" -v 
+// Monitoring: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v 
 
 bool relayOn = false;
 

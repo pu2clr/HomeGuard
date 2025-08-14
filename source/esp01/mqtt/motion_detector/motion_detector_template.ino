@@ -1,6 +1,6 @@
 /**
  * HomeGuard Motion Detection Module for ESP-01S
- * Based on the working mqtt.ino configuration
+ * Template for multiple locations with configurable IP and device location
  * 
  * Hardware connections:
  * - PIR Motion Sensor VCC -> 3.3V
@@ -14,21 +14,38 @@
  * - Remote monitoring capabilities
  * - Device identification and heartbeat
  * 
- * MQTT Commands:
- * - mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
- * - mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
- * - mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
+ * Compilation Parameters (defined via build flags):
+ * - DEVICE_LOCATION: Location name (e.g., "Garagem", "Area_Servico")
+ * - DEVICE_IP_LAST_OCTET: Last octet of IP address (e.g., 201 for 192.168.18.201)
+ * - MQTT_TOPIC_SUFFIX: MQTT topic suffix (e.g., "motion1", "motion2")
  */
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+// ======== Build-time Configuration (set via compiler defines) ========
+#ifndef DEVICE_LOCATION
+#define DEVICE_LOCATION "Unknown"
+#endif
+
+#ifndef DEVICE_IP_LAST_OCTET
+#define DEVICE_IP_LAST_OCTET 193
+#endif
+
+#ifndef MQTT_TOPIC_SUFFIX
+#define MQTT_TOPIC_SUFFIX "motion1"
+#endif
+
+// Convert defines to strings
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
 // ======== Wi-Fi Network Configuration ========
 const char* ssid = "APRC";
 const char* password = "Ap69Rc642023";
 
-// ESP-01S fixed IP
-IPAddress local_IP(192, 168, 18, 193);  // Different IP from relay module
+// ESP-01S configurable IP
+IPAddress local_IP(192, 168, 18, DEVICE_IP_LAST_OCTET);
 IPAddress gateway(192, 168, 18, 1);
 IPAddress subnet(255, 255, 255, 0);
 
@@ -42,12 +59,13 @@ const char* mqtt_pass   = "pu2clr123456"; // Password
 #define PIN_MOTION_SENSOR 2    // GPIO2 for PIR sensor (digital input)
 #define PIN_LED 0              // GPIO0 for status LED (optional)
 
-// ======== MQTT Topics ========
-const char* TOPIC_CMD = "home/motion1/cmnd";        // Topic for commands
-const char* TOPIC_STATUS = "home/motion1/status";   // Topic for general status
-const char* TOPIC_MOTION = "home/motion1/motion";   // Topic for motion events
-const char* TOPIC_HEARTBEAT = "home/motion1/heartbeat"; // Topic for heartbeat
-const char* TOPIC_CONFIG = "home/motion1/config";   // Topic for configuration
+// ======== MQTT Topics (configurable via build) ========
+const String TOPIC_BASE = "home/" TOSTRING(MQTT_TOPIC_SUFFIX);
+const String TOPIC_CMD = TOPIC_BASE + "/cmnd";
+const String TOPIC_STATUS = TOPIC_BASE + "/status";
+const String TOPIC_MOTION = TOPIC_BASE + "/motion";
+const String TOPIC_HEARTBEAT = TOPIC_BASE + "/heartbeat";
+const String TOPIC_CONFIG = TOPIC_BASE + "/config";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -64,9 +82,7 @@ unsigned long motionTimeout = 30000;        // 30 seconds - time to keep "DETECT
 unsigned long heartbeatInterval = 60000;    // 60 seconds - heartbeat interval
 unsigned long debounceDelay = 2000;         // 2 seconds - debounce delay to avoid false triggers
 bool enableHeartbeat = true;
-//String deviceLocation = "Living Room";       // Configurable location name
-String deviceLocation = "Maker Space";       // Configurable location name
-
+String deviceLocation = TOSTRING(DEVICE_LOCATION);
 
 // ======== Device Information ========
 String deviceMAC;
@@ -77,12 +93,14 @@ void initializeDevice() {
   deviceMAC = WiFi.macAddress();
   deviceMAC.replace(":", "");
   deviceMAC.toLowerCase();
-  deviceID = "motion_" + deviceMAC.substring(6); // Use last 6 chars of MAC
+  deviceID = "motion_" + String(DEVICE_IP_LAST_OCTET) + "_" + deviceMAC.substring(6);
   
   Serial.println("=== HomeGuard Motion Detector ===");
   Serial.println("Device ID: " + deviceID);
   Serial.println("MAC Address: " + WiFi.macAddress());
   Serial.println("Location: " + deviceLocation);
+  Serial.println("IP Address: " + local_IP.toString());
+  Serial.println("MQTT Topic Base: " + TOPIC_BASE);
 }
 
 // ======== Function to process MQTT messages ========
@@ -100,17 +118,17 @@ void callback(char* topic, byte* payload, unsigned int length) {
     publishDeviceStatus();
   }
   else if (msg.equalsIgnoreCase("RESET")) {
-    publishMessage(TOPIC_STATUS, "RESETTING");
+    publishMessage(TOPIC_STATUS.c_str(), "RESETTING");
     delay(1000);
     ESP.restart();
   }
   else if (msg.equalsIgnoreCase("HEARTBEAT_ON")) {
     enableHeartbeat = true;
-    publishMessage(TOPIC_CONFIG, "HEARTBEAT_ENABLED");
+    publishMessage(TOPIC_CONFIG.c_str(), "HEARTBEAT_ENABLED");
   }
   else if (msg.equalsIgnoreCase("HEARTBEAT_OFF")) {
     enableHeartbeat = false;
-    publishMessage(TOPIC_CONFIG, "HEARTBEAT_DISABLED");
+    publishMessage(TOPIC_CONFIG.c_str(), "HEARTBEAT_DISABLED");
   }
   else if (msg.startsWith("TIMEOUT_")) {
     // Set motion timeout: TIMEOUT_60 (60 seconds)
@@ -118,25 +136,25 @@ void callback(char* topic, byte* payload, unsigned int length) {
     unsigned long newTimeout = timeoutStr.toInt() * 1000;
     if (newTimeout > 0 && newTimeout <= 300000) { // Max 5 minutes
       motionTimeout = newTimeout;
-      publishMessage(TOPIC_CONFIG, "TIMEOUT_SET_" + String(newTimeout/1000) + "s");
+      publishMessage(TOPIC_CONFIG.c_str(), "TIMEOUT_SET_" + String(newTimeout/1000) + "s");
     }
   }
   else if (msg.startsWith("LOCATION_")) {
     // Set device location: LOCATION_Kitchen
     deviceLocation = msg.substring(9);
-    publishMessage(TOPIC_CONFIG, "LOCATION_SET_" + deviceLocation);
+    publishMessage(TOPIC_CONFIG.c_str(), "LOCATION_SET_" + deviceLocation);
   }
   else if (msg.equalsIgnoreCase("SENSITIVITY_HIGH")) {
     debounceDelay = 1000; // 1 second
-    publishMessage(TOPIC_CONFIG, "SENSITIVITY_HIGH");
+    publishMessage(TOPIC_CONFIG.c_str(), "SENSITIVITY_HIGH");
   }
   else if (msg.equalsIgnoreCase("SENSITIVITY_NORMAL")) {
     debounceDelay = 2000; // 2 seconds
-    publishMessage(TOPIC_CONFIG, "SENSITIVITY_NORMAL");
+    publishMessage(TOPIC_CONFIG.c_str(), "SENSITIVITY_NORMAL");
   }
   else if (msg.equalsIgnoreCase("SENSITIVITY_LOW")) {
     debounceDelay = 5000; // 5 seconds
-    publishMessage(TOPIC_CONFIG, "SENSITIVITY_LOW");
+    publishMessage(TOPIC_CONFIG.c_str(), "SENSITIVITY_LOW");
   }
 }
 
@@ -164,7 +182,7 @@ void publishDeviceStatus() {
   status += "\"rssi\":\"" + String(WiFi.RSSI()) + "dBm\"";
   status += "}";
   
-  publishMessage(TOPIC_STATUS, status);
+  publishMessage(TOPIC_STATUS.c_str(), status);
 }
 
 // ======== Publish Heartbeat ========
@@ -177,7 +195,7 @@ void publishHeartbeat() {
   heartbeat += "\"rssi\":\"" + String(WiFi.RSSI()) + "\"";
   heartbeat += "}";
   
-  publishMessage(TOPIC_HEARTBEAT, heartbeat);
+  publishMessage(TOPIC_HEARTBEAT.c_str(), heartbeat);
 }
 
 // ======== Motion Detection Logic ========
@@ -202,7 +220,7 @@ void checkMotionSensor() {
     motionEvent += "\"rssi\":\"" + String(WiFi.RSSI()) + "\"";
     motionEvent += "}";
     
-    publishMessage(TOPIC_MOTION, motionEvent);
+    publishMessage(TOPIC_MOTION.c_str(), motionEvent);
     
     // Blink LED to indicate motion detection
     digitalWrite(PIN_LED, LOW);
@@ -225,7 +243,7 @@ void checkMotionSensor() {
     motionEvent += "\"duration\":\"" + String((currentTime - motionStartTime) / 1000) + "s\"";
     motionEvent += "}";
     
-    publishMessage(TOPIC_MOTION, motionEvent);
+    publishMessage(TOPIC_MOTION.c_str(), motionEvent);
     
     Serial.println("Motion CLEARED at " + deviceLocation);
   }
@@ -243,10 +261,10 @@ void reconnect() {
       Serial.println("MQTT connected!");
       
       // Subscribe to command topic
-      client.subscribe(TOPIC_CMD);
+      client.subscribe(TOPIC_CMD.c_str());
       
       // Announce device online
-      publishMessage(TOPIC_STATUS, "ONLINE");
+      publishMessage(TOPIC_STATUS.c_str(), "ONLINE");
       publishDeviceStatus();
       
     } else {
