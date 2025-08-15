@@ -120,7 +120,7 @@ def example_monitoring():
         
         print("📡 Monitoring device for 30 seconds...")
         print("💡 Try controlling the relay from another terminal or the Arduino IDE!")
-        print("   Example: mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m 'TOGGLE' -u homeguard -P pu2clr123456")
+        print("   Example: mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m 'TOGGLE' -u homeguard -P pu2clr123456")
         print("⏹️  Press Ctrl+C to stop monitoring early")
         
         # Request status every 10 seconds

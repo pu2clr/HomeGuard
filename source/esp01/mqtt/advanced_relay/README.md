@@ -138,42 +138,42 @@ ESP-01S Pinout:
 ### Controle Básico
 ```bash
 # Ligar relé
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
 
 # Desligar relé  
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
 
 # Alternar estado
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "TOGGLE" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "TOGGLE" -u homeguard -P pu2clr123456
 
 # Status do dispositivo
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### Configuração
 ```bash
 # Definir localização
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
 
 # Controlar heartbeat
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "HEARTBEAT_OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "HEARTBEAT_OFF" -u homeguard -P pu2clr123456
 
 # Definir intervalo de heartbeat (em segundos)
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "HEARTBEAT_30" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "HEARTBEAT_30" -u homeguard -P pu2clr123456
 
 # Controlar LED de status
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "LED_ON" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "LED_OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "LED_ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "LED_OFF" -u homeguard -P pu2clr123456
 
 # Reiniciar dispositivo
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "RESET" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "RESET" -u homeguard -P pu2clr123456
 ```
 
 ### Comandos JSON (Futuro)
 ```bash
 # Comando JSON
-mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m '{"relay":"ON","reason":"automation"}' -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m '{"relay":"ON","reason":"automation"}' -u homeguard -P pu2clr123456
 ```
 
 ## 📊 Exemplos de Mensagens JSON
@@ -224,17 +224,17 @@ mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m '{"relay":"ON","reason":"au
 
 ### Monitorar todos os tópicos
 ```bash
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
 ```
 
 ### Monitorar apenas eventos do relé
 ```bash
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/relay1/relay" -v
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/relay1/relay" -v
 ```
 
 ### Monitorar heartbeat
 ```bash
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/relay1/heartbeat" -v
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/relay1/heartbeat" -v
 ```
 
 ## 🆚 Comparação com Versão Original

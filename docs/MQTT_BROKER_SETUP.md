@@ -358,7 +358,7 @@ mosquitto_pub -h 192.168.18.236 -p 8883 --cafile /etc/mosquitto/ca_certificates/
 ## Device Configuration Updates
 
 ### Update ESP-01S Sketches
-You'll need to update the IP address in your Arduino sketches from `192.168.18.6` to `192.168.18.236`:
+You'll need to update the IP address in your Arduino sketches from `192.168.18.236` to `192.168.18.236`:
 
 **For relay.ino:**
 ```cpp

@@ -15,7 +15,7 @@ const char* ssid = "APRC";
 const char* password = "Ap69Rc642023";
 
 // ======== MQTT Broker Configuration ========
-const char* mqtt_server = "192.168.18.6";   // e.g., "192.168.1.100"
+const char* mqtt_server = "192.168.18.236";   // e.g., "192.168.1.100"
 const int   mqtt_port = 1883;
 const char* mqtt_user = "homeguard";              // MQTT username
 const char* mqtt_pass = "pu2clr123456";    // MQTT password

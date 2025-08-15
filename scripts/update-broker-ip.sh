@@ -1,8 +1,8 @@
 #!/bin/bash
 # Update HomeGuard devices to use new MQTT broker IP
-# Changes from 192.168.18.6 to 192.168.18.236
+# Changes from 192.168.18.236 to 192.168.18.236
 
-OLD_IP="192.168.18.6"
+OLD_IP="192.168.18.236"
 NEW_IP="192.168.18.236"
 PROJECT_ROOT="/Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard"
 

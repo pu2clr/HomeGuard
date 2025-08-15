@@ -18,11 +18,11 @@
  * - Enhanced debugging and monitoring
  * 
  * MQTT Commands (JSON format):
- * - mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
- * - mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
- * - mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
- * - mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "TOGGLE" -u homeguard -P pu2clr123456
- * - mosquitto_pub -h 192.168.18.6 -t home/relay1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
+ * - mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
+ * - mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+ * - mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+ * - mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "TOGGLE" -u homeguard -P pu2clr123456
+ * - mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
  */
 
 #include <ESP8266WiFi.h>
@@ -38,7 +38,7 @@ IPAddress gateway(192, 168, 18, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 // ======== MQTT Broker Configuration ========
-const char* mqtt_server = "192.168.18.6"; // Local MQTT broker IP
+const char* mqtt_server = "192.168.18.236"; // Local MQTT broker IP
 const int   mqtt_port   = 1883;           // Standard MQTT port
 const char* mqtt_user   = "homeguard";    // Username
 const char* mqtt_pass   = "pu2clr123456"; // Password

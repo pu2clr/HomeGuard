@@ -88,7 +88,7 @@ python advanced_relay_controller.py --device relay2
 
 | Parâmetro | Padrão | Descrição |
 |-----------|--------|-----------|
-| `--broker` | 192.168.18.6 | IP do broker MQTT |
+| `--broker` | 192.168.18.236 | IP do broker MQTT |
 | `--port` | 1883 | Porta do broker MQTT |
 | `--username` | homeguard | Usuário MQTT |
 | `--password` | pu2clr123456 | Senha MQTT |

@@ -92,7 +92,7 @@ sudo tail -f /var/log/mosquitto/monitor.log
 Change in all `.ino` files:
 ```cpp
 // OLD
-const char* mqtt_server = "192.168.18.6";
+const char* mqtt_server = "192.168.18.236";
 
 // NEW  
 const char* mqtt_server = "192.168.18.236";
@@ -102,7 +102,7 @@ const char* mqtt_server = "192.168.18.236";
 Change in all `.py` files:
 ```python
 # OLD
-def __init__(self, broker_host="192.168.18.6", ...):
+def __init__(self, broker_host="192.168.18.236", ...):
 
 # NEW
 def __init__(self, broker_host="192.168.18.236", ...):

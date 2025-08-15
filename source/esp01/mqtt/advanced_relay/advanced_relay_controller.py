@@ -13,7 +13,7 @@ Features:
 - Automatic reconnection handling
 
 Based on the advanced_relay.ino configuration:
-- Broker: 192.168.18.6
+- Broker: 192.168.18.236
 - User: homeguard  
 - Pass: pu2clr123456
 - Device IP: 192.168.18.192
@@ -35,7 +35,7 @@ import paho.mqtt.client as mqtt
 
 
 class AdvancedRelayController:
-    def __init__(self, broker_host="192.168.18.6", broker_port=1883, 
+    def __init__(self, broker_host="192.168.18.236", broker_port=1883, 
                  username="homeguard", password="pu2clr123456", device_prefix="relay1"):
         """
         Initialize Advanced Relay Controller
@@ -445,7 +445,7 @@ class AdvancedRelayController:
 
 def main():
     parser = argparse.ArgumentParser(description='HomeGuard Advanced Relay Controller')
-    parser.add_argument('--broker', default='192.168.18.6', help='MQTT broker IP address')
+    parser.add_argument('--broker', default='192.168.18.236', help='MQTT broker IP address')
     parser.add_argument('--port', type=int, default=1883, help='MQTT broker port')
     parser.add_argument('--username', default='homeguard', help='MQTT username')
     parser.add_argument('--password', default='pu2clr123456', help='MQTT password')
