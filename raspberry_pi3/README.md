@@ -55,7 +55,7 @@ raspberry_pi/
 ```bash
 # No Raspberry Pi
 git clone <repo_url>
-cd HomeGuard/raspberry_pi
+cd HomeGuard/raspberry_pi3
 
 # Executar script de instalação
 sudo ./setup_audio_simulator.sh
