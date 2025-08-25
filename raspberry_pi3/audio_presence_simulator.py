@@ -47,17 +47,20 @@ class AudioPresenceSimulator:
         self.mqtt_pass = self.config.get('mqtt_pass', 'pu2clr123456')
         
         # Device info
-        self.device_id = "audio_presence_rpi3"
-        self.device_location = self.config.get('location', 'Living Room')
+        self.device_id = "audio_presence_rpi3_ground_floor"
+        self.device_location = self.config.get('location', 'Ground Floor')
+        self.floor = "ground"
         
-        # MQTT Topics
+        # MQTT Topics - Ground Floor Audio System
         self.topics = {
-            'cmd': 'home/audio/cmnd',
-            'status': 'home/audio/status',
-            'events': 'home/audio/events',
-            'heartbeat': 'home/audio/heartbeat',
-            'motion_trigger': 'home/+/motion',  # Listen to all motion sensors
-            'relay_trigger': 'home/+/relay'     # Listen to relay events
+            'cmd': 'homeguard/audio/ground/cmnd',
+            'status': 'homeguard/audio/ground/status', 
+            'events': 'homeguard/audio/ground/events',
+            'heartbeat': 'homeguard/audio/ground/heartbeat',
+            'motion_trigger': 'homeguard/motion/+/detected',  # Listen to all motion sensors
+            'relay_trigger': 'homeguard/relay/+/status',      # Listen to relay events
+            'audio_control': 'homeguard/audio/ground/control', # Direct audio control
+            'emergency': 'homeguard/emergency/+',             # Emergency triggers
         }
         
         # Audio system

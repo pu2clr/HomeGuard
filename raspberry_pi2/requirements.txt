@@ -1,0 +1,30 @@
+# HomeGuard Audio Presence Simulator - First Floor (Raspberry Pi 2)
+# Python dependencies for the first floor audio system
+
+# Audio processing
+pygame==2.5.2
+pyaudio==0.2.11
+
+# MQTT communication
+paho-mqtt==1.6.1
+
+# Scheduling and timing
+schedule==1.2.0
+
+# Data processing
+numpy==1.24.3
+
+# HTTP requests (for audio downloads)
+requests==2.31.0
+
+# JSON handling (built-in, listed for reference)
+# json
+
+# System utilities (built-in, listed for reference)  
+# os
+# sys
+# time
+# threading
+# pathlib
+# datetime
+# random

@@ -1,12 +1,15 @@
 {
-    "mqtt_broker": "192.168.18.236",
+    "mqtt_broker": "192.168.18.6",
     "mqtt_port": 1883,
     "mqtt_user": "homeguard",
     "mqtt_pass": "pu2clr123456",
-    "location": "Living Room",
+    "location": "Ground Floor",
+    "floor": "ground",
     "audio_path": "./audio_files",
     "default_mode": "home",
     "motion_triggered": true,
+    "coordinated_mode": true,
+    "volume": 0.8,
     "schedules": {
         "morning_routine": {
             "time": "07:30",
