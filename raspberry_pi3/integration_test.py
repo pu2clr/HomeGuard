@@ -11,7 +11,7 @@ import paho.mqtt.client as mqtt
 
 class HomeGuardIntegrationTest:
     def __init__(self):
-        self.broker_host = "192.168.18.6"
+        self.broker_host = "192.168.18.236"
         self.broker_port = 1883
         self.username = "homeguard"
         self.password = "pu2clr123456"
@@ -172,7 +172,7 @@ class HomeGuardIntegrationTest:
         """Show system overview"""
         print("🏠 HomeGuard System Overview")
         print("=" * 40)
-        print("📡 MQTT Broker: 192.168.18.6:1883")
+        print("📡 MQTT Broker: 192.168.18.236:1883")
         print("🔐 Credentials: homeguard / pu2clr123456")
         print()
         print("🎛️ Active Components:")

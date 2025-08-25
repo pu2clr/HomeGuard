@@ -42,7 +42,7 @@ class AudioPresenceSimulatorFirstFloor:
         self.config = self.load_config(config_file)
         
         # MQTT Configuration
-        self.mqtt_broker = self.config.get('mqtt_broker', '192.168.18.6')
+        self.mqtt_broker = self.config.get('mqtt_broker', '192.168.18.236')
         self.mqtt_port = self.config.get('mqtt_port', 1883)
         self.mqtt_user = self.config.get('mqtt_user', 'homeguard')
         self.mqtt_pass = self.config.get('mqtt_pass', 'pu2clr123456')
@@ -122,7 +122,7 @@ class AudioPresenceSimulatorFirstFloor:
     def get_default_config(self):
         """Get default configuration for first floor"""
         return {
-            "mqtt_broker": "192.168.18.6",
+            "mqtt_broker": "192.168.18.236",
             "mqtt_port": 1883,
             "mqtt_user": "homeguard",
             "mqtt_pass": "pu2clr123456",

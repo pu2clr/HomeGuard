@@ -114,7 +114,7 @@ sudo ./setup_vpn_server.sh
 ### **Configuração MQTT Remota**
 ```bash
 # Após conectar na VPN, use:
-# Host: 192.168.18.6 (IP do Raspberry Pi)
+# Host: 192.168.18.236 (IP do Raspberry Pi)
 # Port: 1883
 # User: homeguard
 # Pass: pu2clr123456
@@ -126,38 +126,38 @@ Para guia completo de apps: `cat MOBILE_APPS_GUIDE.md`
 
 ### **Comandos Básicos**
 ```bash
-# Broker MQTT: 192.168.18.6
+# Broker MQTT: 192.168.18.236
 # Tópico: home/audio/cmnd
 
 # Latidos de cachorro
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "DOGS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "DOGS" -u homeguard -P pu2clr123456
 
 # Passos
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "FOOTSTEPS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "FOOTSTEPS" -u homeguard -P pu2clr123456
 
 # Banheiro
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "TOILET" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "TOILET" -u homeguard -P pu2clr123456
 
 # TV de fundo
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "TV" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "TV" -u homeguard -P pu2clr123456
 
 # Rotina matinal
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "MORNING" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MORNING" -u homeguard -P pu2clr123456
 ```
 
 ### **Modos de Operação**
 ```bash
 # Modo Casa (resposta baixa a movimento)
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "MODE_HOME" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_HOME" -u homeguard -P pu2clr123456
 
 # Modo Fora (resposta alta a movimento)
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "MODE_AWAY" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_AWAY" -u homeguard -P pu2clr123456
 
 # Modo Noite (volume reduzido)
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "MODE_NIGHT" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_NIGHT" -u homeguard -P pu2clr123456
 
 # Modo Férias (atividade máxima)
-mosquitto_pub -h 192.168.18.6 -t home/audio/cmnd -m "MODE_VACATION" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_VACATION" -u homeguard -P pu2clr123456
 ```
 
 ## 📊 Integração com HomeGuard
@@ -189,7 +189,7 @@ O sistema monitora automaticamente:
 ### **audio_config.json**
 ```json
 {
-    "mqtt_broker": "192.168.18.6",
+    "mqtt_broker": "192.168.18.236",
     "location": "Living Room",
     "default_mode": "home",
     "motion_triggered": true,
@@ -265,7 +265,7 @@ sudo journalctl -u homeguard-audio -f
 sudo systemctl status homeguard-audio
 
 # Monitorar MQTT
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 -t "home/audio/#" -v
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/audio/#" -v
 ```
 
 ### **Tópicos MQTT**
@@ -337,7 +337,7 @@ sudo raspi-config # Advanced Options > Audio
 ### **MQTT Não Conecta**
 ```bash
 # Testar conexão MQTT
-mosquitto_pub -h 192.168.18.6 -t test -m "hello" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t test -m "hello" -u homeguard -P pu2clr123456
 ```
 
 ### **Serviço Não Inicia**

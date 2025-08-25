@@ -6,7 +6,7 @@ Sistema completo de simulação de presença por áudio distribuído entre dois 
 
 ```
 🏠 Casa HomeGuard - Sistema Distribuído
-├── 📶 MQTT Broker (192.168.18.6:1883)
+├── 📶 MQTT Broker (192.168.18.236:1883)
 ├── 
 ├── 🏠 TÉRREO (Raspberry Pi 3)
 │   ├── 📁 raspberry_pi3/
@@ -127,23 +127,23 @@ python3 integration_test.py
 ### **Comandos Individuais por Andar:**
 ```bash
 # Térreo
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/ground/cmnd -m "DOGS"
 
 # Primeiro Andar  
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd -m "SHOWER"
 ```
 
 ### **Comandos JSON Avançados:**
 ```bash
 # Rotina coordenada
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/ground/cmnd \
   -m '{"action":"ROUTINE","routine":"morning_routine"}'
 
 # Modo da casa inteira
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/coordination \
   -m '{"action":"MODE","mode":"away","target":"all"}'
 ```
@@ -167,15 +167,15 @@ HomeGuard> emergency security_breach # Alerta de emergência
 ### **Status em Tempo Real:**
 ```bash
 # Status térreo
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/ground/status
 
 # Status primeiro andar
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/status
 
 # Eventos de coordenação
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/coordination
 ```
 
@@ -203,9 +203,9 @@ sudo journalctl -u homeguard-audio-first -f
 # Sons contínuos até cancelamento manual
 
 # Cancelar emergência
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/ground/cmnd -m "STOP"
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd -m "STOP"
 ```
 
@@ -265,7 +265,7 @@ Por Raspberry Pi:
 python3 integration_test.py
 
 # Conectividade MQTT
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/+/heartbeat -C 2
 ```
 
@@ -317,11 +317,11 @@ python3 audio_coordination_controller.py
 ### **Teste Rápido:**
 ```bash
 # Comando simples
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/ground/cmnd -m "FOOTSTEPS"
 
 # Status dos sistemas
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/+/status -C 2
 ```
 

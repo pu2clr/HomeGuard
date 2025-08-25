@@ -1,7 +1,7 @@
 #!/bin/bash
 # MQTT Command Examples for HomeGuard Audio System
 
-BROKER="192.168.18.6"
+BROKER="192.168.18.236"
 USERNAME="homeguard" 
 PASSWORD="pu2clr123456"
 TOPIC="home/audio/cmnd"

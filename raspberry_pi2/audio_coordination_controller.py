@@ -15,7 +15,7 @@ class AudioCoordinationController:
         """Initialize the coordination controller"""
         
         # MQTT Configuration
-        self.mqtt_broker = "192.168.18.6"
+        self.mqtt_broker = "192.168.18.236"
         self.mqtt_port = 1883
         self.mqtt_user = "homeguard"
         self.mqtt_pass = "pu2clr123456"

@@ -88,11 +88,11 @@ client.username_pw_set('homeguard', 'pu2clr123456')
 client.on_connect = on_connect
 
 try:
-    client.connect('192.168.18.6', 1883, 60)
+    client.connect('192.168.18.236', 1883, 60)
     client.loop_forever(timeout=5)
 except Exception as e:
     print(f'⚠️  MQTT test failed: {e}')
-    print('   Check if MQTT broker is running on 192.168.18.6')
+    print('   Check if MQTT broker is running on 192.168.18.236')
 "
 
 echo -e "${BLUE}📋 Step 5: Creating System Service${NC}"

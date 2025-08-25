@@ -93,27 +93,27 @@ audio_files/
 ### **Comandos Simples:**
 ```bash
 # Reproduzir categoria específica
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd -m "FOOTSTEPS"
 
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd -m "SHOWER"
 ```
 
 ### **Comandos JSON:**
 ```bash
 # Reproduzir com volume específico
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd \
   -m '{"action":"PLAY","category":"doors","volume":0.5}'
 
 # Iniciar rotina
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd \
   -m '{"action":"ROUTINE","routine":"morning_routine"}'
 
 # Mudar modo
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd \
   -m '{"action":"MODE","mode":"away"}'
 ```
@@ -136,15 +136,15 @@ mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
 ### **Status do Sistema:**
 ```bash
 # Verificar status
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/status
 
 # Monitorar eventos
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/events
 
 # Heartbeat
-mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/heartbeat
 ```
 
@@ -246,7 +246,7 @@ du -sh audio_files/
 # Conectividade MQTT
 python3 -c "import paho.mqtt.client as mqtt; 
 client = mqtt.Client(); 
-client.connect('192.168.18.6', 1883, 60); 
+client.connect('192.168.18.236', 1883, 60); 
 print('✅ MQTT OK')"
 ```
 
@@ -303,7 +303,7 @@ cp seus_audios/* audio_files/categoria/
 python3 audio_presence_simulator.py
 
 # 4. Testar comando
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
   -t home/audio/first/cmnd -m "FOOTSTEPS"
 ```
 
