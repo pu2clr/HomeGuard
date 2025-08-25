@@ -195,16 +195,16 @@ mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MORNING" -u homegu
 ### **Modos de Operação**
 ```bash
 # Modo Casa (resposta baixa a movimento)
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_HOME" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_HOME" -u homeguard -P pu2clr123456
 
 # Modo Fora (resposta alta a movimento)
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_AWAY" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_AWAY" -u homeguard -P pu2clr123456
 
 # Modo Noite (volume reduzido)
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_NIGHT" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_NIGHT" -u homeguard -P pu2clr123456
 
 # Modo Férias (atividade máxima)
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MODE_VACATION" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_VACATION" -u homeguard -P pu2clr123456
 ```
 
 ## 📊 Integração com HomeGuard
