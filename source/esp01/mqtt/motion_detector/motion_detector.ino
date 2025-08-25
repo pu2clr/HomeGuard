@@ -22,7 +22,7 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include "wifi_info.h"  // Please the file wifi_infoX.h to wifi_info.h and 
+#include "wifi_info.h"  // Please rename the file wifi_infoX.h to wifi_info.h and change the SSID and password
 
 
 // ======== Wi-Fi Network Configuration ========
