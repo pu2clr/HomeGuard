@@ -254,10 +254,13 @@ prepare_sketch() {
     local sensor_dir="$BUILD_DIR/$sketch_name"
     mkdir -p "$sensor_dir"
     
+    # Copia todos os arquivos .h do diretório do sketch para o diretório do build
+    cp "$PROJECT_DIR/source/esp01/mqtt/dht11/dht11_sensor/"*.h "$sensor_dir/"
+
     # Copy template and rename - Arduino requires .ino file to match directory name
     local sketch_file="$sensor_dir/$sketch_name.ino"
     cp "$SKETCH_TEMPLATE" "$sketch_file"
-    
+
     print_success "Sketch prepared: $sketch_file" >&2
     echo "$sensor_dir"  # Return directory path for arduino-cli (only this goes to stdout)
 }
