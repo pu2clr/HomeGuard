@@ -1,0 +1,96 @@
+{
+    "mqtt_broker": "192.168.18.236",
+    "mqtt_port": 1883,
+    "mqtt_user": "homeguard",
+    "mqtt_pass": "pu2clr123456",
+    "location": "Living Room",
+    "audio_path": "./audio_files",
+    "default_mode": "home",
+    "motion_triggered": true,
+    "schedules": {
+        "morning_routine": {
+            "time": "07:30",
+            "sounds": ["toilets", "footsteps", "doors"],
+            "enabled": true
+        },
+        "evening_routine": {
+            "time": "19:00", 
+            "sounds": ["doors", "footsteps", "tv_radio"],
+            "enabled": true
+        },
+        "random_activity": {
+            "interval": 45,
+            "sounds": ["footsteps", "doors"],
+            "probability": 0.3,
+            "enabled": true
+        },
+        "night_routine": {
+            "time": "22:30",
+            "sounds": ["toilets", "footsteps"],
+            "enabled": false
+        }
+    },
+    "volume_levels": {
+        "dogs": 0.8,
+        "footsteps": 0.6,
+        "toilets": 0.7,
+        "tv_radio": 0.4,
+        "doors": 0.6,
+        "background": 0.3,
+        "alerts": 0.9
+    },
+    "presence_modes": {
+        "home": {
+            "motion_response_probability": 0.3,
+            "random_activity_enabled": false,
+            "background_sounds": false
+        },
+        "away": {
+            "motion_response_probability": 0.8,
+            "random_activity_enabled": true,
+            "background_sounds": true
+        },
+        "night": {
+            "motion_response_probability": 0.5,
+            "random_activity_enabled": false,
+            "background_sounds": false,
+            "volume_reduction": 0.5
+        },
+        "vacation": {
+            "motion_response_probability": 0.9,
+            "random_activity_enabled": true,
+            "background_sounds": true,
+            "enhanced_routines": true
+        }
+    },
+    "audio_categories": {
+        "dogs": {
+            "description": "Dog barking sounds",
+            "response_types": ["motion_alert", "door_activity", "manual"]
+        },
+        "footsteps": {
+            "description": "Footsteps inside house",
+            "response_types": ["motion_response", "routine", "random"]
+        },
+        "toilets": {
+            "description": "Toilet flush sounds",
+            "response_types": ["routine", "manual"]
+        },
+        "tv_radio": {
+            "description": "TV and radio background",
+            "response_types": ["background", "evening_routine"]
+        },
+        "doors": {
+            "description": "Door opening/closing",
+            "response_types": ["motion_response", "routine", "arrival"]
+        },
+        "background": {
+            "description": "General background noise",
+            "response_types": ["background"]
+        },
+        "alerts": {
+            "description": "Alert sounds",
+            "response_types": ["security_alert", "manual"]
+        }
+    }
+}

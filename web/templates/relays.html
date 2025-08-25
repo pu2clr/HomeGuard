@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}HomeGuard - Controle de Relés{% endblock %}
+
+{% block content %}
+<h2>🔌 Controle de Relés</h2>
+
+<div class="alert alert-info">
+    <strong>ℹ️ Informação:</strong> Esta é uma interface básica para controle de relés. 
+    Para funcionamento completo, é necessário configurar a integração MQTT.
+</div>
+
+<div class="device-grid">
+    {% for relay in relays %}
+    <div class="device-card">
+        <div class="device-status">
+            <div class="status-dot offline"></div>
+            <strong>{{ relay.name }}</strong>
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <strong>Local:</strong> {{ relay.location }}<br>
+            <strong>ID:</strong> {{ relay.id }}<br>
+            <strong>Status:</strong> <span id="status-{{ relay.id }}">🔘 Desconhecido</span>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-success" onclick="controlRelay('{{ relay.id }}', 'on')">
+                🟢 Ligar
+            </button>
+            
+            <button class="btn btn-danger" onclick="controlRelay('{{ relay.id }}', 'off')">
+                🔴 Desligar
+            </button>
+            
+            <button class="btn" onclick="controlRelay('{{ relay.id }}', 'toggle')">
+                🔄 Toggle
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="margin-top: 2rem;">
+    <h3>🏠 Controles em Massa</h3>
+    
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+        <button class="btn btn-success" onclick="controlAllLights('on')">
+            💡 Ligar Todas as Luzes
+        </button>
+        
+        <button class="btn btn-danger" onclick="controlAllLights('off')">
+            🔴 Desligar Todas as Luzes
+        </button>
+        
+        <button class="btn btn-warning" onclick="emergencyOff()">
+            🚨 Emergência - Desligar Tudo
+        </button>
+    </div>
+</div>
+
+<div style="margin-top: 2rem; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h3>📡 Configuração MQTT</h3>
+    <p><strong>Broker:</strong> 192.168.18.236:1883</p>
+    <p><strong>Tópico Comando:</strong> homeguard/relay/command/{RELAY_ID}</p>
+    <p><strong>Tópico Status:</strong> homeguard/relay/status/{RELAY_ID}</p>
+    
+    <div style="margin-top: 1rem;">
+        <h4>📋 Formato das Mensagens</h4>
+        <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; font-size: 0.9rem;">
+Comando:
+{
+    "relay_id": "ESP01_RELAY_001",
+    "command": "ON",
+    "timestamp": "2025-08-18T14:30:45",
+    "source": "flask_dashboard"
+}
+
+Status:
+{
+    "status": "ON",
+    "rssi": -45,
+    "voltage": 3.3,
+    "temperature": 25.5
+}
+        </pre>
+    </div>
+</div>
+
+<script>
+// Função para controlar luzes em massa
+function controlAllLights(action) {
+    const lightRelays = ['ESP01_RELAY_001', 'ESP01_RELAY_002']; // IDs das luzes
+    let promises = [];
+    
+    for (let relayId of lightRelays) {
+        promises.push(
+            fetch(`/api/relay/${relayId}/${action}`)
+                .then(response => response.json())
+        );
+    }
+    
+    Promise.all(promises)
+        .then(results => {
+            let successCount = results.filter(r => r.success).length;
+            alert(`✅ ${successCount}/${lightRelays.length} luzes controladas!`);
+        })
+        .catch(error => {
+            alert(`❌ Erro no controle em massa: ${error}`);
+        });
+}
+
+// Função de emergência
+function emergencyOff() {
+    if (confirm('🚨 ATENÇÃO: Desligar todos os relés?\nEsta ação não pode ser desfeita.')) {
+        const allRelays = [
+            {% for relay in relays %}'{{ relay.id }}'{% if not loop.last %},{% endif %}{% endfor %}
+        ];
+        
+        let promises = [];
+        
+        for (let relayId of allRelays) {
+            promises.push(
+                fetch(`/api/relay/${relayId}/off`)
+                    .then(response => response.json())
+            );
+        }
+        
+        Promise.all(promises)
+            .then(results => {
+                let successCount = results.filter(r => r.success).length;
+                alert(`🚨 EMERGÊNCIA: ${successCount}/${allRelays.length} dispositivos desligados!`);
+            })
+            .catch(error => {
+                alert(`❌ Erro na emergência: ${error}`);
+            });
+    }
+}
+
+// Atualizar status visualmente após comando
+function controlRelay(relayId, action) {
+    fetch(`/api/relay/${relayId}/${action}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Atualizar status visual
+                const statusElement = document.getElementById(`status-${relayId}`);
+                if (statusElement) {
+                    if (action === 'on') {
+                        statusElement.innerHTML = '🟢 Ligado';
+                        statusElement.style.color = '#28a745';
+                    } else if (action === 'off') {
+                        statusElement.innerHTML = '🔴 Desligado';
+                        statusElement.style.color = '#dc3545';
+                    } else {
+                        statusElement.innerHTML = '🔄 Alternado';
+                        statusElement.style.color = '#17a2b8';
+                    }
+                }
+                
+                alert(`✅ ${data.message}`);
+            } else {
+                alert(`❌ Erro: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            alert(`❌ Erro de comunicação: ${error}`);
+        });
+}
+</script>
+{% endblock %}

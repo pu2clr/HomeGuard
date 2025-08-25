@@ -1,0 +1,236 @@
+# HomeGuard Project - Git Ignore File
+
+# ========================================
+# Build and Compilation Files
+# ========================================
+
+# Arduino CLI build directories and temporary files
+build/
+*.bin
+*.hex
+*.elf
+*.map
+*.eep
+*.lss
+*.sym
+
+# Temporary compilation files
+temp/
+tmp/
+.build/
+
+# ========================================
+# Development Environment Files
+# ========================================
+
+# Python virtual environment
+homeguard-env/
+venv/
+env/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Python distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ========================================
+# IDE and Editor Files
+# ========================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ========================================
+# System Files
+# ========================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ========================================
+# Logs and Runtime Files
+# ========================================
+
+# Log files
+*.log
+logs/
+log/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# ========================================
+# Backup and Temporary Files
+# ========================================
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+*.temp
+*~
+
+# Archive files (when used for backups)
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ========================================
+# Security and Configuration
+# ========================================
+
+# Environment variables files
+.env
+.env.local
+.env.production
+.env.development
+
+# Configuration files with sensitive data
+config.json
+secrets.json
+credentials.json
+
+# Private keys
+*.pem
+*.key
+*.crt
+*.cert
+
+# ========================================
+# Hardware-Specific Files
+# ========================================
+
+# Arduino IDE files
+libraries/
+hardware/
+tools/
+*.hex
+*.elf
+*.bin
+
+# Compiled firmware files (comment out if you want to keep them)
+firmware/*.bin
+firmware/*.hex
+firmware/*.elf
+
+# ========================================
+# Testing and Documentation
+# ========================================
+
+# Test output
+test-results/
+coverage/
+*.coverage
+
+# Documentation builds
+docs/_build/
+site/
+
+# ========================================
+# Project-Specific Exclusions
+# ========================================
+
+# MQTT broker data and logs (if running locally)
+mosquitto/data/
+mosquitto/log/
+
+# Compiled motion sensor sketches
+build/Garagem_motion_sensor/
+build/Area_Servico_motion_sensor/
+build/Varanda_motion_sensor/
+build/Mezanino_motion_sensor/
+build/Ad_Hoc_motion_sensor/
+build/test/
+
+# Generated documentation files
+UPLOAD_INSTRUCTIONS.md
+
+# Temporary script outputs
+output.txt
+debug.log
+db/homeguard.db
+
+
+wifi_info.h
