@@ -74,7 +74,7 @@ import time
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print('✅ MQTT connection successful')
-        client.publish('homeguard/audio/first/status', json.dumps({
+        client.publish('home/audio/first/status', json.dumps({
             'device_id': 'audio_presence_rpi2_first_floor',
             'status': 'SETUP_TEST',
             'timestamp': str(time.time())
@@ -260,11 +260,11 @@ def test_audio_system():
     # Test MQTT topics structure
     print("\n📡 MQTT Topics for First Floor:")
     topics = [
-        'homeguard/audio/first/cmnd',
-        'homeguard/audio/first/status',
-        'homeguard/audio/first/events',
-        'homeguard/audio/first/heartbeat',
-        'homeguard/audio/coordination'
+        'home/audio/first/cmnd',
+        'home/audio/first/status',
+        'home/audio/first/events',
+        'home/audio/first/heartbeat',
+        'home/audio/coordination'
     ]
     
     for topic in topics:
@@ -298,14 +298,14 @@ echo "   • Manual: python3 audio_presence_simulator.py"
 echo "   • Service: sudo systemctl start homeguard-audio-first"
 echo ""
 echo "4. ${CYAN}MQTT Commands (First Floor):${NC}"
-echo "   • Topic: homeguard/audio/first/cmnd"
+echo "   • Topic: home/audio/first/cmnd"
 echo "   • Commands: FOOTSTEPS, DOORS, SHOWER, TV_RADIO, TOILETS"
 echo "   • JSON: {\"action\":\"PLAY\",\"category\":\"footsteps\"}"
 echo ""
 echo "5. ${CYAN}Monitor Status:${NC}"
-echo "   • Status: homeguard/audio/first/status"
-echo "   • Events: homeguard/audio/first/events"
-echo "   • Heartbeat: homeguard/audio/first/heartbeat"
+echo "   • Status: home/audio/first/status"
+echo "   • Events: home/audio/first/events"
+echo "   • Heartbeat: home/audio/first/heartbeat"
 echo ""
 echo -e "${BLUE}🏠 System Coordination:${NC}"
 echo "• First floor coordinates with ground floor (raspberry_pi3)"

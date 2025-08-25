@@ -15,10 +15,10 @@ Este sistema simula presença humana no primeiro andar da casa através de:
 ## 📡 **Tópicos MQTT - Primeiro Andar**
 
 ### **Controle e Status:**
-- `homeguard/audio/first/cmnd` - Comandos diretos
-- `homeguard/audio/first/status` - Status do sistema
-- `homeguard/audio/first/events` - Eventos de áudio
-- `homeguard/audio/first/heartbeat` - Heartbeat do sistema
+- `home/audio/first/cmnd` - Comandos diretos
+- `home/audio/first/status` - Status do sistema
+- `home/audio/first/events` - Eventos de áudio
+- `home/audio/first/heartbeat` - Heartbeat do sistema
 
 ### **Triggers:**
 - `homeguard/motion/+/detected` - Detectores de movimento
@@ -26,7 +26,7 @@ Este sistema simula presença humana no primeiro andar da casa através de:
 - `homeguard/emergency/+` - Emergências
 
 ### **Coordenação:**
-- `homeguard/audio/coordination` - Coordenação entre andares
+- `home/audio/coordination` - Coordenação entre andares
 
 ## 🏗️ **Arquitetura do Sistema**
 
@@ -34,12 +34,12 @@ Este sistema simula presença humana no primeiro andar da casa através de:
 Casa HomeGuard - Sistema de Áudio Distribuído
 ├── 🏠 Térreo (Raspberry Pi 3)
 │   ├── raspberry_pi3/
-│   ├── Tópicos: homeguard/audio/ground/*
+│   ├── Tópicos: home/audio/ground/*
 │   └── Sons: Sala, cozinha, entrada
 │
 └── 🏠 Primeiro Andar (Raspberry Pi 2)
     ├── raspberry_pi2/
-    ├── Tópicos: homeguard/audio/first/*
+    ├── Tópicos: home/audio/first/*
     └── Sons: Quartos, banheiros, corredor
 ```
 
@@ -94,27 +94,27 @@ audio_files/
 ```bash
 # Reproduzir categoria específica
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd -m "FOOTSTEPS"
+  -t home/audio/first/cmnd -m "FOOTSTEPS"
 
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd -m "SHOWER"
+  -t home/audio/first/cmnd -m "SHOWER"
 ```
 
 ### **Comandos JSON:**
 ```bash
 # Reproduzir com volume específico
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd \
+  -t home/audio/first/cmnd \
   -m '{"action":"PLAY","category":"doors","volume":0.5}'
 
 # Iniciar rotina
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd \
+  -t home/audio/first/cmnd \
   -m '{"action":"ROUTINE","routine":"morning_routine"}'
 
 # Mudar modo
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd \
+  -t home/audio/first/cmnd \
   -m '{"action":"MODE","mode":"away"}'
 ```
 
@@ -137,15 +137,15 @@ mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
 ```bash
 # Verificar status
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/status
+  -t home/audio/first/status
 
 # Monitorar eventos
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/events
+  -t home/audio/first/events
 
 # Heartbeat
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/heartbeat
+  -t home/audio/first/heartbeat
 ```
 
 ### **Logs do Sistema:**
@@ -222,7 +222,7 @@ python3 audio_presence_simulator.py
 ### **Comunicação entre Andares:**
 ```python
 # Térreo → Primeiro Andar
-homeguard/audio/coordination → {
+home/audio/coordination → {
   "action": "ROUTINE_START",
   "routine_type": "morning_routine", 
   "floor": "ground"
@@ -304,7 +304,7 @@ python3 audio_presence_simulator.py
 
 # 4. Testar comando
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd -m "FOOTSTEPS"
+  -t home/audio/first/cmnd -m "FOOTSTEPS"
 ```
 
 **🎉 Sistema do primeiro andar configurado e coordenado com o térreo!** 🏠

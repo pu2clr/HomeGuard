@@ -45,9 +45,9 @@ class AudioIntegrationTest:
             
             # Subscribe to all audio topics
             topics = [
-                'homeguard/audio/ground/+',
-                'homeguard/audio/first/+', 
-                'homeguard/audio/coordination',
+                'home/audio/ground/+',
+                'home/audio/first/+', 
+                'home/audio/coordination',
                 'homeguard/motion/+/detected',
                 'homeguard/relay/+/status'
             ]
@@ -84,7 +84,7 @@ class AudioIntegrationTest:
         
         for cmd in test_commands:
             print(f"📤 Sending to ground floor: {cmd}")
-            self.client.publish('homeguard/audio/ground/cmnd', cmd)
+            self.client.publish('home/audio/ground/cmnd', cmd)
             time.sleep(2)
             
         self.test_results['ground_floor'] = 'SENT'
@@ -102,7 +102,7 @@ class AudioIntegrationTest:
         
         for cmd in test_commands:
             print(f"📤 Sending to first floor: {cmd}")
-            self.client.publish('homeguard/audio/first/cmnd', cmd)
+            self.client.publish('home/audio/first/cmnd', cmd)
             time.sleep(2)
             
         self.test_results['first_floor'] = 'SENT'
@@ -119,7 +119,7 @@ class AudioIntegrationTest:
         }
         
         print("📤 Sending coordination message...")
-        self.client.publish('homeguard/audio/coordination', json.dumps(coord_message))
+        self.client.publish('home/audio/coordination', json.dumps(coord_message))
         time.sleep(3)
         
         self.test_results['coordination'] = 'SENT'
@@ -171,8 +171,8 @@ class AudioIntegrationTest:
         }
         
         print("🚨 Sending emergency alert to both floors...")
-        self.client.publish('homeguard/audio/ground/cmnd', json.dumps(emergency_cmd))
-        self.client.publish('homeguard/audio/first/cmnd', json.dumps(emergency_cmd))
+        self.client.publish('home/audio/ground/cmnd', json.dumps(emergency_cmd))
+        self.client.publish('home/audio/first/cmnd', json.dumps(emergency_cmd))
         time.sleep(3)
         
         self.test_results['emergency'] = 'SENT'

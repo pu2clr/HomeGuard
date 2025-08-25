@@ -11,19 +11,19 @@ Sistema completo de simulação de presença por áudio distribuído entre dois 
 ├── 🏠 TÉRREO (Raspberry Pi 3)
 │   ├── 📁 raspberry_pi3/
 │   ├── 🎵 Audio: Sala, cozinha, entrada, varanda
-│   ├── 📡 Tópicos: homeguard/audio/ground/*
+│   ├── 📡 Tópicos: home/audio/ground/*
 │   ├── ⏰ Horários: 07:00, 19:00, 22:30
 │   └── 🔊 Sons: Cachorro, passos, portas, TV, banheiro
 │
 ├── 🏠 PRIMEIRO ANDAR (Raspberry Pi 2)  
 │   ├── 📁 raspberry_pi2/
 │   ├── 🎵 Audio: Quartos, banheiros, corredor
-│   ├── 📡 Tópicos: homeguard/audio/first/*
+│   ├── 📡 Tópicos: home/audio/first/*
 │   ├── ⏰ Horários: 07:15, 14:30, 21:30, 23:45
 │   └── 🔊 Sons: Passos, chuveiro, TV quartos, portas
 │
 └── 🎛️ COORDENAÇÃO
-    ├── 📡 Tópico: homeguard/audio/coordination
+    ├── 📡 Tópico: home/audio/coordination
     ├── ⚡ Delay: 2-5 minutos entre andares
     ├── 🎯 Probabilidade: 80% resposta
     └── 🤖 Controller: audio_coordination_controller.py
@@ -33,26 +33,26 @@ Sistema completo de simulação de presença por áudio distribuído entre dois 
 
 ### **🏠 Térreo (Ground Floor) - Raspberry Pi 3:**
 ```bash
-homeguard/audio/ground/cmnd        # Comandos
-homeguard/audio/ground/status      # Status do sistema  
-homeguard/audio/ground/events      # Eventos de áudio
-homeguard/audio/ground/heartbeat   # Heartbeat
-homeguard/audio/ground/control     # Controle direto
+home/audio/ground/cmnd        # Comandos
+home/audio/ground/status      # Status do sistema  
+home/audio/ground/events      # Eventos de áudio
+home/audio/ground/heartbeat   # Heartbeat
+home/audio/ground/control     # Controle direto
 ```
 
 ### **🏠 Primeiro Andar (First Floor) - Raspberry Pi 2:**
 ```bash
-homeguard/audio/first/cmnd         # Comandos
-homeguard/audio/first/status       # Status do sistema
-homeguard/audio/first/events       # Eventos de áudio  
-homeguard/audio/first/heartbeat    # Heartbeat
-homeguard/audio/first/control      # Controle direto
+home/audio/first/cmnd         # Comandos
+home/audio/first/status       # Status do sistema
+home/audio/first/events       # Eventos de áudio  
+home/audio/first/heartbeat    # Heartbeat
+home/audio/first/control      # Controle direto
 ```
 
 ### **🤝 Coordenação entre Andares:**
 ```bash
-homeguard/audio/coordination       # Coordenação automática
-homeguard/audio/controller         # Status do controlador
+home/audio/coordination       # Coordenação automática
+home/audio/controller         # Status do controlador
 homeguard/motion/+/detected        # Sensores movimento (global)
 homeguard/relay/+/status           # Estados dos relays (global)
 homeguard/emergency/+              # Emergências (global)
@@ -128,23 +128,23 @@ python3 integration_test.py
 ```bash
 # Térreo
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/ground/cmnd -m "DOGS"
+  -t home/audio/ground/cmnd -m "DOGS"
 
 # Primeiro Andar  
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd -m "SHOWER"
+  -t home/audio/first/cmnd -m "SHOWER"
 ```
 
 ### **Comandos JSON Avançados:**
 ```bash
 # Rotina coordenada
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/ground/cmnd \
+  -t home/audio/ground/cmnd \
   -m '{"action":"ROUTINE","routine":"morning_routine"}'
 
 # Modo da casa inteira
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/coordination \
+  -t home/audio/coordination \
   -m '{"action":"MODE","mode":"away","target":"all"}'
 ```
 
@@ -168,15 +168,15 @@ HomeGuard> emergency security_breach # Alerta de emergência
 ```bash
 # Status térreo
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/ground/status
+  -t home/audio/ground/status
 
 # Status primeiro andar
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/status
+  -t home/audio/first/status
 
 # Eventos de coordenação
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/coordination
+  -t home/audio/coordination
 ```
 
 ### **Logs dos Serviços:**
@@ -204,9 +204,9 @@ sudo journalctl -u homeguard-audio-first -f
 
 # Cancelar emergência
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/ground/cmnd -m "STOP"
+  -t home/audio/ground/cmnd -m "STOP"
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/first/cmnd -m "STOP"
+  -t home/audio/first/cmnd -m "STOP"
 ```
 
 ## 🎯 **Integração com Sensores**
@@ -219,8 +219,8 @@ mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
 
 # Exemplo: Movimento na sala
 homeguard/motion/living_room/detected → 
-  → homeguard/audio/ground/* (imediato)
-  → homeguard/audio/first/* (delay 3min, 80% chance)
+  → home/audio/ground/* (imediato)
+  → home/audio/first/* (delay 3min, 80% chance)
 ```
 
 ### **Resposta a Relays:**
@@ -230,8 +230,8 @@ homeguard/motion/living_room/detected →
 
 # Exemplo: Luz do quarto
 homeguard/relay/bedroom_light/status = "ON" →
-  → homeguard/audio/first/* (sons de quarto)
-  → homeguard/audio/ground/* (delay, pessoa descendo)
+  → home/audio/first/* (sons de quarto)
+  → home/audio/ground/* (delay, pessoa descendo)
 ```
 
 ## 📊 **Performance e Estatísticas**
@@ -266,7 +266,7 @@ python3 integration_test.py
 
 # Conectividade MQTT
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/+/heartbeat -C 2
+  -t home/audio/+/heartbeat -C 2
 ```
 
 ### **Backup dos Arquivos:**
@@ -318,11 +318,11 @@ python3 audio_coordination_controller.py
 ```bash
 # Comando simples
 mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/ground/cmnd -m "FOOTSTEPS"
+  -t home/audio/ground/cmnd -m "FOOTSTEPS"
 
 # Status dos sistemas
 mosquitto_sub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
-  -t homeguard/audio/+/status -C 2
+  -t home/audio/+/status -C 2
 ```
 
 ## 🎉 **Resultado Final**

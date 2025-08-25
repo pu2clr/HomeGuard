@@ -23,18 +23,18 @@ class AudioCoordinationController:
         # System topics
         self.topics = {
             # Ground floor (Pi3)
-            'ground_cmd': 'homeguard/audio/ground/cmnd',
-            'ground_status': 'homeguard/audio/ground/status',
-            'ground_events': 'homeguard/audio/ground/events',
+            'ground_cmd': 'home/audio/ground/cmnd',
+            'ground_status': 'home/audio/ground/status',
+            'ground_events': 'home/audio/ground/events',
             
             # First floor (Pi2)
-            'first_cmd': 'homeguard/audio/first/cmnd',
-            'first_status': 'homeguard/audio/first/status', 
-            'first_events': 'homeguard/audio/first/events',
+            'first_cmd': 'home/audio/first/cmnd',
+            'first_status': 'home/audio/first/status', 
+            'first_events': 'home/audio/first/events',
             
             # Coordination
-            'coordination': 'homeguard/audio/coordination',
-            'controller': 'homeguard/audio/controller'
+            'coordination': 'home/audio/coordination',
+            'controller': 'home/audio/controller'
         }
         
         # System state

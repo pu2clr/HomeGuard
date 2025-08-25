@@ -53,13 +53,13 @@ class AudioPresenceSimulator:
         
         # MQTT Topics - Ground Floor Audio System
         self.topics = {
-            'cmd': 'homeguard/audio/ground/cmnd',
-            'status': 'homeguard/audio/ground/status', 
-            'events': 'homeguard/audio/ground/events',
-            'heartbeat': 'homeguard/audio/ground/heartbeat',
+            'cmd': 'home/audio/ground/cmnd',
+            'status': 'home/audio/ground/status', 
+            'events': 'home/audio/ground/events',
+            'heartbeat': 'home/audio/ground/heartbeat',
             'motion_trigger': 'homeguard/motion/+/detected',  # Listen to all motion sensors
             'relay_trigger': 'homeguard/relay/+/status',      # Listen to relay events
-            'audio_control': 'homeguard/audio/ground/control', # Direct audio control
+            'audio_control': 'home/audio/ground/control', # Direct audio control
             'emergency': 'homeguard/emergency/+',             # Emergency triggers
         }
         
