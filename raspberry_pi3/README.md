@@ -74,10 +74,45 @@ cp seus_passos.wav audio_files/footsteps/
 ./test_audio_system.sh
 ```
 
-### 4. **Iniciar Serviço**
+### 4. **Iniciar Serviço Automaticamente**
+
+#### Opção 1: Usando cron (@reboot)
+Edite o crontab do usuário `homeguard`:
 ```bash
-sudo systemctl start homeguard-audio
-sudo systemctl enable homeguard-audio
+crontab -e
+```
+Adicione a linha abaixo ao final do arquivo:
+```bash
+@reboot cd /home/homeguard/HomeGuard/raspberry_pi3 && source homeguard-audio-env/bin/activate && python audio_presence_simulator.py
+```
+Assim, o serviço de áudio será iniciado automaticamente a cada boot.
+
+#### Opção 2: Usando systemd user service
+Crie o arquivo `~/.config/systemd/user/homeguard-audio.service` com o conteúdo:
+```ini
+[Unit]
+Description=HomeGuard Audio Presence Simulator
+
+[Service]
+Type=simple
+WorkingDirectory=/home/homeguard/HomeGuard/raspberry_pi3
+Environment="PATH=/home/homeguard/HomeGuard/raspberry_pi3/homeguard-audio-env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="SDL_AUDIODRIVER=alsa"
+ExecStart=/home/homeguard/HomeGuard/raspberry_pi3/homeguard-audio-env/bin/python audio_presence_simulator.py
+Restart=always
+
+[Install]
+WantedBy=default.target
+```
+Ative e inicie o serviço:
+```bash
+systemctl --user daemon-reload
+systemctl --user enable homeguard-audio
+systemctl --user start homeguard-audio
+```
+Para que serviços de usuário iniciem automaticamente no boot, execute:
+```bash
+loginctl enable-linger homeguard
 ```
 
 ## 🔒 **Acesso Remoto via VPN**
@@ -130,19 +165,31 @@ Para guia completo de apps: `cat MOBILE_APPS_GUIDE.md`
 # Tópico: home/audio/cmnd
 
 # Latidos de cachorro
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "DOGS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "DOGS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "DOGS" -u homeguard -P pu2clr123456
 
 # Passos
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "FOOTSTEPS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "FOOTSTEPS" -u homeguard -P pu2clr123456
 
 # Banheiro
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "TOILET" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "TOILET" -u homeguard -P pu2clr123456
+
+
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "FOOTSTEPS" -u homeguard -P pu2clr123456
+
 
 # TV de fundo
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "TV" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "TV" -u homeguard -P pu2clr123456
 
 # Rotina matinal
-mosquitto_pub -h 192.168.18.236 -t home/audio/gound/cmnd -m "MORNING" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MORNING" -u homeguard -P pu2clr123456
+
+
+# Alerts
+
+ mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "ALERT" -u homeguard -P pu2clr123456
+
+
 ```
 
 ### **Modos de Operação**
