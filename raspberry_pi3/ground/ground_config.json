@@ -1,0 +1,79 @@
+{
+  "mqtt_broker": "192.168.18.6",
+  "mqtt_port": 1883,
+  "mqtt_user": "homeguard",
+  "mqtt_pass": "pu2clr123456",
+  "location": "Térreo",
+  "floor": "ground",
+  "audio_path": "./audio_files",
+  "default_mode": "home",
+  "motion_triggered": true,
+  "coordination_enabled": true,
+  "coordination_probability": 0.8,
+  "volume": 0.8,
+  
+  "schedules": {
+    "morning_activity": {
+      "time": "07:00",
+      "sounds": ["dogs", "footsteps", "tv_radio"],
+      "duration": 20,
+      "description": "Atividade matinal no térreo",
+      "enabled": true
+    },
+    "lunch_time": {
+      "time": "12:00",
+      "sounds": ["footsteps", "doors", "tv_radio"],
+      "duration": 45,
+      "description": "Almoço e atividade",
+      "enabled": true
+    },
+    "afternoon_tv": {
+      "time": "15:30",
+      "sounds": ["tv_radio", "footsteps"],
+      "duration": 60,
+      "description": "TV da tarde",
+      "enabled": true
+    },
+    "dinner_prep": {
+      "time": "18:30",
+      "sounds": ["footsteps", "doors"],
+      "duration": 30,
+      "description": "Preparação do jantar",
+      "enabled": true
+    },
+    "evening_dogs": {
+      "time": "20:00",
+      "sounds": ["dogs", "footsteps"],
+      "duration": 15,
+      "description": "Cuidado com os cães",
+      "enabled": true
+    },
+    "night_check": {
+      "time": "22:30",
+      "sounds": ["footsteps", "doors"],
+      "duration": 10,
+      "description": "Verificação noturna",
+      "enabled": true
+    }
+  },
+  
+  "motion_responses": {
+    "entrance": ["dogs", "footsteps"],
+    "living_room": ["tv_radio", "footsteps"],
+    "kitchen": ["footsteps", "doors"],
+    "dining_room": ["footsteps"],
+    "garage": ["doors", "footsteps"],
+    "backyard": ["dogs"],
+    "ground_bathroom": ["footsteps"],
+    "default": ["footsteps", "doors"]
+  },
+  
+  "relay_responses": {
+    "entrance_light": ["footsteps"],
+    "living_room_light": ["tv_radio"],
+    "kitchen_light": ["footsteps"],
+    "garage_light": ["doors"],
+    "backyard_light": ["dogs"],
+    "default": ["footsteps"]
+  }
+}

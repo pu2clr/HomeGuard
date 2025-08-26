@@ -1,399 +1,222 @@
-# HomeGuard Audio Presence Simulator - Raspberry Pi 3
+# HomeGuard Audio Presence System - Dual Raspberry Pi 3 Architecture
 
-## 🎵 Visão Geral
+## 🏗️ Arquitetura
 
-Este sistema transforma um Raspberry Pi 3 em uma **central de áudio inteligente** que simula presença humana em casa através de sons realistas como latidos de cachorro, passos, descargas de vaso sanitário, TV/rádio e outros ruídos domésticos.
+Sistema de simulação de presença por áudio distribuído em dois Raspberry Pi 3:
+- **Raspberry Pi 3A (Térreo)**: Simulação do andar térreo
+- **Raspberry Pi 3B (Primeiro Andar)**: Simulação do primeiro andar
 
-## 🎯 Funcionalidades Principais
-
-### 🏠 **Simulação de Presença**
-- **Latidos de cachorro** para alertas de segurança
-- **Passos dentro de casa** em resposta a movimento
-- **Sons de banheiro** (descarga, torneira) em rotinas
-- **TV/Rádio** como ruído de fundo
-- **Portas abrindo/fechando** para simular entrada/saída
-- **Ruídos gerais** para ambiente vivido
-
-### 🤖 **Integração Inteligente**
-- **Integração MQTT** com sistema HomeGuard
-- **Resposta automática** a sensores de movimento
-- **Rotinas programadas** (manhã, tarde, noite)
-- **Modos de operação** (casa, fora, noite, férias)
-- **Controle remoto** via MQTT
-
-### ⏰ **Automação por Horário**
-- **Rotina matinal**: Banheiro → Passos → Portas
-- **Rotina noturna**: Portas → Passos → TV
-- **Atividades aleatórias** durante o dia
-- **Programação personalizável**
-
-## 📁 Estrutura de Arquivos
+## 📁 Estrutura de Diretórios
 
 ```
-raspberry_pi/
-├── audio_presence_simulator.py  # Script principal de áudio
-├── audio_config.json            # Configuração de áudio
-├── requirements.txt             # Dependências Python
-├── setup_audio_simulator.sh     # Script de instalação de áudio
-├── setup_vpn_server.sh         # Script de instalação VPN/acesso remoto
-├── integration_test.py         # Teste de integração do sistema
-├── README.md                   # Este arquivo
-├── MOBILE_APPS_GUIDE.md        # Guia de apps para celular/desktop
-└── audio_files/                # Arquivos de áudio
-    ├── dogs/                   # Latidos de cachorro
-    ├── footsteps/              # Passos
-    ├── toilets/                # Banheiro
-    ├── tv_radio/               # TV/Rádio
-    ├── doors/                  # Portas
-    ├── background/             # Ruído de fundo
-    └── alerts/                 # Alertas
+raspberry_pi3/
+├── shared/                     # Código compartilhado
+│   └── base_audio_simulator.py # Classe base comum
+├── ground/                     # Térreo (Pi 3A)
+│   ├── audio_ground.py        # Simulador específico do térreo
+│   ├── ground_config.json     # Configuração do térreo
+│   ├── start_ground_floor.sh  # Script de inicialização
+│   └── audio_files/           # Arquivos de áudio do térreo
+│       ├── dogs/
+│       ├── doors/
+│       ├── footsteps/
+│       ├── tv_radio/
+│       └── alerts/
+├── first/                      # Primeiro Andar (Pi 3B)
+│   ├── audio_first.py         # Simulador específico do 1º andar
+│   ├── first_config.json      # Configuração do 1º andar
+│   ├── start_first_floor.sh   # Script de inicialização
+│   └── audio_files/           # Arquivos de áudio do 1º andar
+│       ├── doors/
+│       ├── footsteps/
+│       ├── toilets/
+│       ├── shower/
+│       ├── bedroom/
+│       └── alerts/
+└── logs/                       # Logs compartilhados
 ```
 
-## 🚀 Instalação Rápida
+## 🎵 Categorias de Som por Andar
 
-### 1. **Preparar Raspberry Pi 3**
+### Térreo (Ground Floor)
+- **dogs**: Sons de cães (entrada, quintal)
+- **doors**: Portas (entrada, cozinha, garagem)
+- **footsteps**: Passos (sala, cozinha, corredor)
+- **tv_radio**: TV e rádio (sala de estar)
+- **alerts**: Alertas de segurança
+
+### Primeiro Andar (First Floor)
+- **doors**: Portas dos quartos
+- **footsteps**: Passos no corredor e quartos
+- **toilets**: Sons de banheiro
+- **shower**: Sons de chuveiro
+- **bedroom**: Sons de quarto (cama, roupas)
+- **alerts**: Alertas de segurança
+
+## 🚀 Como Usar
+
+### Instalação Inicial
+
+1. **Clonar repositório em ambos os Pi3**:
 ```bash
-# No Raspberry Pi
-git clone <repo_url>
-cd HomeGuard/raspberry_pi3
-
-# Executar script de instalação
-sudo ./setup_audio_simulator.sh
+git clone [repo-url] /home/pi/HomeGuard
+cd /home/pi/HomeGuard/raspberry_pi3
 ```
 
-### 2. **Adicionar Arquivos de Áudio**
+2. **Instalar dependências**:
 ```bash
-# Adicione seus arquivos de áudio nas pastas correspondentes
-cp seus_latidos.mp3 audio_files/dogs/
-cp seus_passos.wav audio_files/footsteps/
-# etc...
+sudo apt update
+sudo apt install python3-pip pulseaudio
+pip3 install pygame paho-mqtt schedule
 ```
 
-### 3. **Testar Sistema**
+### Configuração por Andar
+
+#### Térreo (Pi 3A)
 ```bash
-./test_audio_system.sh
+cd ground/
+# Editar configuração se necessário
+nano ground_config.json
+# Fazer script executável
+chmod +x start_ground_floor.sh
+# Executar
+./start_ground_floor.sh
 ```
 
-### 4. **Iniciar Serviço Automaticamente**
-
-#### Opção 1: Usando cron (@reboot)
-Edite o crontab do usuário `homeguard`:
+#### Primeiro Andar (Pi 3B)
 ```bash
-crontab -e
-```
-Adicione a linha abaixo ao final do arquivo:
-```bash
-@reboot cd /home/homeguard/HomeGuard/raspberry_pi3 && source homeguard-audio-env/bin/activate && python audio_presence_simulator.py
-```
-Assim, o serviço de áudio será iniciado automaticamente a cada boot.
-
-#### Opção 2: Usando systemd user service
-Crie o arquivo `~/.config/systemd/user/homeguard-audio.service` com o conteúdo:
-```ini
-[Unit]
-Description=HomeGuard Audio Presence Simulator
-
-[Service]
-Type=simple
-WorkingDirectory=/home/homeguard/HomeGuard/raspberry_pi3
-Environment="PATH=/home/homeguard/HomeGuard/raspberry_pi3/homeguard-audio-env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-Environment="SDL_AUDIODRIVER=alsa"
-ExecStart=/home/homeguard/HomeGuard/raspberry_pi3/homeguard-audio-env/bin/python audio_presence_simulator.py
-Restart=always
-
-[Install]
-WantedBy=default.target
-```
-Ative e inicie o serviço:
-```bash
-systemctl --user daemon-reload
-systemctl --user enable homeguard-audio
-systemctl --user start homeguard-audio
-```
-Para que serviços de usuário iniciem automaticamente no boot, execute:
-```bash
-loginctl enable-linger homeguard
+cd first/
+# Editar configuração se necessário
+nano first_config.json
+# Fazer script executável
+chmod +x start_first_floor.sh
+# Executar
+./start_first_floor.sh
 ```
 
-## 🔒 **Acesso Remoto via VPN**
+## 📡 Tópicos MQTT
 
-### **Instalação do Servidor VPN (WireGuard)**
-```bash
-# Instalar e configurar servidor VPN
-sudo ./setup_vpn_server.sh
+### Térreo
+- Comandos: `homeguard/audio/ground/command`
+- Status: `homeguard/audio/ground/status`
+- Eventos: `homeguard/audio/ground/events`
+- Coordenação: `homeguard/audio/coordination`
 
-# Gerar cliente para seu dispositivo
-./generate_wireguard_client.sh seu_celular
+### Primeiro Andar
+- Comandos: `homeguard/audio/first/command`
+- Status: `homeguard/audio/first/status`
+- Eventos: `homeguard/audio/first/events`
+- Coordenação: `homeguard/audio/coordination`
 
-# Verificar status do VPN
-./wireguard_status.sh
-```
+## ⚙️ Configuração de Sensores
 
-### **Configuração do Router**
-```bash
-# Configurar redirecionamento de porta no seu roteador:
-# Porta: 51820 UDP → IP do Raspberry Pi
-```
+### Resposta a Movimento
 
-### **Apps Recomendados para Acesso Remoto**
+#### Térreo
+- **Entrada**: Cães + passos
+- **Sala**: TV/rádio + passos
+- **Cozinha**: Passos + portas
+- **Garagem**: Portas + passos
+- **Quintal**: Cães
 
-#### **📱 iOS/Android:**
-- **WireGuard** (VPN client - gratuito)
-- **MQTTAnalyzer** (iOS) ou **MQTT Dash** (Android)
-- **IoT MQTT Panel** (Dashboard customizável)
+#### Primeiro Andar
+- **Quarto Principal**: Quarto + passos + portas
+- **Quartos**: Quarto + passos
+- **Corredor**: Passos + portas
+- **Banheiro**: Banheiro + passos
+- **Banheiro Suíte**: Chuveiro + banheiro
 
-#### **💻 macOS/Windows:**
-- **WireGuard** (VPN client oficial)
-- **MQTT Explorer** (cliente desktop completo)
+### Resposta a Relés
 
-### **Configuração MQTT Remota**
-```bash
-# Após conectar na VPN, use:
-# Host: 192.168.18.236 (IP do Raspberry Pi)
-# Port: 1883
-# User: homeguard
-# Pass: pu2clr123456
-```
+#### Térreo
+- **Luz Entrada**: Passos
+- **Luz Sala**: TV/rádio
+- **Luz Cozinha**: Passos
+- **Luz Garagem**: Portas
+- **Luz Quintal**: Cães
 
-Para guia completo de apps: `cat MOBILE_APPS_GUIDE.md`
+#### Primeiro Andar
+- **Luz Quarto**: Quarto + passos
+- **Luz Corredor**: Passos
+- **Luz Banheiro**: Banheiro
+- **Luz Suíte**: Quarto + portas
 
-## 🎛️ Controle via MQTT
+## 🤝 Sistema de Coordenação
 
-### **Comandos Básicos**
-```bash
-# Broker MQTT: 192.168.18.236
-# Tópico: home/audio/cmnd
+Os dois Pi3 se coordenam via MQTT:
+- **Probabilidade de resposta conjunta**: 80% (térreo) / 70% (primeiro andar)
+- **Delay de coordenação**: 2-5 minutos
+- **Tópico de coordenação**: `homeguard/audio/coordination`
 
-# Latidos de cachorro
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "DOGS" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "DOGS" -u homeguard -P pu2clr123456
+## 🔧 Comandos MQTT de Controle
 
-# Passos
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "FOOTSTEPS" -u homeguard -P pu2clr123456
-
-# Banheiro
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "TOILET" -u homeguard -P pu2clr123456
-
-
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "FOOTSTEPS" -u homeguard -P pu2clr123456
-
-
-# TV de fundo
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "TV" -u homeguard -P pu2clr123456
-
-# Rotina matinal
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MORNING" -u homeguard -P pu2clr123456
-
-
-# Alerts
-
- mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "ALERT" -u homeguard -P pu2clr123456
-
-
-```
-
-### **Modos de Operação**
-```bash
-# Modo Casa (resposta baixa a movimento)
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_HOME" -u homeguard -P pu2clr123456
-
-# Modo Fora (resposta alta a movimento)
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_AWAY" -u homeguard -P pu2clr123456
-
-# Modo Noite (volume reduzido)
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_NIGHT" -u homeguard -P pu2clr123456
-
-# Modo Férias (atividade máxima)
-mosquitto_pub -h 192.168.18.236 -t home/audio/ground/cmnd -m "MODE_VACATION" -u homeguard -P pu2clr123456
-```
-
-## 📊 Integração com HomeGuard
-
-### **Resposta Automática a Sensores**
-
-O sistema monitora automaticamente:
-
-- **Sensores de movimento**: `home/+/motion`
-- **Relés (luzes)**: `home/+/relay`
-- **Outros dispositivos**: Configurável
-
+### Comandos Básicos
 ```json
-// Quando detecta movimento
-{
-  "device_id": "motion_abc123",
-  "event": "MOTION_DETECTED",
-  "location": "Living Room"
-}
-
-// Sistema responde com som apropriado baseado no modo:
-// - AWAY: Latidos + Passos (simula chegada)
-// - HOME: Passos ocasionais (30% chance)
-// - NIGHT: Resposta reduzida
+{"command": "start"}          # Iniciar simulação
+{"command": "stop"}           # Parar simulação
+{"command": "pause"}          # Pausar
+{"command": "resume"}         # Retomar
+{"command": "status"}         # Status atual
 ```
 
-## ⚙️ Configuração
-
-### **audio_config.json**
+### Comandos de Som
 ```json
-{
-    "mqtt_broker": "192.168.18.236",
-    "location": "Living Room",
-    "default_mode": "home",
-    "motion_triggered": true,
-    "schedules": {
-        "morning_routine": {
-            "time": "07:30",
-            "sounds": ["toilets", "footsteps", "doors"]
-        },
-        "evening_routine": {
-            "time": "19:00",
-            "sounds": ["doors", "footsteps", "tv_radio"]
-        }
-    },
-    "volume_levels": {
-        "dogs": 0.8,
-        "footsteps": 0.6,
-        "toilets": 0.7,
-        "tv_radio": 0.4
-    }
-}
+{"command": "play", "category": "dogs"}        # Térreo
+{"command": "play", "category": "bedroom"}     # Primeiro andar
+{"command": "volume", "level": 0.8}            # Ajustar volume
 ```
 
-## 🔧 Hardware Recomendado
-
-### **Raspberry Pi 3 Setup**
-- **Raspberry Pi 3B/3B+**
-- **MicroSD 16GB+** (Classe 10)
-- **Fonte 5V 2.5A**
-- **Caixa de som** (3.5mm jack, HDMI, ou USB)
-
-### **Conectores de Áudio**
-```
-Raspberry Pi 3:
-├── 3.5mm Jack ──── Caixas de som pequenas
-├── HDMI ────────── TV/Monitor com som
-├── USB ─────────── Caixas USB (melhor qualidade)
-└── GPIO ────────── Amplificadores externos
+### Comandos de Modo
+```json
+{"command": "mode", "value": "home"}     # Modo casa
+{"command": "mode", "value": "away"}     # Modo ausente
+{"command": "mode", "value": "sleep"}    # Modo dormir
 ```
 
-## 📈 Cenários de Uso
+## 📊 Logs e Monitoramento
 
-### **🏠 Casa Ocupada (MODE_HOME)**
-- Resposta baixa a movimento (30%)
-- Rotinas normais
-- Volume moderado
-- Atividades aleatórias desabilitadas
+- **Logs**: `raspberry_pi3/logs/`
+- **Formato**: `[andar]_floor_YYYYMMDD_HHMMSS.log`
+- **Rotação**: Diária automática
 
-### **✈️ Casa Vazia (MODE_AWAY)**  
-- Resposta alta a movimento (80%)
-- Simula chegada em casa
-- Atividades aleatórias habilitadas
-- Ruído de fundo ligado
+## 🔄 Manutenção
 
-### **🌙 Período Noturno (MODE_NIGHT)**
-- Volume reduzido (50%)
-- Resposta moderada (50%)
-- Apenas sons suaves
-
-### **🏖️ Férias (MODE_VACATION)**
-- Simulação máxima
-- Rotinas enhanced
-- Resposta 90% a movimento
-- Atividade contínua
-
-## 📋 Monitoramento
-
-### **Logs do Sistema**
+### Atualizar Sistema
 ```bash
-# Ver logs em tempo real
-sudo journalctl -u homeguard-audio -f
-
-# Status do serviço
-sudo systemctl status homeguard-audio
-
-# Monitorar MQTT
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/audio/#" -v
+cd /home/pi/HomeGuard
+git pull
+# Reiniciar serviços se necessário
 ```
 
-### **Tópicos MQTT**
-- `home/audio/status` - Status do sistema
-- `home/audio/events` - Eventos de áudio
-- `home/audio/heartbeat` - Heartbeat (60s)
-- `home/audio/cmnd` - Comandos
-
-## 🎵 Obtendo Arquivos de Áudio
-
-### **Fontes Gratuitas**
-- **Freesound.org** - Biblioteca gratuita
-- **Zapsplat.com** - Sons profissionais
-- **BBC Sound Effects** - Efeitos da BBC
-
-### **Tipos de Arquivo Suportados**
-- MP3, WAV, OGG
-- Qualidade recomendada: 44.1kHz, 16-bit
-- Duração ideal: 1-10 segundos
-
-### **Exemplos de Sons Necessários**
-
-#### 🐕 **Dogs (3-5 arquivos)**
-- Latido de alerta
-- Latido de proteção
-- Rosnado baixo
-
-#### 👣 **Footsteps (5-10 arquivos)**
-- Passos no piso de madeira
-- Passos no carpete
-- Passos subindo escada
-
-#### 🚽 **Toilets (3-5 arquivos)**
-- Descarga completa
-- Torneira abrindo/fechando
-- Porta do banheiro
-
-#### 📺 **TV/Radio (2-3 longos)**
-- Murmúrio de TV distante
-- Rádio com música baixa
-- Conversa de fundo
-
-## 🔒 Segurança
-
-### **Autenticação MQTT**
-- Usuário/senha configuráveis
-- Tópicos protegidos
-- Validação de comandos
-
-### **Proteção do Sistema**
-- Serviço systemd com restart automático
-- Logs rotativos
-- Controle de volume
-
-## 🚨 Troubleshooting
-
-### **Áudio Não Funciona**
+### Backup de Configuração
 ```bash
-# Testar saída de áudio
-speaker-test -t sine -f 1000 -l 2
-
-# Verificar dispositivos
-aplay -l
-
-# Configurar saída
-sudo raspi-config # Advanced Options > Audio
+cp ground/ground_config.json ground/ground_config.json.backup
+cp first/first_config.json first/first_config.json.backup
 ```
 
-### **MQTT Não Conecta**
+### Verificar Status
 ```bash
-# Testar conexão MQTT
-mosquitto_pub -h 192.168.18.236 -t test -m "hello" -u homeguard -P pu2clr123456
+# Via MQTT
+mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+    -t "homeguard/audio/ground/command" -m '{"command": "status"}'
+    
+mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+    -t "homeguard/audio/first/command" -m '{"command": "status"}'
 ```
 
-### **Serviço Não Inicia**
-```bash
-# Verificar logs
-sudo journalctl -u homeguard-audio --no-pager
+## 🆘 Troubleshooting
 
-# Verificar permissões
-ls -la audio_presence_simulator.py
-```
+### Problemas Comuns
 
-Este sistema oferece uma **solução completa e profissional** para simular presença em casa usando áudio inteligente integrado ao sistema HomeGuard! 🎵🏠
+1. **Import Error**: Verificar PYTHONPATH nos scripts
+2. **MQTT Connection**: Verificar credenciais e conectividade
+3. **Audio Issues**: Verificar PulseAudio e permissões
+4. **File Not Found**: Verificar estrutura de diretórios de áudio
+
+### Debug Mode
+Adicionar `"debug": true` nas configurações JSON para logs detalhados.
+
+---
+
+**Versão**: 2.0 (Dual Pi3 Architecture)  
+**Última Atualização**: Janeiro 2024
