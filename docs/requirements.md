@@ -13,3 +13,24 @@
 | 12V Battery 3A      | 12V Baterry                     |   4   | 
 
 
+
+
+TÉRREO
++----------------------+------------------+-------------------+
+| Garagem              | Sala de Visita   | Área de Serviço   |
+| - Sensor movimento   | - Relé luz       | - Sensor movimento|
+| - Relé luz           | - RPi 3          | - Relé luz        |
+|                      | Sensor Energia   |                   |     
++----------------------+------------------+-------------------+
+
+
+1º ANDAR
++----------------------+------------------+-------------------+
+| Varanda              | Quarto           | Mezanino          |
+| - Sensor movimento   | - Relé luz       | - Sensor movimento|
+|                      | - Servidor áudio | - Sensor movimento|
+|                      | - RPi 3          | Modem (rede GSM)  | 
+|                      |                  | RPi 4 (Broker)    | 
++----------------------+------------------+-------------------+
+
+
