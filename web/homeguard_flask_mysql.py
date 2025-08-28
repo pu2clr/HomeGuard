@@ -20,21 +20,29 @@ from mqtt_relay_config import RELAYS_CONFIG
 app = Flask(__name__)
 
 class MySQLHomeGuardDashboard:
-    def __init__(self, config_file='homeguard_mysql_config.json'):
-        self.config_file = config_file
-        self.config = self._load_config()
-        self.motion_table = 'motion_sensors'
-        self.sensors_table = 'dht11_sensors'
-        self.alerts_table = 'sensor_alerts'
+    def __init__(self, config_file="config_mysql.json"):
+        """Inicializar o dashboard HomeGuard com MySQL"""
+        self.config = self.load_config(config_file)
+        self.db_config = self.config['database']
         
-        # Configurações de alertas
-        self.alert_thresholds = {
-            'temperature': {'min': 10, 'max': 35},  # °C
-            'humidity': {'min': 30, 'max': 80}      # %
-        }
+        # Configurar Flask
+        self.app = Flask(__name__)
+        self.app.secret_key = self.config['flask']['secret_key']
         
-        # Inicializar banco de dados
-        self._init_database()
+        # Pool de conexões MySQL
+        self.connection_pool = None
+        self.init_database_pool()
+        
+        # Testar conexão na inicialização
+        if not self.test_connection():
+            print("❌ ERRO: Não foi possível conectar ao MySQL!")
+            print("🔧 Execute: ./fix_mariadb_auth.sh para corrigir problemas de autenticação")
+            return
+        
+        print("✅ Conexão MySQL estabelecida com sucesso!")
+        
+        # Configurar rotas
+        self.setup_routes()
 
     def _load_config(self):
         """Carregar configuração do MySQL"""
@@ -167,28 +175,57 @@ class MySQLHomeGuardDashboard:
                 cursor.close()
                 conn.close()
 
-    def get_db_connection(self):
-        """Obter conexão com banco de dados MySQL"""
+    def test_connection(self):
+        """Testar conexão com MySQL de forma robusta"""
         try:
-            connection = mysql.connector.connect(
-                host=self.config['mysql']['host'],
-                port=self.config['mysql']['port'],
-                database=self.config['mysql']['database'],
-                user=self.config['mysql']['user'],
-                password=self.config['mysql']['password'],
-                charset=self.config['mysql']['charset'],
-                autocommit=self.config['mysql'].get('autocommit', True)
-            )
-            
-            if connection.is_connected():
-                return connection
-            else:
-                print("❌ Falha na conexão com MySQL")
-                return None
+            conn = self.get_db_connection()
+            if conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT 1 AS test")
+                result = cursor.fetchone()
+                cursor.close()
+                conn.close()
                 
-        except Error as e:
-            print(f"❌ Erro ao conectar ao MySQL: {e}")
-            return None
+                if result and result[0] == 1:
+                    print(f"✅ Conexão MySQL OK - Host: {self.db_config['host']}:{self.db_config['port']}")
+                    return True
+                    
+        except Exception as e:
+            print(f"❌ Erro na conexão MySQL: {str(e)}")
+            print("\\n🔧 SOLUÇÕES POSSÍVEIS:")
+            print("   1. Execute: ./fix_mariadb_auth.sh")
+            print("   2. Verifique se MariaDB está rodando: sudo systemctl status mariadb")
+            print("   3. Verifique as credenciais em config_mysql.json")
+            print("   4. Teste conexão manual: mysql -u homeguard -p")
+            
+        return False
+
+    def get_db_connection(self):
+        """Obter conexão do pool com tratamento de erro"""
+        try:
+            if self.connection_pool:
+                conn = self.connection_pool.get_connection()
+                if conn.is_connected():
+                    return conn
+        except Exception as e:
+            print(f"❌ Erro no pool de conexões: {str(e)}")
+            # Tentar conexão direta se pool falhar
+            try:
+                conn = mysql.connector.connect(
+                    host=self.db_config['host'],
+                    port=self.db_config['port'],
+                    database=self.db_config['database'],
+                    user=self.db_config['user'],
+                    password=self.db_config['password'],
+                    charset=self.db_config.get('charset', 'utf8mb4'),
+                    connection_timeout=self.db_config.get('connection_timeout', 10),
+                    autocommit=self.db_config.get('autocommit', True)
+                )
+                return conn
+            except Exception as direct_error:
+                print(f"❌ Erro na conexão direta: {str(direct_error)}")
+                
+        return None
 
     def get_device_statistics(self):
         """Obter estatísticas dos dispositivos"""

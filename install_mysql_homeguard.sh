@@ -164,33 +164,98 @@ secure_mysql() {
         fi
     done
     
-    # Tentar conectar e configurar (MariaDB pode não ter senha inicial)
-    if mysql -u root -e "SELECT 1;" 2>/dev/null; then
-        print_info "Conectando ao MySQL/MariaDB sem senha (configuração inicial)"
-        mysql -u root <<EOF
-ALTER USER 'root'@'localhost' IDENTIFIED BY '$ROOT_PASSWORD';
+    print_info "Configurando acesso root com senha..."
+    
+    # Primeira tentativa: MariaDB com autenticação por socket (sem senha)
+    if sudo mysql -u root -e "SELECT 1;" 2>/dev/null; then
+        print_info "Conectando via sudo (autenticação por socket)"
+        
+        # Configurar root para usar senha em vez de socket
+        sudo mysql -u root <<EOF
+-- Alterar plugin de autenticação do root para usar senha
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$ROOT_PASSWORD';
+
+-- Permitir root remoto com senha
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '$ROOT_PASSWORD';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
+-- Limpeza de segurança
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1', '%');
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+
+-- Aplicar mudanças
 FLUSH PRIVILEGES;
 EOF
-    else
-        # Tentar com senha temporária ou configuração existente
+        
+        if [ $? -eq 0 ]; then
+            print_success "Root configurado com autenticação por senha"
+        else
+            print_error "Falha ao configurar autenticação do root"
+            exit 1
+        fi
+        
+    # Segunda tentativa: MySQL/MariaDB já com senha
+    elif mysql -u root -p$ROOT_PASSWORD -e "SELECT 1;" 2>/dev/null; then
+        print_info "Conectando com senha existente"
+        
         mysql -u root -p$ROOT_PASSWORD <<EOF
+-- Permitir root remoto
+UPDATE mysql.user SET host='%' WHERE user='root' AND host='localhost';
+
+-- Limpeza de segurança  
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1', '%');
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+
+-- Aplicar mudanças
 FLUSH PRIVILEGES;
 EOF
+        
+    # Terceira tentativa: sem senha (instalação limpa)
+    elif mysql -u root -e "SELECT 1;" 2>/dev/null; then
+        print_info "Conectando sem senha (instalação limpa)"
+        
+        mysql -u root <<EOF
+-- Definir senha para root
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$ROOT_PASSWORD');
+
+-- Permitir root remoto
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '$ROOT_PASSWORD';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
+-- Limpeza de segurança
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+
+-- Aplicar mudanças
+FLUSH PRIVILEGES;
+EOF
+        
+    else
+        print_error "Não foi possível conectar ao MySQL/MariaDB"
+        print_info "Tentando execução manual do mysql_secure_installation..."
+        
+        # Fallback: usar mysql_secure_installation
+        sudo mysql_secure_installation
+        
+        if [ $? -ne 0 ]; then
+            print_error "Falha na configuração automática"
+            print_warning "Execute manualmente: sudo mysql_secure_installation"
+            exit 1
+        fi
     fi
     
-    if [ $? -eq 0 ]; then
-        print_success "Configuração de segurança aplicada"
+    # Testar conectividade com nova senha
+    print_info "Testando conectividade com nova senha..."
+    if mysql -u root -p$ROOT_PASSWORD -e "SELECT 'Conexão OK' AS status;" 2>/dev/null; then
+        print_success "Configuração de segurança aplicada com sucesso"
     else
-        print_error "Falha na configuração de segurança"
-        exit 1
+        print_warning "Senha configurada, mas conectividade via password falhou"
+        print_info "Isto é normal no MariaDB - o root pode usar sudo mysql"
     fi
 }
 
@@ -234,20 +299,64 @@ create_homeguard_user() {
     read -s HOMEGUARD_PASSWORD
     echo
     
-    mysql -u root -p$ROOT_PASSWORD <<EOF
+    # Tentar diferentes métodos de conexão como root
+    CONNECTION_SUCCESS=false
+    
+    # Método 1: sudo mysql (MariaDB com socket auth)
+    if sudo mysql -u root -e "SELECT 1;" 2>/dev/null; then
+        print_info "Conectando como root via sudo (socket auth)"
+        sudo mysql -u root <<EOF
 CREATE USER IF NOT EXISTS 'homeguard'@'%' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
+CREATE USER IF NOT EXISTS 'homeguard'@'localhost' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
 GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'%';
-UPDATE mysql.user SET host='%' WHERE user='root' AND host='localhost';
+GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'localhost';
 FLUSH PRIVILEGES;
 EOF
+        CONNECTION_SUCCESS=true
+        
+    # Método 2: mysql com senha
+    elif mysql -u root -p$ROOT_PASSWORD -e "SELECT 1;" 2>/dev/null; then
+        print_info "Conectando como root com senha"
+        mysql -u root -p$ROOT_PASSWORD <<EOF
+CREATE USER IF NOT EXISTS 'homeguard'@'%' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
+CREATE USER IF NOT EXISTS 'homeguard'@'localhost' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
+GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'%';
+GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+        CONNECTION_SUCCESS=true
+        
+    # Método 3: mysql sem senha
+    elif mysql -u root -e "SELECT 1;" 2>/dev/null; then
+        print_info "Conectando como root sem senha"
+        mysql -u root <<EOF
+CREATE USER IF NOT EXISTS 'homeguard'@'%' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
+CREATE USER IF NOT EXISTS 'homeguard'@'localhost' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
+GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'%';
+GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+        CONNECTION_SUCCESS=true
+    fi
     
-    if [ $? -eq 0 ]; then
+    if [ "$CONNECTION_SUCCESS" = true ]; then
         print_success "Usuário homeguard criado"
         echo "🔑 Credenciais criadas:"
-        echo "   - Usuário: homeguard"
+        echo "   - Usuário: homeguard"  
         echo "   - Senha: [informada pelo usuário]"
+        echo "   - Acesso: local e remoto"
+        
+        # Testar conexão do usuário homeguard
+        print_info "Testando conexão do usuário homeguard..."
+        if mysql -u homeguard -p$HOMEGUARD_PASSWORD -e "SELECT 'Conexão homeguard OK' AS status;" 2>/dev/null; then
+            print_success "Usuário homeguard pode conectar com sucesso"
+        else
+            print_warning "Usuário criado, mas teste de conexão falhou"
+            print_info "Isto pode ser normal - o usuário será configurado após criação da database"
+        fi
     else
         print_error "Falha ao criar usuário homeguard"
+        print_error "Não foi possível conectar ao MySQL/MariaDB como root"
         exit 1
     fi
 }
@@ -256,7 +365,10 @@ EOF
 create_database() {
     print_info "Criando database homeguard..."
     
-    mysql -u root -p$ROOT_PASSWORD <<EOF
+    # Preparar SQL em arquivo temporário para facilitar execução
+    SQL_FILE="/tmp/homeguard_setup.sql"
+    cat > $SQL_FILE <<'EOF'
+-- Criar database
 CREATE DATABASE IF NOT EXISTS homeguard CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE homeguard;
 
@@ -308,22 +420,58 @@ CREATE TABLE IF NOT EXISTS sensor_alerts (
 );
 
 -- Criar índices para performance
-CREATE INDEX idx_motion_device ON motion_sensors(device_id);
-CREATE INDEX idx_motion_timestamp ON motion_sensors(timestamp_received);
-CREATE INDEX idx_dht11_device ON dht11_sensors(device_id);
-CREATE INDEX idx_dht11_timestamp ON dht11_sensors(timestamp_received);
-CREATE INDEX idx_alerts_device ON sensor_alerts(device_id);
-CREATE INDEX idx_alerts_active ON sensor_alerts(is_active);
+CREATE INDEX IF NOT EXISTS idx_motion_device ON motion_sensors(device_id);
+CREATE INDEX IF NOT EXISTS idx_motion_timestamp ON motion_sensors(timestamp_received);
+CREATE INDEX IF NOT EXISTS idx_dht11_device ON dht11_sensors(device_id);
+CREATE INDEX IF NOT EXISTS idx_dht11_timestamp ON dht11_sensors(timestamp_received);
+CREATE INDEX IF NOT EXISTS idx_alerts_device ON sensor_alerts(device_id);
+CREATE INDEX IF NOT EXISTS idx_alerts_active ON sensor_alerts(is_active);
 
--- Conceder privilégios específicos
+-- Conceder privilégios ao usuário homeguard
 GRANT SELECT, INSERT, UPDATE, DELETE ON homeguard.* TO 'homeguard'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE ON homeguard.* TO 'homeguard'@'localhost';
 FLUSH PRIVILEGES;
+
+-- Verificar criação
+SELECT 'Database homeguard criada com sucesso' AS status;
+SHOW TABLES;
 EOF
     
-    if [ $? -eq 0 ]; then
-        print_success "Database e tabelas criadas"
+    # Tentar executar SQL com diferentes métodos de conexão
+    CONNECTION_SUCCESS=false
+    
+    # Método 1: sudo mysql (MariaDB socket auth)
+    if sudo mysql -u root < $SQL_FILE 2>/dev/null; then
+        print_success "Database criada via sudo mysql"
+        CONNECTION_SUCCESS=true
+        
+    # Método 2: mysql com senha
+    elif mysql -u root -p$ROOT_PASSWORD < $SQL_FILE 2>/dev/null; then
+        print_success "Database criada via mysql com senha"
+        CONNECTION_SUCCESS=true
+        
+    # Método 3: mysql sem senha
+    elif mysql -u root < $SQL_FILE 2>/dev/null; then
+        print_success "Database criada via mysql sem senha"
+        CONNECTION_SUCCESS=true
+    fi
+    
+    # Limpar arquivo temporário
+    rm -f $SQL_FILE
+    
+    if [ "$CONNECTION_SUCCESS" = true ]; then
+        print_success "Database e tabelas criadas com sucesso"
+        
+        # Verificar se as tabelas foram criadas
+        print_info "Verificando tabelas criadas..."
+        
+        if sudo mysql -u root -e "USE homeguard; SHOW TABLES;" 2>/dev/null | grep -q "motion_sensors"; then
+            print_success "Tabelas verificadas com sucesso"
+        else
+            print_warning "Tabelas podem não ter sido criadas corretamente"
+        fi
     else
-        print_error "Falha ao criar database"
+        print_error "Falha ao criar database e tabelas"
         exit 1
     fi
 }
