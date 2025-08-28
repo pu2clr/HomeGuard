@@ -43,24 +43,72 @@ pip3 install --upgrade pip
 if pip3 install mysql-connector-python PyMySQL; then
     echo "✅ Drivers instalados via pip3"
     METHOD="pip3"
+elif pip3 install --user mysql-connector-python PyMySQL; then
+    echo "✅ Drivers instalados via pip3 --user"
+    METHOD="pip3-user"
+elif pip3 install --break-system-packages mysql-connector-python PyMySQL; then
+    echo "✅ Drivers instalados via pip3 --break-system-packages"
+    METHOD="pip3-break"
 else
-    echo "⚠️  Falha no pip3, tentando apt..."
-    
-    # Método 2: Usando apt (fallback)
+    echo "⚠️  Falha no pip3, tentando métodos alternativos..."
+    METHOD="none"
+fi
+
+# Método 2: Usando apt (fallback)
+if [ "$METHOD" = "none" ]; then
     echo "2️⃣ Tentando via apt..."
     sudo apt update
     
-    if sudo apt install python3-mysql.connector python3-pymysql -y; then
-        echo "✅ Drivers instalados via apt"
-        METHOD="apt"
+    # Tentar diferentes nomes de pacotes
+    if sudo apt install python3-pymysql -y; then
+        echo "✅ PyMySQL instalado via apt"
+        METHOD="apt-pymysql"
+        
+        # Tentar instalar mysql-connector via alternativas
+        if sudo apt install python3-mysql.connector -y 2>/dev/null; then
+            echo "✅ mysql.connector instalado via apt"
+            METHOD="apt-full"
+        else
+            echo "⚠️  mysql.connector não disponível via apt, mas PyMySQL funcionará"
+        fi
     else
-        echo "❌ Falha em ambos os métodos"
-        echo
-        echo "🔧 SOLUÇÕES ALTERNATIVAS:"
-        echo "   1. sudo apt install python3-dev default-libmysqlclient-dev build-essential"
-        echo "   2. pip3 install --user mysql-connector-python"
-        echo "   3. sudo apt install python3-pymysql"
-        exit 1
+        echo "❌ Falha no apt também"
+        METHOD="failed"
+    fi
+fi
+
+# Método 3: Virtual Environment (se tudo falhar)
+if [ "$METHOD" = "failed" ]; then
+    echo "3️⃣ Criando ambiente virtual..."
+    
+    # Instalar dependências para venv
+    sudo apt install python3-full python3-venv python3-dev -y
+    
+    # Criar virtual environment no diretório homeguard-env
+    if python3 -m venv homeguard-env; then
+        echo "✅ Ambiente virtual criado"
+        
+        # Ativar ambiente e instalar dependências
+        source homeguard-env/bin/activate
+        pip install mysql-connector-python PyMySQL flask
+        deactivate
+        
+        echo "✅ Drivers instalados no ambiente virtual"
+        METHOD="venv"
+        
+        # Criar script de ativação
+        cat > activate_env.sh <<'EOF'
+#!/bin/bash
+echo "🔄 Ativando ambiente virtual HomeGuard..."
+source homeguard-env/bin/activate
+echo "✅ Ambiente ativo. Para desativar: deactivate"
+echo "🚀 Executar: python homeguard_flask_mysql.py"
+EOF
+        chmod +x activate_env.sh
+        
+    else
+        echo "❌ Falha ao criar ambiente virtual"
+        METHOD="failed"
     fi
 fi
 
@@ -71,38 +119,68 @@ echo "✅ Instalação concluída via $METHOD"
 echo
 echo "🧪 Testando importação dos módulos..."
 
-# Teste mysql.connector
-if python3 -c "import mysql.connector; print('✅ mysql.connector OK')" 2>/dev/null; then
-    echo "✅ mysql.connector importado com sucesso"
+# Determinar comando python baseado no método
+if [ "$METHOD" = "venv" ]; then
+    PYTHON_CMD="homeguard-env/bin/python"
 else
-    echo "❌ mysql.connector falhou"
-    FAILED=true
+    PYTHON_CMD="python3"
+fi
+
+# Teste mysql.connector
+if $PYTHON_CMD -c "import mysql.connector; print('✅ mysql.connector OK')" 2>/dev/null; then
+    echo "✅ mysql.connector importado com sucesso"
+    MYSQL_OK=true
+else
+    echo "⚠️  mysql.connector não disponível"
+    MYSQL_OK=false
 fi
 
 # Teste PyMySQL  
-if python3 -c "import pymysql; print('✅ PyMySQL OK')" 2>/dev/null; then
+if $PYTHON_CMD -c "import pymysql; print('✅ PyMySQL OK')" 2>/dev/null; then
     echo "✅ PyMySQL importado com sucesso"
+    PYMYSQL_OK=true
 else
-    echo "⚠️  PyMySQL falhou (opcional)"
+    echo "⚠️  PyMySQL não disponível"
+    PYMYSQL_OK=false
 fi
 
-# Verificar se falhou
-if [ "$FAILED" = true ]; then
+# Verificar se pelo menos um driver funciona
+if [ "$MYSQL_OK" = false ] && [ "$PYMYSQL_OK" = false ]; then
     echo
-    echo "❌ PROBLEMAS DETECTADOS"
+    echo "❌ NENHUM DRIVER MYSQL FUNCIONOU"
     echo "💡 Tente executar manualmente:"
     echo "   pip3 install --user mysql-connector-python"
-    echo "   python3 -c 'import mysql.connector'"
+    echo "   pip3 install --break-system-packages mysql-connector-python"
+    echo "   sudo apt install python3-pymysql"
     exit 1
 fi
 
 echo
 echo "🎉 DEPENDÊNCIAS INSTALADAS COM SUCESSO!"
 echo "======================================="
-echo "✅ mysql.connector: OK"
-echo "✅ PyMySQL: OK (ou disponível via apt)"
+
+if [ "$MYSQL_OK" = true ]; then
+    echo "✅ mysql.connector: OK"
+fi
+
+if [ "$PYMYSQL_OK" = true ]; then
+    echo "✅ PyMySQL: OK"
+fi
+
 echo "✅ Python3: $(python3 --version)"
-echo "✅ pip3: $(pip3 --version | cut -d' ' -f2)"
+
+if [ "$METHOD" = "venv" ]; then
+    echo "⚠️  USANDO AMBIENTE VIRTUAL"
+    echo "   Para usar o HomeGuard:"
+    echo "   1. source homeguard-env/bin/activate"
+    echo "   2. cd web/"
+    echo "   3. python homeguard_flask_mysql.py"
+    echo "   4. deactivate (quando terminar)"
+    echo
+    echo "   Ou use: ./activate_env.sh"
+else
+    echo "✅ pip3: $(pip3 --version | cut -d' ' -f2)"
+fi
 
 # Instalar dependências adicionais do Flask se necessário
 echo
