@@ -13,28 +13,41 @@
 sudo apt update && sudo apt upgrade -y
 ```
 
-### 2. Instalar MySQL Server
+### 2. Instalar MariaDB Server (Compatível com MySQL)
 ```bash
-sudo apt install mysql-server -y
+# MariaDB é a alternativa recomendada no Raspberry Pi OS
+sudo apt install mariadb-server -y
+
+# Alternativamente, se quiser MySQL oficial:
+# sudo apt install default-mysql-server -y
 ```
 
-### 3. Iniciar e Habilitar MySQL
+**Nota**: MariaDB é um fork do MySQL, totalmente compatível e recomendado para Raspberry Pi.
+
+### 3. Iniciar e Habilitar MariaDB/MySQL
 ```bash
-sudo systemctl start mysql
-sudo systemctl enable mysql
+# Para MariaDB
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+
+# Verificar status
+sudo systemctl status mariadb
 ```
 
 ### 4. Configuração Inicial de Segurança
 Execute o script de configuração segura:
 ```bash
+# Para MariaDB
 sudo mysql_secure_installation
+
+# Ou para MySQL/MariaDB genérico
+sudo mariadb-secure-installation
 ```
 
 **Respostas recomendadas:**
-- **VALIDATE PASSWORD COMPONENT**: `y` (sim)
-- **Password validation policy**: `2` (STRONG)
-- **New root password**: Digite uma senha forte
-- **Re-enter new password**: Confirme a senha
+- **Enter current password for root**: Pressione Enter (sem senha inicial)
+- **Switch to unix_socket authentication**: `n` (não)
+- **Change the root password**: `y` (sim) - Digite uma senha forte
 - **Remove anonymous users**: `y` (sim)
 - **Disallow root login remotely**: `n` (não) - Permitir login remoto
 - **Remove test database**: `y` (sim)
@@ -44,6 +57,10 @@ sudo mysql_secure_installation
 
 #### 5.1 Editar arquivo de configuração:
 ```bash
+# Para MariaDB/MySQL
+sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+
+# Ou tente o caminho tradicional MySQL
 sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
@@ -58,10 +75,14 @@ bind-address = 0.0.0.0
 
 #### 5.2 Criar usuário para acesso remoto:
 ```bash
+# Conectar como root (MariaDB/MySQL)
 sudo mysql -u root -p
+
+# Ou se não pedir senha:
+sudo mysql
 ```
 
-No prompt do MySQL:
+No prompt do MariaDB/MySQL:
 ```sql
 -- Criar usuário homeguard com acesso remoto
 CREATE USER 'homeguard'@'%' IDENTIFIED BY 'SUA_SENHA_AQUI';
@@ -72,6 +93,9 @@ GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'%';
 -- Permitir root remoto (opcional)
 UPDATE mysql.user SET host='%' WHERE user='root';
 
+-- Para MariaDB, garantir plugin correto
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'sua_senha_root';
+
 -- Aplicar mudanças
 FLUSH PRIVILEGES;
 
@@ -79,8 +103,12 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-### 6. Reiniciar MySQL
+### 6. Reiniciar MariaDB/MySQL
 ```bash
+# Para MariaDB
+sudo systemctl restart mariadb
+
+# Ou para MySQL
 sudo systemctl restart mysql
 ```
 
@@ -105,9 +133,16 @@ sudo apt install python3-mysql.connector python3-pymysql -y
 
 ## 🔧 Verificação da Instalação
 
-### Verificar Status do MySQL
+### Verificar Status do MariaDB/MySQL
 ```bash
+# Para MariaDB
+sudo systemctl status mariadb
+
+# Para MySQL  
 sudo systemctl status mysql
+
+# Verificar qual está instalado
+systemctl list-units --type=service | grep -E "(mysql|mariadb)"
 ```
 
 ### Testar Conexão Local

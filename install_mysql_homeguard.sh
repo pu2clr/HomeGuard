@@ -64,51 +64,89 @@ update_system() {
     fi
 }
 
-# Instalar MySQL Server
+# Instalar MariaDB Server (compatível com MySQL)
 install_mysql() {
-    print_info "Instalando MySQL Server..."
+    print_info "Instalando MariaDB Server (compatível com MySQL)..."
     
-    # Configurar instalação não-interativa
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password temp_password'
-    sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password temp_password'
-    
-    sudo apt install mysql-server -y
+    # Verificar qual pacote está disponível
+    if apt list mariadb-server 2>/dev/null | grep -q "mariadb-server"; then
+        print_info "Instalando MariaDB Server..."
+        sudo apt install mariadb-server -y
+        MYSQL_SERVICE="mariadb"
+    elif apt list default-mysql-server 2>/dev/null | grep -q "default-mysql-server"; then
+        print_info "Instalando MySQL Server (default)..."
+        sudo apt install default-mysql-server -y
+        MYSQL_SERVICE="mysql"
+    elif apt list mysql-server 2>/dev/null | grep -q "mysql-server"; then
+        print_info "Instalando MySQL Server..."
+        sudo apt install mysql-server -y
+        MYSQL_SERVICE="mysql"
+    else
+        print_error "Nenhum servidor MySQL/MariaDB encontrado nos repositórios"
+        print_info "Tentando instalar MariaDB via repositório oficial..."
+        
+        # Adicionar repositório MariaDB se necessário
+        curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
+        sudo apt update
+        sudo apt install mariadb-server -y
+        MYSQL_SERVICE="mariadb"
+    fi
     
     if [ $? -eq 0 ]; then
-        print_success "MySQL Server instalado"
+        print_success "Servidor MySQL/MariaDB instalado"
+        echo "export MYSQL_SERVICE=$MYSQL_SERVICE" >> ~/.bashrc
     else
-        print_error "Falha ao instalar MySQL Server"
+        print_error "Falha ao instalar servidor MySQL/MariaDB"
         exit 1
     fi
 }
 
-# Iniciar e habilitar MySQL
+# Iniciar e habilitar MySQL/MariaDB
 start_mysql() {
-    print_info "Iniciando serviço MySQL..."
-    sudo systemctl start mysql
-    sudo systemctl enable mysql
+    print_info "Iniciando serviço MySQL/MariaDB..."
     
-    if sudo systemctl is-active --quiet mysql; then
-        print_success "MySQL está rodando"
+    # Detectar qual serviço usar
+    if systemctl list-units --type=service | grep -q mariadb; then
+        MYSQL_SERVICE="mariadb"
+    elif systemctl list-units --type=service | grep -q mysql; then
+        MYSQL_SERVICE="mysql"
     else
-        print_error "Falha ao iniciar MySQL"
+        # Tentar ambos
+        if systemctl start mariadb 2>/dev/null; then
+            MYSQL_SERVICE="mariadb"
+        elif systemctl start mysql 2>/dev/null; then
+            MYSQL_SERVICE="mysql"
+        else
+            print_error "Não foi possível determinar o serviço MySQL/MariaDB"
+            exit 1
+        fi
+    fi
+    
+    sudo systemctl start $MYSQL_SERVICE
+    sudo systemctl enable $MYSQL_SERVICE
+    
+    if sudo systemctl is-active --quiet $MYSQL_SERVICE; then
+        print_success "MySQL/MariaDB está rodando (serviço: $MYSQL_SERVICE)"
+        echo "export MYSQL_SERVICE=$MYSQL_SERVICE" >> ~/.bashrc
+    else
+        print_error "Falha ao iniciar MySQL/MariaDB"
         exit 1
     fi
 }
 
-# Configurar segurança do MySQL
+# Configurar segurança do MySQL/MariaDB
 secure_mysql() {
-    print_info "Configurando segurança do MySQL..."
+    print_info "Configurando segurança do MySQL/MariaDB..."
     
     # Solicitar senha do root
     echo
     echo "=============================================="
-    echo "CONFIGURAÇÃO DE SEGURANÇA DO MYSQL"
+    echo "CONFIGURAÇÃO DE SEGURANÇA DO MYSQL/MARIADB"
     echo "=============================================="
     echo
     
     while true; do
-        echo -n "Digite a senha para o usuário root do MySQL: "
+        echo -n "Digite a senha para o usuário root do MySQL/MariaDB: "
         read -s ROOT_PASSWORD
         echo
         echo -n "Confirme a senha: "
@@ -126,17 +164,27 @@ secure_mysql() {
         fi
     done
     
-    # Alterar senha temporária
-    mysql -u root -ptemp_password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$ROOT_PASSWORD';" 2>/dev/null
-    
-    # Configurações de segurança
-    mysql -u root -p$ROOT_PASSWORD <<EOF
+    # Tentar conectar e configurar (MariaDB pode não ter senha inicial)
+    if mysql -u root -e "SELECT 1;" 2>/dev/null; then
+        print_info "Conectando ao MySQL/MariaDB sem senha (configuração inicial)"
+        mysql -u root <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$ROOT_PASSWORD';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1', '%');
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 EOF
+    else
+        # Tentar com senha temporária ou configuração existente
+        mysql -u root -p$ROOT_PASSWORD <<EOF
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1', '%');
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;
+EOF
+    fi
     
     if [ $? -eq 0 ]; then
         print_success "Configuração de segurança aplicada"
@@ -150,13 +198,31 @@ EOF
 configure_remote_access() {
     print_info "Configurando acesso remoto..."
     
+    # Detectar arquivos de configuração
+    CONFIG_FILE=""
+    if [ -f "/etc/mysql/mariadb.conf.d/50-server.cnf" ]; then
+        CONFIG_FILE="/etc/mysql/mariadb.conf.d/50-server.cnf"
+        print_info "Usando configuração MariaDB: $CONFIG_FILE"
+    elif [ -f "/etc/mysql/mysql.conf.d/mysqld.cnf" ]; then
+        CONFIG_FILE="/etc/mysql/mysql.conf.d/mysqld.cnf"
+        print_info "Usando configuração MySQL: $CONFIG_FILE"
+    else
+        print_warning "Arquivo de configuração não encontrado, usando padrão"
+        CONFIG_FILE="/etc/mysql/mysql.conf.d/mysqld.cnf"
+    fi
+    
     # Backup do arquivo de configuração
-    sudo cp /etc/mysql/mysql.conf.d/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf.backup
+    sudo cp "$CONFIG_FILE" "$CONFIG_FILE.backup" 2>/dev/null || true
     
     # Alterar bind-address
-    sudo sed -i 's/bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+    sudo sed -i 's/bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' "$CONFIG_FILE" 2>/dev/null || true
     
-    print_success "Arquivo de configuração alterado"
+    # Se não existir, adicionar
+    if ! grep -q "bind-address" "$CONFIG_FILE" 2>/dev/null; then
+        echo "bind-address = 0.0.0.0" | sudo tee -a "$CONFIG_FILE"
+    fi
+    
+    print_success "Configuração de acesso remoto alterada"
 }
 
 # Criar usuário homeguard
@@ -262,15 +328,31 @@ EOF
     fi
 }
 
-# Reiniciar MySQL
+# Reiniciar MySQL/MariaDB
 restart_mysql() {
-    print_info "Reiniciando MySQL..."
-    sudo systemctl restart mysql
+    print_info "Reiniciando MySQL/MariaDB..."
     
-    if sudo systemctl is-active --quiet mysql; then
-        print_success "MySQL reiniciado com sucesso"
+    # Usar variável de ambiente ou detectar serviço
+    SERVICE_NAME=${MYSQL_SERVICE:-$(systemctl list-units --type=service | grep -E "(mysql|mariadb)" | head -1 | awk '{print $1}' | sed 's/\.service//')}
+    
+    if [ -z "$SERVICE_NAME" ]; then
+        # Tentar ambos
+        if systemctl restart mariadb 2>/dev/null; then
+            SERVICE_NAME="mariadb"
+        elif systemctl restart mysql 2>/dev/null; then
+            SERVICE_NAME="mysql"
+        else
+            print_error "Falha ao reiniciar serviço MySQL/MariaDB"
+            exit 1
+        fi
     else
-        print_error "Falha ao reiniciar MySQL"
+        sudo systemctl restart $SERVICE_NAME
+    fi
+    
+    if sudo systemctl is-active --quiet $SERVICE_NAME; then
+        print_success "MySQL/MariaDB reiniciado com sucesso (serviço: $SERVICE_NAME)"
+    else
+        print_error "Falha ao reiniciar MySQL/MariaDB"
         exit 1
     fi
 }
