@@ -124,11 +124,48 @@ mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS homeguard CHARACTER SET utf8m
 
 ### 9. Instalar Dependências Python
 ```bash
+# Método automatizado (RECOMENDADO)
+./install_python_mysql_deps.sh
+
+# Ou instalação manual:
+# Atualizar pip primeiro
+pip3 install --upgrade pip
+
 # Instalar driver MySQL para Python
 pip3 install mysql-connector-python PyMySQL
 
-# Ou se preferir usando apt
+# Ou se preferir usando apt (alternativa)
 sudo apt install python3-mysql.connector python3-pymysql -y
+
+# Verificar instalação
+python3 -c "import mysql.connector; print('mysql.connector OK')"
+```
+
+#### ⚠️ Problemas Comuns e Soluções
+
+**Erro: "mysql.connector não encontrado"**
+```bash
+# Solução 1: Instalar com usuário
+pip3 install --user mysql-connector-python
+
+# Solução 2: Instalar dependências de compilação
+sudo apt install python3-dev default-libmysqlclient-dev build-essential
+pip3 install mysql-connector-python
+
+# Solução 3: Usar versão do sistema
+sudo apt install python3-mysql.connector
+
+# Solução 4: Script automatizado
+./install_python_mysql_deps.sh
+```
+
+**Erro: "Permission denied" no pip**
+```bash
+# Usar instalação local
+pip3 install --user mysql-connector-python
+
+# Ou atualizar pip
+python3 -m pip install --upgrade pip --user
 ```
 
 ## 🔧 Verificação da Instalação
