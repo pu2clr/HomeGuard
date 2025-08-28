@@ -1,9 +1,7 @@
 #!/bin/bash
 
-"""
-Simple MariaDB Fix for HomeGuard
-Resolve o ERROR 1698 usando comandos básicos
-"""
+# Simple MariaDB Fix for HomeGuard
+# Resolve o ERROR 1698 usando comandos básicos
 
 echo "🔧 HomeGuard - MariaDB Simple Fix"
 echo "=================================="
@@ -29,19 +27,29 @@ fi
 
 echo "🔧 Configurando..."
 
-# Usar comandos MySQL simples que funcionam no MariaDB
-sudo mysql -e "
-SET sql_mode = '';
-DELETE FROM mysql.user WHERE User='homeguard';
-INSERT INTO mysql.user (User, Host, Password, Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Grant_priv, References_priv, Index_priv, Alter_priv) 
-VALUES ('homeguard', 'localhost', PASSWORD('$PASS'), 'N','N','N','N','N','N','N','N','N','N');
-INSERT INTO mysql.user (User, Host, Password, Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Grant_priv, References_priv, Index_priv, Alter_priv)  
-VALUES ('homeguard', '%', PASSWORD('$PASS'), 'N','N','N','N','N','N','N','N','N','N');
-CREATE DATABASE IF NOT EXISTS homeguard;
-INSERT INTO mysql.db VALUES ('%', 'homeguard', 'homeguard', 'Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y');
-INSERT INTO mysql.db VALUES ('localhost', 'homeguard', 'homeguard', 'Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y');
+# Usar comandos MariaDB simples e compatíveis
+sudo mysql <<EOF
+-- Criar database primeiro
+CREATE DATABASE IF NOT EXISTS homeguard CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Remover usuário se existir (ignora erro se não existir)  
+DROP USER IF EXISTS 'homeguard'@'localhost';
+DROP USER IF EXISTS 'homeguard'@'%';
+
+-- Criar usuário homeguard com privilégios no database homeguard
+CREATE USER 'homeguard'@'localhost' IDENTIFIED BY '$PASS';
+CREATE USER 'homeguard'@'%' IDENTIFIED BY '$PASS';
+
+-- Conceder todos os privilégios no database homeguard
+GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'localhost';
+GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'%';
+
+-- Aplicar mudanças
 FLUSH PRIVILEGES;
-"
+
+-- Verificar usuários criados
+SELECT User, Host FROM mysql.user WHERE User='homeguard';
+EOF
 
 if [ $? -eq 0 ]; then
     echo "✅ Usuário homeguard criado"
@@ -51,37 +59,53 @@ if [ $? -eq 0 ]; then
         echo "✅ Conexão funcionando"
         
         # Criar tabelas básicas
-        mysql -u homeguard -p$PASS homeguard -e "
-        CREATE TABLE IF NOT EXISTS motion_sensors (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            device_id VARCHAR(255),
-            device_name VARCHAR(255),
-            location VARCHAR(255),
-            motion_detected BOOLEAN,
-            timestamp_received DATETIME,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        
-        CREATE TABLE IF NOT EXISTS dht11_sensors (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            device_id VARCHAR(255),
-            device_name VARCHAR(255), 
-            location VARCHAR(255),
-            sensor_type VARCHAR(50),
-            temperature DECIMAL(5,2),
-            humidity DECIMAL(5,2),
-            timestamp_received DATETIME,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        
-        CREATE TABLE IF NOT EXISTS sensor_alerts (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            device_id VARCHAR(255),
-            alert_type VARCHAR(100),
-            message TEXT,
-            timestamp_created DATETIME,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );"
+        mysql -u homeguard -p$PASS homeguard <<EOF
+CREATE TABLE IF NOT EXISTS motion_sensors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    device_id VARCHAR(255),
+    device_name VARCHAR(255),
+    location VARCHAR(255),
+    motion_detected BOOLEAN,
+    rssi INT,
+    uptime INT,
+    battery_level DECIMAL(5,2),
+    timestamp_received DATETIME,
+    unix_timestamp BIGINT,
+    raw_payload TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS dht11_sensors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    device_id VARCHAR(255),
+    device_name VARCHAR(255), 
+    location VARCHAR(255),
+    sensor_type VARCHAR(50),
+    temperature DECIMAL(5,2),
+    humidity DECIMAL(5,2),
+    rssi INT,
+    uptime INT,
+    timestamp_received DATETIME,
+    raw_payload TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS sensor_alerts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    device_id VARCHAR(255),
+    device_name VARCHAR(255),
+    location VARCHAR(255),
+    alert_type VARCHAR(100),
+    sensor_value DECIMAL(8,2),
+    threshold_value DECIMAL(8,2),
+    message TEXT,
+    severity VARCHAR(20),
+    is_active BOOLEAN DEFAULT TRUE,
+    timestamp_created DATETIME,
+    timestamp_resolved DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+EOF
         
         if [ $? -eq 0 ]; then
             echo "✅ Tabelas criadas"
