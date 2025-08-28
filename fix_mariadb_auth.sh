@@ -134,7 +134,8 @@ EOF
         # Configurar password auth
         sudo mysql -u root <<EOF
 -- Alterar root para usar password auth
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$ROOT_PASSWORD';
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$ROOT_PASSWORD');
+UPDATE mysql.user SET plugin='mysql_native_password' WHERE User='root' AND Host='localhost';
 FLUSH PRIVILEGES;
 SELECT User, Host, plugin FROM mysql.user WHERE User='root';
 EOF
@@ -184,10 +185,19 @@ EOF
 -- Manter root@localhost com socket auth
 UPDATE mysql.user SET plugin='unix_socket' WHERE User='root' AND Host='localhost';
 
--- Criar root@% com password auth para acesso remoto
-DROP USER IF EXISTS 'root'@'%';
-CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '$ROOT_PASSWORD';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+-- Configurar root@127.0.0.1 com password auth
+UPDATE mysql.user SET plugin='mysql_native_password', authentication_string=PASSWORD('$ROOT_PASSWORD') 
+WHERE User='root' AND Host='127.0.0.1';
+
+-- Se não existir root@127.0.0.1, criar
+INSERT IGNORE INTO mysql.user (User, Host, plugin, authentication_string, ssl_cipher, x509_issuer, x509_subject,
+    Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Reload_priv, 
+    Shutdown_priv, Process_priv, File_priv, Grant_priv, References_priv, Index_priv, Alter_priv, 
+    Show_db_priv, Super_priv, Create_tmp_table_priv, Lock_tables_priv, Execute_priv, 
+    Repl_slave_priv, Repl_client_priv, Create_view_priv, Show_view_priv, Create_routine_priv, 
+    Alter_routine_priv, Create_user_priv, Event_priv, Trigger_priv)
+VALUES ('root', '127.0.0.1', 'mysql_native_password', PASSWORD('$ROOT_PASSWORD'), '', '', '',
+    'Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y');
 
 FLUSH PRIVILEGES;
 SELECT User, Host, plugin FROM mysql.user WHERE User='root';
@@ -226,10 +236,25 @@ if ! sudo mysql -u root -e "SELECT User FROM mysql.user WHERE User='homeguard';"
     echo
     
     sudo mysql -u root <<EOF
-CREATE USER IF NOT EXISTS 'homeguard'@'%' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
-CREATE USER IF NOT EXISTS 'homeguard'@'localhost' IDENTIFIED BY '$HOMEGUARD_PASSWORD';
-GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'%';
-GRANT ALL PRIVILEGES ON homeguard.* TO 'homeguard'@'localhost';
+-- Criar usuário homeguard com password auth
+DELETE FROM mysql.user WHERE User='homeguard';
+INSERT INTO mysql.user (User, Host, plugin, authentication_string, ssl_cipher, x509_issuer, x509_subject)
+VALUES 
+    ('homeguard', '%', 'mysql_native_password', PASSWORD('$HOMEGUARD_PASSWORD'), '', '', ''),
+    ('homeguard', 'localhost', 'mysql_native_password', PASSWORD('$HOMEGUARD_PASSWORD'), '', '', '');
+
+-- Criar database homeguard se não existir
+CREATE DATABASE IF NOT EXISTS homeguard CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Conceder privilégios
+INSERT IGNORE INTO mysql.db (User, Host, Db, Select_priv, Insert_priv, Update_priv, Delete_priv, 
+    Create_priv, Drop_priv, Grant_priv, References_priv, Index_priv, Alter_priv, 
+    Create_tmp_table_priv, Lock_tables_priv, Create_view_priv, Show_view_priv, 
+    Create_routine_priv, Alter_routine_priv, Execute_priv, Event_priv, Trigger_priv)
+VALUES 
+    ('homeguard', '%', 'homeguard', 'Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'),
+    ('homeguard', 'localhost', 'homeguard', 'Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y');
+
 FLUSH PRIVILEGES;
 EOF
     
