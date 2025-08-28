@@ -8,7 +8,7 @@ echo "=========================================================="
 # Verificar parâmetros
 if [ $# -lt 1 ]; then
     echo "📋 Uso: $0 <IP_DO_RASPBERRY> [usuario] [senha]"
-    echo "📋 Exemplo: $0 192.168.1.100"
+    echo "📋 Exemplo: $0 192.168.18.100"
     echo "📋 Exemplo: $0 192.168.1.100 homeguard homeguard123"
     exit 1
 fi
