@@ -53,12 +53,13 @@ def test_connection(db_config):
         )
         
         if conn.is_connected():
-            info = conn.get_server_info()
+            # Usar propriedade ao invés do método depreciado
+            info = conn.server_info  
             print(f"✅ Conectado ao servidor MySQL versão {info}")
             
-            # Testar query
+            # Testar query (compatível com MariaDB)
             cursor = conn.cursor()
-            cursor.execute("SELECT VERSION() as version, NOW() as current_time")
+            cursor.execute("SELECT VERSION() as version, NOW() as current_datetime")
             result = cursor.fetchone()
             print(f"   Versão: {result[0]}")
             print(f"   Hora: {result[1]}")
@@ -185,21 +186,41 @@ def test_insert_sample(db_config):
         
         cursor = conn.cursor()
         
-        # Inserir dado de teste
-        test_sql = """
-        INSERT INTO motion_sensors 
-        (device_id, device_name, location, motion_detected, timestamp_received, unix_timestamp) 
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """
+        # Primeiro verificar estrutura da tabela
+        cursor.execute("DESCRIBE motion_sensors")
+        columns = cursor.fetchall()
+        available_columns = [col[0] for col in columns]
+        print(f"   Colunas disponíveis: {', '.join(available_columns)}")
         
-        test_data = (
-            'test_device_001',
-            'Sensor de Teste',
-            'Test Location',
-            True,
-            datetime.now(),
-            int(datetime.now().timestamp())
-        )
+        # Inserir dado de teste usando apenas colunas que existem
+        if 'unix_timestamp' in available_columns:
+            test_sql = """
+            INSERT INTO motion_sensors 
+            (device_id, device_name, location, motion_detected, timestamp_received, unix_timestamp) 
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            test_data = (
+                'test_device_001',
+                'Sensor de Teste',
+                'Test Location',
+                True,
+                datetime.now(),
+                int(datetime.now().timestamp())
+            )
+        else:
+            # Usar apenas colunas básicas
+            test_sql = """
+            INSERT INTO motion_sensors 
+            (device_id, device_name, location, motion_detected, timestamp_received) 
+            VALUES (%s, %s, %s, %s, %s)
+            """
+            test_data = (
+                'test_device_001',
+                'Sensor de Teste',
+                'Test Location',
+                True,
+                datetime.now()
+            )
         
         cursor.execute(test_sql, test_data)
         

@@ -123,8 +123,16 @@ mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS homeguard CHARACTER SET utf8m
 ```
 
 ### 9. Instalar Dependências Python
+
+#### 🍓 Para Raspberry Pi OS Bookworm+ (RECOMENDADO)
 ```bash
-# Método automatizado (RECOMENDADO)
+# Script específico para Raspberry Pi OS (resolve PEP 668)
+./install_mysql_raspberry.sh
+```
+
+#### 🐍 Método Manual Tradicional
+```bash
+# Método automatizado (genérico)
 ./install_python_mysql_deps.sh
 
 # Ou instalação manual:
@@ -135,7 +143,7 @@ pip3 install --upgrade pip
 pip3 install mysql-connector-python PyMySQL
 
 # Ou se preferir usando apt (alternativa)
-sudo apt install python3-mysql.connector python3-pymysql -y
+sudo apt install python3-pymysql -y
 
 # Verificar instalação
 python3 -c "import mysql.connector; print('mysql.connector OK')"
@@ -143,20 +151,41 @@ python3 -c "import mysql.connector; print('mysql.connector OK')"
 
 #### ⚠️ Problemas Comuns e Soluções
 
-**Erro: "mysql.connector não encontrado"**
+**Erro: "externally-managed-environment" (PEP 668)**
 ```bash
-# Solução 1: Instalar com usuário
+# Raspberry Pi OS Bookworm+ bloqueia pip3 por segurança
+# SOLUÇÕES (em ordem de preferência):
+
+# 1. Usar apt (MAIS SEGURO)
+sudo apt install python3-pymysql -y
+
+# 2. Virtual environment (RECOMENDADO)
+python3 -m venv homeguard-env
+source homeguard-env/bin/activate
+pip install mysql-connector-python PyMySQL
+# Use: homeguard-env/bin/python script.py
+
+# 3. Instalação local do usuário
 pip3 install --user mysql-connector-python
 
-# Solução 2: Instalar dependências de compilação
+# 4. Override (CUIDADO - pode quebrar sistema)
+pip3 install --break-system-packages mysql-connector-python
+```
+
+**Erro: "mysql.connector não encontrado"**
+```bash
+# Solução 1: PyMySQL como alternativa (funciona igual)
+sudo apt install python3-pymysql -y
+
+# Solução 2: Instalar com usuário
+pip3 install --user mysql-connector-python
+
+# Solução 3: Instalar dependências de compilação
 sudo apt install python3-dev default-libmysqlclient-dev build-essential
 pip3 install mysql-connector-python
 
-# Solução 3: Usar versão do sistema
-sudo apt install python3-mysql.connector
-
 # Solução 4: Script automatizado
-./install_python_mysql_deps.sh
+./install_mysql_raspberry.sh
 ```
 
 **Erro: "Permission denied" no pip**
@@ -166,6 +195,14 @@ pip3 install --user mysql-connector-python
 
 # Ou atualizar pip
 python3 -m pip install --upgrade pip --user
+```
+
+**Erro: Package 'python3-mysql.connector' has no installation candidate**
+```bash
+# Usar PyMySQL (alternativa compatível)
+sudo apt install python3-pymysql -y
+
+# PyMySQL funciona como substituto do mysql.connector
 ```
 
 ## 🔧 Verificação da Instalação
