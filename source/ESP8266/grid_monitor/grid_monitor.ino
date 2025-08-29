@@ -37,7 +37,7 @@
 #define WIFI_PASS        "YOUR_PASSWORD"          // WiFi password
 
 #define ZMPT_PIN         A0                        // Analog pin for ZMPT101B
-#define STATUS_LED_PIN   0                         // GPIO0 for status LED (optional)
+#define RELAY_PIN        0                         // GPIO0 for relay control
 #define GRID_THRESHOLD   100                       // Threshold for grid detection (adjust experimentally)
 
 #include <ESP8266WiFi.h>
@@ -101,14 +101,14 @@ void readGridSensor() {
   if (sensorValue < 0) {
     failedReadings++;
     device_status.grid_ok = false;
-    digitalWrite(STATUS_LED_PIN, !digitalRead(STATUS_LED_PIN));
     Serial.println("Erro ao ler ZMPT101B!");
   } else {
     failedReadings = 0;
     device_status.grid_ok = gridOnline;
     device_status.last_grid_online = gridOnline;
     device_status.last_reading_time = millis();
-    digitalWrite(STATUS_LED_PIN, gridOnline ? HIGH : LOW);
+    // Aciona o relé em caso de falta de energia
+    digitalWrite(RELAY_PIN, gridOnline ? LOW : HIGH); // HIGH aciona o relé (luz emergência)
     Serial.printf("Grid: %s (Valor: %d)\n", gridOnline ? "ONLINE" : "OFFLINE", sensorValue);
   }
   device_status.failed_readings = failedReadings;
@@ -205,8 +205,8 @@ void reconnect() {
 void setup() {
   Serial.begin(115200);
   Serial.println("ESP8266 Grid Monitor iniciando...");
-  pinMode(STATUS_LED_PIN, OUTPUT);
-  digitalWrite(STATUS_LED_PIN, LOW);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW); // Relé desligado inicialmente
   device_status.online = false;
   device_status.grid_ok = false;
   device_status.failed_readings = 0;
@@ -257,7 +257,7 @@ void loop() {
     lastHeartbeat = currentTime;
   }
   if (failedReadings > 10) {
-    digitalWrite(STATUS_LED_PIN, LOW);
+    digitalWrite(RELAY_PIN, LOW); // Desliga relé em caso de erro de leitura
   }
   delay(100);
 }
