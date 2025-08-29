@@ -8,7 +8,10 @@
 
   Exemplos de uso com mosquitto:
   # Alterar frequência para 10390 (FM 103.9 MHz):
+
+  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "FM"
   mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/frequency" -m "10390"
+
 
   # Alterar banda para AM:
   mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "AM"
@@ -61,7 +64,7 @@ void setupSI4735AM() {
   currentBand = 1;
 }
 void setupSI4735SW() {
-  si4735.setAM(9400, 9990, 9600, 5); // SW: 9400-9990kHz
+  si4735.setAM(5900, 22900, 11780, 5); // SW: 5900-22900kHz
   currentBand = 2;
 }
 
