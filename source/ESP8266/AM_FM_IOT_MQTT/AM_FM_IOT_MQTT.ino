@@ -6,6 +6,25 @@
     - /home/radio/band      : altera banda ("AM", "FM", "SW")
     - /home/radio/volume    : altera volume (0-63)
 
+  Exemplos de uso com mosquitto:
+  # Alterar frequência para 10390 (FM 103.9 MHz):
+  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/frequency" -m "10390"
+
+  # Alterar banda para AM:
+  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "AM"
+
+  # Alterar banda para FM:
+  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "FM"
+
+  # Alterar banda para SW:
+  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "SW"
+
+  # Alterar volume para 30:
+  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/volume" -m "30"
+
+  # Monitorar comandos recebidos (debug):
+  mosquitto_sub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/#" -v
+
   Preencha as credenciais abaixo antes de compilar!
 */
 
