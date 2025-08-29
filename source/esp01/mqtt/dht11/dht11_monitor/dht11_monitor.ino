@@ -8,14 +8,14 @@
 */
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID        "ESP01_DHT11_MONITOR"   // Unique device ID
-#define DEVICE_NAME      "corredor_de_ar"        // Device display name
-#define DEVICE_LOCATION  "Área Externa"          // Location name
+#define DEVICE_ID        "ESP01_DHT11_BRANCO"   // Unique device ID
+#define DEVICE_NAME      "sala"        // Device display name
+#define DEVICE_LOCATION  "Sala"          // Location name
 
 #define LOCAL_IP_1       192                    // Device local IP
 #define LOCAL_IP_2       168
 #define LOCAL_IP_3       18
-#define LOCAL_IP_4       150
+#define LOCAL_IP_4       152
 
 #define GATEWAY_1        192                    // Your network gateway
 #define GATEWAY_2        168
@@ -31,8 +31,8 @@
 #define MQTT_PORT        1883                   // MQTT broker port
 #define MQTT_USER        "homeguard"            // MQTT username
 #define MQTT_PASS        "pu2clr123456"         // MQTT password
-#define WIFI_SSID        "YOUR_SSID"            // WiFi SSID
-#define WIFI_PASS        "YOUR_PASSWORD"        // WiFi password
+#define WIFI_SSID        "APRC"                 // WiFi SSID
+#define WIFI_PASS        "Ap69Rc642023"        // WiFi password
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
