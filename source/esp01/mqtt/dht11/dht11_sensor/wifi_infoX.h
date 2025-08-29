@@ -1,2 +1,2 @@
-#define YOUR_SSID "APRC"
-#define YOUR_PASSWORD "Ap69Rc642023"
+#define YOUR_SSID "XXXX"
+#define YOUR_PASSWORD "XXXXXXXX"
