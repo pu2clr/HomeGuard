@@ -10,33 +10,62 @@
   - ZMPT101B VCC -> 3.3V
   - ZMPT101B GND -> GND
   - ZMPT101B OUT -> Analog Pin (A0)
-  - Status LED -> GPIO0 (PIN 0) [Optional]
+  - RELÉ -> GPIO0 (PIN 0)
+
+  MQTT Interaction Examples (using mosquitto):
+  # Monitor grid status:
+  mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/status" -v
+
+  # Monitor device info:
+  mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/info" -v
+
+  # Command relay ON:
+  mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "ON"
+
+  # Command relay OFF:
+  mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "OFF"
+
+  # Return relay to automatic mode:
+  mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "AUTO"
 */
 
 // ======== User Parameters (Edit these for your device) ========
+
 #define DEVICE_ID        "ESP8266_GRID_MONITOR"   // Unique device ID
 #define DEVICE_NAME      "Monitor Rede"           // Device display name
 #define DEVICE_LOCATION  "Quadro"                 // Location name
+
+// Device local IP
 #define LOCAL_IP_1       192
 #define LOCAL_IP_2       168
 #define LOCAL_IP_3       18
 #define LOCAL_IP_4       210
+
+// Network Getway IP
 #define GATEWAY_1        192
 #define GATEWAY_2        168
 #define GATEWAY_3        18
 #define GATEWAY_4        1
+
+// Network Subnet IP
 #define SUBNET_1         255
 #define SUBNET_2         255
 #define SUBNET_3         255
 #define SUBNET_4         0
+
+// Broker Configuration
 #define MQTT_SERVER      "192.168.18.236"         // MQTT broker IP
-#define MQTT_PORT        1883                      // MQTT broker port
+#define MQTT_PORT        1883                     // MQTT broker port
 #define MQTT_USER        "homeguard"              // MQTT username
 #define MQTT_PASS        "pu2clr123456"           // MQTT password
+
+// WIFI Configuration
 #define WIFI_SSID        "YOUR_SSID"              // WiFi SSID
 #define WIFI_PASS        "YOUR_PASSWORD"          // WiFi password
+
+
 #define ZMPT_PIN         A0                        // Analog pin for ZMPT101B
-#define STATUS_LED_PIN   0                         // GPIO0 for status LED (optional)
+#define RELAY_PIN        0                         // GPIO0 for relay control
 #define GRID_THRESHOLD   100                       // Threshold for grid detection (adjust experimentally)
 
 #include <ESP8266WiFi.h>
@@ -76,6 +105,8 @@ unsigned long lastHeartbeat = 0;
 unsigned long lastReading = 0;
 unsigned long lastDataSend = 0;
 int failedReadings = 0;
+bool relayManualOverride = false; // Se true, ignora controle automático
+bool relayManualState = false;    // Estado desejado do relé via comando
 
 // Timing intervals
 const unsigned long READING_INTERVAL = 10000;     // 10 seconds
@@ -100,14 +131,18 @@ void readGridSensor() {
   if (sensorValue < 0) {
     failedReadings++;
     device_status.grid_ok = false;
-    digitalWrite(STATUS_LED_PIN, !digitalRead(STATUS_LED_PIN));
     Serial.println("Erro ao ler ZMPT101B!");
   } else {
     failedReadings = 0;
     device_status.grid_ok = gridOnline;
     device_status.last_grid_online = gridOnline;
     device_status.last_reading_time = millis();
-    digitalWrite(STATUS_LED_PIN, gridOnline ? HIGH : LOW);
+    // Controle do relé: automático (falta de energia) ou manual (override)
+    if (relayManualOverride) {
+      digitalWrite(RELAY_PIN, relayManualState ? HIGH : LOW);
+    } else {
+      digitalWrite(RELAY_PIN, gridOnline ? LOW : HIGH); // HIGH aciona relé (luz emergência)
+    }
     Serial.printf("Grid: %s (Valor: %d)\n", gridOnline ? "ONLINE" : "OFFLINE", sensorValue);
   }
   device_status.failed_readings = failedReadings;
@@ -175,6 +210,24 @@ void callback(char* topic, byte* payload, unsigned int length) {
   else if (command.equalsIgnoreCase("INFO")) {
     sendDeviceInfo();
   }
+  else if (command.equalsIgnoreCase("ON")) {
+    relayManualOverride = true;
+    relayManualState = true;
+    digitalWrite(RELAY_PIN, HIGH);
+    Serial.println("Comando remoto: ON");
+  }
+  else if (command.equalsIgnoreCase("OFF")) {
+    relayManualOverride = true;
+    relayManualState = false;
+    digitalWrite(RELAY_PIN, LOW);
+    Serial.println("Comando remoto: OFF");
+  }
+  else if (command.equalsIgnoreCase("AUTO")) {
+    relayManualOverride = false;
+    Serial.println("Comando remoto: AUTO (controle automático)");
+    // O controle volta a ser feito pelo sensor
+    readGridSensor();
+  }
 }
 
 // ======== Reconnect to MQTT ========
@@ -204,8 +257,8 @@ void reconnect() {
 void setup() {
   Serial.begin(115200);
   Serial.println("ESP8266 Grid Monitor iniciando...");
-  pinMode(STATUS_LED_PIN, OUTPUT);
-  digitalWrite(STATUS_LED_PIN, LOW);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW); // Relé desligado inicialmente
   device_status.online = false;
   device_status.grid_ok = false;
   device_status.failed_readings = 0;
