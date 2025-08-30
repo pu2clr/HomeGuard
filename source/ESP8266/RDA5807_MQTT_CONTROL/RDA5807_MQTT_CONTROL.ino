@@ -3,11 +3,10 @@
   Exemplos de comandos usando mosquitto:
 
 
-  ESP8266 Dev Module Wire up 
-
-  | Device name               | QN8066 Pin           | ESP8266 Dev Module |
+  ESP8266 Dev Module Wire up
+  | Device name               | RDA5807 Pin          | ESP8266 Dev Module |
   | ------------------------- | -------------------- | ------------------ |
-  | QN8066                    |                      |                    | 
+  | RDA5807                   |                      |                    | 
   |                           | VCC                  |      3.3V          |
   |                           | GND                  |      GND           |    
   |                           | SDIO / SDA (pin 2)   |      GPIO4 [1]     |
@@ -39,6 +38,9 @@
 #include <PubSubClient.h>
 #include <RDA5807.h>
 
+#define ESP8266_I2C_SDA 4
+#define ESP8266_I2C_SCL 5
+
 const char* ssid = "APRC";
 const char* password = "Ap69Rc642023";
 const char* mqtt_server = "192.168.18.236";
@@ -62,10 +64,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void setup_wifi() {
+
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
+ 
 }
 
 void reconnect() {
@@ -80,9 +84,11 @@ void reconnect() {
 }
 
 void setup() {
+
+  Wire.begin(ESP8266_I2C_SDA, ESP8266_I2C_SCL);
   rx.setup();
-  rx.setFrequency(10390);
-  rx.setVolume(8);
+  rx.setFrequency(9390);
+  rx.setVolume(14);
 
   setup_wifi();
   client.setServer(mqtt_server, 1883);
