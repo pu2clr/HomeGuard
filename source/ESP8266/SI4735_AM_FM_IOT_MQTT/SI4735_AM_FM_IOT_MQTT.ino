@@ -36,9 +36,9 @@
 #include <SI4735.h>
 
 // ======== CONFIGURAÇÕES DE REDE E MQTT ========
-#define WIFI_SSID     "SEU_SSID_AQUI"
-#define WIFI_PASSWORD "SUA_SENHA_AQUI"
-#define MQTT_BROKER   "SEU_BROKER_IP_AQUI" // Exemplo: "192.168.1.100"
+#define WIFI_SSID     "APRC"
+#define WIFI_PASSWORD "Ap69Rc642023"
+#define MQTT_BROKER   "192.168.18.236" 
 #define MQTT_PORT     1883
 
 // ======== PINOS E DEFINIÇÕES DO SI4735 ========
