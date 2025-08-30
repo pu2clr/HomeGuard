@@ -9,24 +9,24 @@
   Exemplos de uso com mosquitto:
   # Alterar frequência para 10390 (FM 103.9 MHz):
 
-  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "FM"
-  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/frequency" -m "10390"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "FM"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/frequency" -m "10390"
 
 
   # Alterar banda para AM:
-  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "AM"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "AM"
 
   # Alterar banda para FM:
-  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "FM"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "FM"
 
   # Alterar banda para SW:
-  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/band" -m "SW"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "SW"
 
   # Alterar volume para 30:
-  mosquitto_pub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/volume" -m "30"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/volume" -m "30"
 
   # Monitorar comandos recebidos (debug):
-  mosquitto_sub -h SEU_BROKER_IP_AQUI -p 1883 -u <usuario> -P <senha> -t "/home/radio/#" -v
+  mosquitto_sub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/#" -v
 
   Preencha as credenciais abaixo antes de compilar!
 */
