@@ -14,31 +14,31 @@
 
   Inspirado no exemplo AM_FM_SERIAL_MONITOR.ino
   Controle remoto via MQTT:
-    - /home/radio/frequency : altera frequência (int)
-    - /home/radio/band      : altera banda ("AM", "FM", "SW")
-    - /home/radio/volume    : altera volume (0-63)
+    - home/radio/frequency : altera frequência (int)
+    - home/radio/band      : altera banda ("AM", "FM", "SW")
+    - home/radio/volume    : altera volume (0-63)
 
   Exemplos de uso com mosquitto:
   # Alterar frequência para 10390 (FM 103.9 MHz):
 
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "FM"
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/frequency" -m "10390"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/frequency" -m "10390"
 
 
   # Alterar banda para AM:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "AM"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "AM"
 
   # Alterar banda para FM:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "FM"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
 
   # Alterar banda para SW:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/band" -m "SW"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "SW"
 
   # Alterar volume para 30:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/volume" -m "30"
+  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/volume" -m "30"
 
   # Monitorar comandos recebidos (debug):
-  mosquitto_sub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "/home/radio/#" -v
+  mosquitto_sub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/#" -v
 
   Preencha as credenciais abaixo antes de compilar!
 */
@@ -48,10 +48,13 @@
 #include <SI4735.h>
 
 // ======== CONFIGURAÇÕES DE REDE E MQTT ========
+// Adicione usuário e senha do broker
 #define WIFI_SSID     "APRC"
 #define WIFI_PASSWORD "Ap69Rc642023"
 #define MQTT_BROKER   "192.168.18.236" 
 #define MQTT_PORT     1883
+#define MQTT_USER     "homeguard"
+#define MQTT_PASS     "pu2clr123456"
 
 // ======== PINOS E DEFINIÇÕES DO SI4735 ========
 #define RESET_PIN 2           // (GPIO02)
@@ -94,13 +97,13 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   String msg;
   for (unsigned int i = 0; i < length; i++) msg += (char)payload[i];
 
-  if (strcmp(topic, "/home/radio/frequency") == 0) {
+  if (strcmp(topic, "home/radio/frequency") == 0) {
     uint16_t freq = msg.toInt();
     si4735.setFrequency(freq);
     currentFrequency = freq;
-  } else if (strcmp(topic, "/home/radio/band") == 0) {
+  } else if (strcmp(topic, "home/radio/band") == 0) {
     setBandByString(msg);
-  } else if (strcmp(topic, "/home/radio/volume") == 0) {
+  } else if (strcmp(topic, "home/radio/volume") == 0) {
     int vol = msg.toInt();
     if (vol >= 0 && vol <= 63) {
       si4735.setVolume(vol);
@@ -111,10 +114,10 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
 void reconnectMQTT() {
   while (!client.connected()) {
-    if (client.connect("SI4735Radio")) {
-      client.subscribe("/home/radio/frequency");
-      client.subscribe("/home/radio/band");
-      client.subscribe("/home/radio/volume");
+    if (client.connect("SI4735Radio", MQTT_USER, MQTT_PASS)) {
+      client.subscribe("home/radio/frequency");
+      client.subscribe("home/radio/band");
+      client.subscribe("home/radio/volume");
     } else {
       delay(2000);
     }
@@ -122,15 +125,11 @@ void reconnectMQTT() {
 }
 
 void setup() {
-  Serial.begin(115200);
-  delay(100);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Conectando WiFi...");
+
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
   }
-  Serial.println(" conectado!");
 
   client.setServer(MQTT_BROKER, MQTT_PORT);
   client.setCallback(mqttCallback);
