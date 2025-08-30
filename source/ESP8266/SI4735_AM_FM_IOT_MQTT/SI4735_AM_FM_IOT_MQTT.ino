@@ -1,5 +1,17 @@
 /*
   AM/FM/SW SI4735 IoT Receiver via MQTT - ESP8266
+
+
+  ESP8266/ESP12F and SI4735-D60 or SI4732-A10 wire up
+
+  | Si4735  | SI4732   | DESC.  | ESP8266  (GPIO)    |
+  |---------| -------- |--------|--------------------|
+  | pin 15  |  pin 9   | RESET  |   2 (GPIO2)        |
+  | pin 18  |  pin 12  | SDIO   |   4 (SDA / GPIO4)  |
+  | pin 17  |  pin 11  | SCLK   |   5 (SCL / GPIO5)  |
+
+  
+
   Inspirado no exemplo AM_FM_SERIAL_MONITOR.ino
   Controle remoto via MQTT:
     - /home/radio/frequency : altera frequência (int)
