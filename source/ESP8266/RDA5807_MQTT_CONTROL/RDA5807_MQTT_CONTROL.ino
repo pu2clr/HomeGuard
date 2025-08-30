@@ -18,14 +18,14 @@
 
 
   # Mudar frequência para 103.9 MHz (10390 kHz)
-  mosquitto_pub -h <BROKER_IP> -t /home/RDA5807/frequency -m "10390"
+  mosquitto_pub -h <BROKER_IP> -t home/RDA5807/frequency -m "10390"
 
   # Mudar volume para 10
-  mosquitto_pub -h <BROKER_IP> -t /home/RDA5807/volume -m "10"
+  mosquitto_pub -h <BROKER_IP> -t home/RDA5807/volume -m "10"
 
   # Você pode usar o mosquitto_sub para monitorar os tópicos
-  mosquitto_sub -h <BROKER_IP> -t /home/RDA5807/frequency
-  mosquitto_sub -h <BROKER_IP> -t /home/RDA5807/volume
+  mosquitto_sub -h <BROKER_IP> -t home/RDA5807/frequency
+  mosquitto_sub -h <BROKER_IP> -t home/RDA5807/volume
 
   Tests:
 
@@ -57,11 +57,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
   String msg;
   for (unsigned int i = 0; i < length; i++) msg += (char)payload[i];
 
-  if (strcmp(topic, "/home/RDA5807/frequency") == 0) {
+  if (strcmp(topic, "home/RDA5807/frequency") == 0) {
     int freq = msg.toInt();
     rx.setFrequency(freq); // freq em kHz, ex: 10390 para 103.9 MHz
   }
-  if (strcmp(topic, "/home/RDA5807/volume") == 0) {
+  if (strcmp(topic, "home/RDA5807/volume") == 0) {
     int vol = msg.toInt();
     rx.setVolume(vol); // volume de 0 a 15
   }
@@ -79,8 +79,8 @@ void setup_wifi() {
 void reconnect() {
   while (!client.connected()) {
     if (client.connect("RDA5807Client", mqtt_user, mqtt_pass)) {
-      client.subscribe("/home/RDA5807/frequency");
-      client.subscribe("/home/RDA5807/volume");
+      client.subscribe("home/RDA5807/frequency");
+      client.subscribe("home/RDA5807/volume");
     } else {
       delay(5000);
     }
