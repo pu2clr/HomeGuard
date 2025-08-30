@@ -2,6 +2,20 @@
   Controle do rádio RDA5807 via MQTT
   Exemplos de comandos usando mosquitto:
 
+
+  ESP8266 Dev Module Wire up 
+
+  | Device name               | QN8066 Pin           | ESP8266 Dev Module |
+  | ------------------------- | -------------------- | ------------------ |
+  | QN8066                    |                      |                    | 
+  |                           | VCC                  |      3.3V          |
+  |                           | GND                  |      GND           |    
+  |                           | SDIO / SDA (pin 2)   |      GPIO4 [1]     |
+  |                           | SCLK (pin 1)         |      GPIO5 [1]     |
+  | ------------------------- | -------------------- | ------------------ |
+
+
+
   # Mudar frequência para 103.9 MHz (10390 kHz)
   mosquitto_pub -h <BROKER_IP> -t /home/RDA4807/frequency -m "10390"
 
@@ -12,16 +26,22 @@
   mosquitto_sub -h <BROKER_IP> -t /home/RDA4807/frequency
   mosquitto_sub -h <BROKER_IP> -t /home/RDA4807/volume
 
+  Tests:
+
+  mosquitto_pub -h 192.168.18.236  -u homeguard  -P pu2clr123456  -t "home/RDA4807/volume" -m "30"
+  mosquitto_pub -h 192.168.18.236  -u homeguard  -P pu2clr123456  -t "home/RDA4807/frequency" -m "10390"
+
   Placa recomendada: ESP32 ou ESP8266
 */
 
-#include <WiFi.h>
+#include <Wire.h>
+#include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <RDA5807.h>
 
-const char* ssid = "SEU_WIFI";
-const char* password = "SUA_SENHA";
-const char* mqtt_server = "BROKER_IP";
+const char* ssid = "APRC";
+const char* password = "Ap69Rc642023";
+const char* mqtt_server = "192.168.18.236";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
