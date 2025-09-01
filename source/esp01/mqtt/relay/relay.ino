@@ -42,23 +42,23 @@
 
 // ======== Device Configuration (Auto-selected based on #define above) ========
 #if defined(RELAY_001)
-  const char* RELAY_ID = "ESP01_RELAY_001";
+  const char* DEVICE_ID = "ESP01_RELAY_001";
   const char* RELAY_NAME = "Luz da Sala";
   const char* RELAY_LOCATION = "Sala";
   IPAddress local_IP(192, 168, 18, 192);
 #elif defined(RELAY_002)  
-  const char* RELAY_ID = "ESP01_RELAY_002";
+  const char* DEVICE_ID = "ESP01_RELAY_002";
   const char* RELAY_NAME = "Área de Serviço";
   const char* RELAY_LOCATION = "AreaServico";
   IPAddress local_IP(192, 168, 18, 193);
 #elif defined(RELAY_003)
-  const char* RELAY_ID = "ESP01_RELAY_003";
+  const char* DEVICE_ID = "ESP01_RELAY_003";
   const char* RELAY_NAME = "Bomba d'Água";
   const char* RELAY_LOCATION = "Externa";
   IPAddress local_IP(192, 168, 18, 194);
 #else
   // Default configuration - CHANGE THESE VALUES FOR YOUR SETUP
-  const char* RELAY_ID = "ESP01_RELAY_001";        // Must match RELAYS_CONFIG[n]['id']
+  const char* DEVICE_ID = "ESP01_RELAY_001";        // Must match RELAYS_CONFIG[n]['id']
   const char* RELAY_NAME = "Luz da Sala";          // Must match RELAYS_CONFIG[n]['name'] 
   const char* RELAY_LOCATION = "Sala";             // Must match RELAYS_CONFIG[n]['location']
   IPAddress local_IP(192, 168, 18, 192);            // ESP01_RELAY_001 -> .192, ESP01_RELAY_002 -> .193, etc
@@ -86,9 +86,9 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 // ======== MQTT Topics (matches Flask RELAYS_CONFIG) ========
-String TOPIC_COMMAND = "home/relay/" + String(RELAY_ID) + "/command";  // Receive commands
-String TOPIC_STATUS = "home/relay/" + String(RELAY_ID) + "/status";    // Send status
-String TOPIC_INFO = "home/relay/" + String(RELAY_ID) + "/info";        // Send device info
+String TOPIC_COMMAND = "home/relay/" + String(DEVICE_ID) + "/command";  // Receive commands
+String TOPIC_STATUS = "home/relay/" + String(DEVICE_ID) + "/status";    // Send status
+String TOPIC_INFO = "home/relay/" + String(DEVICE_ID) + "/info";        // Send device info
 
 // ======== Relay State Variables ========
 bool relayState = false;
@@ -143,7 +143,7 @@ void sendStatus() {
 // ======== Send device information ========
 void sendDeviceInfo() {
   String info = "{";
-  info += "\"RELAY_ID\":\"" + String(RELAY_ID) + "\",";
+  info += "\"device_id\":\"" + String(DEVICE_ID) + "\",";
   info += "\"name\":\"" + String(RELAY_NAME) + "\",";
   info += "\"location\":\"" + String(RELAY_LOCATION) + "\",";
   info += "\"ip\":\"" + WiFi.localIP().toString() + "\",";
@@ -195,7 +195,7 @@ void reconnect() {
   int attempts = 0;
   
   while (!client.connected() && attempts < 3) {
-    String clientId = "HomeGuard_" + String(RELAY_ID);
+    String clientId = "HomeGuard_" + String(DEVICE_ID);
     
     if (client.connect(clientId.c_str(), mqtt_user, mqtt_pass)) {
       // Successfully connected
