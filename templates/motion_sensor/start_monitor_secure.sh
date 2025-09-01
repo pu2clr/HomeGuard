@@ -46,7 +46,7 @@ echo "✅ Dependencies checked"
 echo ""
 
 # Default configuration
-BROKER="192.168.18.236"
+BROKER="192.168.18.198"
 USERNAME="homeguard"
 LOCATIONS="Garagem,Area_Servico,Varanda,Mezanino,Ad_Hoc"
 

@@ -11,7 +11,7 @@ PASSO 1: ESP01 Boot
 └── Inicia processo MQTT
 
 PASSO 2: Conexão MQTT
-├── ESP01 conecta ao Broker (192.168.18.236:1883)
+├── ESP01 conecta ao Broker (192.168.18.198:1883)
 ├── Autentica com usuário/senha (homeguard/pu2clr123456)
 ├── Se inscreve no tópico: homeguard/relay/ESP01_RELAY_001/command
 └── Publica status inicial nos tópicos de resposta
@@ -123,7 +123,7 @@ No monitor serial, se a conexão MQTT falhar, você verá:
 Teste se o ESP01 consegue alcançar o broker:
 ```bash
 # Do ESP01 para o broker (se tivesse telnet):
-telnet 192.168.18.236 1883
+telnet 192.168.18.198 1883
 ```
 
 ## Próximos Passos

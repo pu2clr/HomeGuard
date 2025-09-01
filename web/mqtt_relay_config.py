@@ -8,7 +8,7 @@ Configuração MQTT para Controle de Relés
 
 # Configuração do Broker MQTT
 MQTT_CONFIG = {
-    'broker_host': '192.168.18.236',  # 🔧 ALTERE AQUI o IP do seu broker MQTT
+    'broker_host': '192.168.18.198',  # 🔧 ALTERE AQUI o IP do seu broker MQTT
     'broker_port': 1883,
     'username': 'homeguard',  # Se precisar de autenticação, coloque aqui
     'password': 'pu2clr123456',  # Se precisar de autenticação, coloque aqui

@@ -126,13 +126,13 @@ home/{sensor_topic}/
 ### Example Commands
 ```bash
 # Check device status
-mosquitto_pub -h 192.168.18.236 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 
 # Monitor all motion events
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
 
 # Configure sensitivity
-mosquitto_pub -h 192.168.18.236 -t "home/motion_garagem/cmnd" -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
 ```
 
 ## 🔍 Troubleshooting
@@ -169,7 +169,7 @@ arduino-cli lib list | grep PubSubClient
 ping 192.168.18.201
 
 # Check MQTT broker
-mosquitto_pub -h 192.168.18.236 -t test -m "hello" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t test -m "hello" -u homeguard -P pu2clr123456
 
 # Monitor device output
 screen /dev/tty.usbserial-XXXX 115200
@@ -191,7 +191,7 @@ screen /dev/tty.usbserial-XXXX 115200
 ./scripts/test-all-motion-sensors.sh
 
 # Monitor continuous operation
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
 ```
 
 ## 📈 Advanced Usage
@@ -258,7 +258,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.username_pw_set("homeguard", "pu2clr123456")
 client.on_message = on_message
-client.connect("192.168.18.236", 1883, 60)
+client.connect("192.168.18.198", 1883, 60)
 
 # Subscribe to all motion sensors
 client.subscribe("home/motion_+/motion")

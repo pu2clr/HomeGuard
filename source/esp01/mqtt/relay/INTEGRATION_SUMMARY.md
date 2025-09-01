@@ -55,7 +55,7 @@ TOPIC_INFO = "homeguard/relay/ESP01_RELAY_001/info"
 
 | Flask Config | ESP01 Config | Match |
 |--------------|--------------|-------|
-| `broker_host: "192.168.18.236"` | `mqtt_server = "192.168.18.236"` | ✅ |
+| `broker_host: "192.168.18.198"` | `mqtt_server = "192.168.18.198"` | ✅ |
 | `broker_port: 1883` | `mqtt_port = 1883` | ✅ |
 | `username: "homeguard"` | `mqtt_user = "homeguard"` | ✅ |
 | `password: "pu2clr123456"` | `mqtt_pass = "pu2clr123456"` | ✅ |
@@ -88,17 +88,17 @@ ESP01 #3: #define RELAY_003 → Compile → Upload
 ./test_esp01_mqtt.sh
 
 # Ou manual:
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
   -t "homeguard/relay/ESP01_RELAY_001/command" -m "ON"
 ```
 
 ### **4. 🌐 Verificar no Flask:**
 ```bash
 # Acessar dashboard:
-http://192.168.18.236:5000/relays
+http://192.168.18.198:5000/relays
 
 # Ou via API:
-curl http://192.168.18.236:5000/api/relay/ESP01_RELAY_001/on
+curl http://192.168.18.198:5000/api/relay/ESP01_RELAY_001/on
 ```
 
 ---
@@ -135,7 +135,7 @@ cd HomeGuard/web
 ./restart_flask.sh
 
 # 2. Verificar relés configurados
-curl http://192.168.18.236:5000/api/relays
+curl http://192.168.18.198:5000/api/relays
 ```
 
 ### **2. Testar ESP01:**
@@ -150,7 +150,7 @@ chmod +x test_esp01_mqtt.sh
 
 ### **3. Verificar Dashboard Web:**
 ```
-http://192.168.18.236:5000/relays
+http://192.168.18.198:5000/relays
 ```
 
 ---
@@ -188,9 +188,9 @@ Control    (MQTT)      (Python)       (HTML/JS)
 ### **Comando de Teste Rápido:**
 ```bash
 # Testar ESP01_RELAY_001 via MQTT:
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
   -t "homeguard/relay/ESP01_RELAY_001/command" -m "TOGGLE"
 
 # Verificar via Flask:
-curl http://192.168.18.236:5000/api/relay/ESP01_RELAY_001/toggle
+curl http://192.168.18.198:5000/api/relay/ESP01_RELAY_001/toggle
 ```

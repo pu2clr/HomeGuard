@@ -45,7 +45,7 @@ IPAddress local_IP(192, 168, 18, 193);  // Different IP from relay
 
 ### MQTT Broker (same settings that work):
 ```cpp
-const char* mqtt_server = "192.168.18.236";
+const char* mqtt_server = "192.168.18.198";
 const char* mqtt_user = "homeguard";
 const char* mqtt_pass = "pu2clr123456";
 ```
@@ -66,52 +66,52 @@ home/motion1/
 ### General Monitoring:
 ```bash
 # Monitor all detector events
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
 
 # Monitor only motion detections
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion1/motion" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/motion" -v
 ```
 
 ### Control Commands:
 ```bash
 # Get complete device status
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 
 # Restart device
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "RESET" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "RESET" -u homeguard -P pu2clr123456
 
 # Configure location
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
 ```
 
 ### Sensitivity Configuration:
 ```bash
 # High sensitivity (1 second debounce)
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
 
 # Normal sensitivity (2 seconds debounce) 
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "SENSITIVITY_NORMAL" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "SENSITIVITY_NORMAL" -u homeguard -P pu2clr123456
 
 # Low sensitivity (5 seconds debounce)
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "SENSITIVITY_LOW" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "SENSITIVITY_LOW" -u homeguard -P pu2clr123456
 ```
 
 ### Timeout Configuration:
 ```bash
 # Set motion timeout to 30 seconds
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "TIMEOUT_30" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "TIMEOUT_30" -u homeguard -P pu2clr123456
 
 # Set motion timeout to 60 seconds
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "TIMEOUT_60" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "TIMEOUT_60" -u homeguard -P pu2clr123456
 ```
 
 ### Heartbeat Control:
 ```bash
 # Enable heartbeat
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
 
 # Disable heartbeat
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "HEARTBEAT_OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "HEARTBEAT_OFF" -u homeguard -P pu2clr123456
 ```
 
 ## Message Examples
@@ -188,16 +188,16 @@ mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "HEARTBEAT_OFF" -u homeg
 ### 2. Verification:
 ```bash
 # Check if device is online
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion1/status" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/status" -v
 
 # Test a command
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### 3. Monitoring:
 ```bash
 # Monitor motion detections in real-time
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion1/motion" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/motion" -v
 ```
 
 ## PIR Sensor Adjustments
@@ -265,7 +265,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.username_pw_set("homeguard", "pu2clr123456")
 client.on_message = on_message
-client.connect("192.168.18.236", 1883, 60)
+client.connect("192.168.18.198", 1883, 60)
 client.subscribe("home/motion1/motion")
 client.loop_forever()
 ```

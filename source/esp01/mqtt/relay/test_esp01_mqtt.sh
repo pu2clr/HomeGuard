@@ -4,7 +4,7 @@
 # Testa comunicação MQTT com os relés ESP01
 
 # Configurações MQTT (devem coincidir com mqtt_relay_config.py)
-BROKER="192.168.18.236"
+BROKER="192.168.18.198"
 PORT="1883"
 USER="homeguard"
 PASS="pu2clr123456"

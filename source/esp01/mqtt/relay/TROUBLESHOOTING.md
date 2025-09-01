@@ -2,7 +2,7 @@
 
 ## Status do Diagnóstico
 ✅ ESP01 está acessível na rede (IP 192.168.18.192)  
-✅ Broker MQTT está funcionando (192.168.18.236:1883)  
+✅ Broker MQTT está funcionando (192.168.18.198:1883)  
 ✅ Autenticação MQTT está funcionando (usuário: homeguard)  
 ❌ ESP01 não está respondendo aos comandos MQTT  
 
@@ -32,7 +32,7 @@ const char* password = "YOUR_PASSWORD"; // ← Confirme se está correto
 ### 4. **Configurações MQTT Incorretas no Código**
 **Verificar no código**:
 ```cpp
-const char* mqtt_server = "192.168.18.236"; // ← Confirme se está correto
+const char* mqtt_server = "192.168.18.198"; // ← Confirme se está correto
 const char* mqtt_user = "homeguard";        // ← Confirme se está correto  
 const char* mqtt_pass = "pu2clr123456";     // ← Confirme se está correto
 ```
@@ -80,7 +80,7 @@ Subscribed to: homeguard/relay/ESP01_RELAY_001/command (success: 1)
 ### Passo 4: Testar Comandos
 Execute:
 ```bash
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
   -t "homeguard/relay/ESP01_RELAY_001/command" -m "STATUS"
 ```
 
@@ -100,17 +100,17 @@ MQTT Command received: 'STATUS' on topic: homeguard/relay/ESP01_RELAY_001/comman
 ### Test MQTT:
 ```bash
 # Monitor todos os tópicos do ESP01:
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/#" -v
 
 # Enviar comandos:
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/command" -m "STATUS"
 
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/command" -m "ON"
 
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/command" -m "OFF"
 ```
 

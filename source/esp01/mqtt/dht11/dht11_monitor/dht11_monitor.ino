@@ -22,9 +22,9 @@
   - Restart: sudo systemctl restart mosquitto
 
   Testing Commands:
-  - Monitor all topics: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v
-  - Monitor temperature: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/temperature/ESP01_DHT11_001/data" -v
-  - Monitor humidity: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/humidity/ESP01_DHT11_001/data" -v
+  - Monitor all topics: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "#" -v
+  - Monitor temperature: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/temperature/ESP01_DHT11_001/data" -v
+  - Monitor humidity: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/humidity/ESP01_DHT11_001/data" -v
 
 */
 
@@ -48,7 +48,7 @@
 #define SUBNET_3         255
 #define SUBNET_4         0
 
-#define MQTT_SERVER      "192.168.18.236"       // MQTT broker IP
+#define MQTT_SERVER      "192.168.18.198"       // MQTT broker IP
 #define MQTT_PORT        1883                   // MQTT broker port
 #define MQTT_USER        "homeguard"            // MQTT username
 #define MQTT_PASS        "pu2clr123456"         // MQTT password

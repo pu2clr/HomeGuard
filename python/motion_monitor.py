@@ -4,7 +4,7 @@ HomeGuard Motion Monitor
 Python script for monitoring motion detection events from ESP-01S motion detector
 
 Based on the working MQTT configuration:
-- Broker: 192.168.18.236
+- Broker: 192.168.18.198
 - User: homeguard  
 - Pass: pu2clr123456
 
@@ -24,7 +24,7 @@ from typing import Dict, List
 import paho.mqtt.client as mqtt
 
 class MotionMonitor:
-    def __init__(self, broker_host="192.168.18.236", broker_port=1883, 
+    def __init__(self, broker_host="192.168.18.198", broker_port=1883, 
                  username="homeguard", password="pu2clr123456"):
         """
         Initialize Motion Monitor
@@ -244,7 +244,7 @@ class MotionMonitor:
 
 def main():
     parser = argparse.ArgumentParser(description='HomeGuard Motion Monitor')
-    parser.add_argument('--broker', default='192.168.18.236', help='MQTT broker IP')
+    parser.add_argument('--broker', default='192.168.18.198', help='MQTT broker IP')
     parser.add_argument('--port', type=int, default=1883, help='MQTT broker port')
     parser.add_argument('--username', default='homeguard', help='MQTT username')
     parser.add_argument('--password', default='pu2clr123456', help='MQTT password')

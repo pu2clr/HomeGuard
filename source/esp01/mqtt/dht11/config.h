@@ -40,7 +40,7 @@ IPAddress gateway(192, 168, 18, 1);           // Gateway padrão
 IPAddress subnet(255, 255, 255, 0);           // Máscara de rede
 
 // ======== CONFIGURAÇÕES MQTT ========
-const char* mqtt_server = "192.168.18.236";   // IP do broker MQTT (Raspberry Pi)
+const char* mqtt_server = "192.168.18.198";   // IP do broker MQTT (Raspberry Pi)
 const int   mqtt_port   = 1883;               // Porta do broker MQTT
 const char* mqtt_user   = "homeguard";        // Usuário MQTT
 const char* mqtt_pass   = "pu2clr123456";     // Senha MQTT
@@ -75,14 +75,14 @@ Comandos aceitos:
 // ======== COMANDOS DE TESTE ========
 /*
 // Monitorar todos os dados do sensor:
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/+" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/+" -v
 
 // Monitorar apenas dados do sensor (temperatura + umidade):
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/data" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/data" -v
 
 // Solicitar leitura imediata:
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "READ"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "READ"
 
 // Solicitar status:
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "STATUS"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "STATUS"
 */

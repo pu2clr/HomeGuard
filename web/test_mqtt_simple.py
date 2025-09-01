@@ -12,7 +12,7 @@ from datetime import datetime
 
 # Configuração MQTT (mesmo do sistema)
 MQTT_CONFIG = {
-    'broker_host': '192.168.18.236',
+    'broker_host': '192.168.18.198',
     'broker_port': 1883,
     'username': 'homeguard',
     'password': 'pu2clr123456',

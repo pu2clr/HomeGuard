@@ -47,7 +47,7 @@ sudo openssl req -new -x509 -days 3650 -key ca.key -out ca.crt -subj "/C=BR/ST=S
 sudo openssl genrsa -out server.key 4096
 
 # Gerar requisição de certificado do servidor
-sudo openssl req -new -key server.key -out server.csr -subj "/C=BR/ST=SP/L=SaoPaulo/O=HomeGuard/OU=MQTT/CN=192.168.18.236"
+sudo openssl req -new -key server.key -out server.csr -subj "/C=BR/ST=SP/L=SaoPaulo/O=HomeGuard/OU=MQTT/CN=192.168.18.198"
 
 # Assinar certificado do servidor com a CA
 sudo openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 3650
@@ -192,7 +192,7 @@ context.load_verify_locations("/path/to/ca.crt")
 client = mqtt.Client()
 client.tls_set_context(context)
 client.username_pw_set("homeguard", "pu2clr123456")
-client.connect("192.168.18.236", 8883, 60)
+client.connect("192.168.18.198", 8883, 60)
 ```
 
 ---

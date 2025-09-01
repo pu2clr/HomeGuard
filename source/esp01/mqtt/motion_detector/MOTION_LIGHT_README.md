@@ -15,7 +15,7 @@ This Python script integrates the HomeGuard motion detector with the relay contr
 ## Hardware Requirements
 - ESP-01S with motion detector (IP: 192.168.18.193)
 - ESP-01S with relay module (IP: 192.168.18.192)
-- MQTT broker running at 192.168.18.236
+- MQTT broker running at 192.168.18.198
 - Both devices connected to YOUR_SSID WiFi network
 
 ## Installation
@@ -46,7 +46,7 @@ python motion_light_controller.py --broker 192.168.1.100 --light-delay 15
 
 ### Command Line Options
 ```
---broker        MQTT broker IP (default: 192.168.18.236)
+--broker        MQTT broker IP (default: 192.168.18.198)
 --port          MQTT broker port (default: 1883)
 --username      MQTT username (default: homeguard)
 --password      MQTT password (default: pu2clr123456)
@@ -96,7 +96,7 @@ python motion_light_controller.py --broker 192.168.1.100 --light-delay 15
 ```
 🔗 Connecting to MQTT broker...
 💡 Light delay configured: 5 seconds
-✅ Connected to MQTT broker at 192.168.18.236
+✅ Connected to MQTT broker at 192.168.18.198
 📡 Subscribed to motion and relay topics
 💡 Motion-activated light controller is ready!
 ============================================================
@@ -118,21 +118,21 @@ python motion_light_controller.py --broker 192.168.1.100 --light-delay 15
 
 ### Check Motion Sensor Status
 ```bash
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### Manual Light Control
 ```bash
 # Turn light ON manually
-mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
 
 # Turn light OFF manually
-mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
 ```
 
 ### Monitor All Activity
 ```bash
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "#" -v
 ```
 
 ## Configuration Options
@@ -140,13 +140,13 @@ mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v
 ### Motion Sensor Settings
 ```bash
 # Adjust motion sensitivity
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "SENSITIVITY_LOW" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "SENSITIVITY_LOW" -u homeguard -P pu2clr123456
 
 # Set motion timeout
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "TIMEOUT_60" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "TIMEOUT_60" -u homeguard -P pu2clr123456
 
 # Configure location
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
 ```
 
 ## Status Display
@@ -177,10 +177,10 @@ The controller automatically shows status every 30 seconds:
 ### Simulate Motion Events
 ```bash
 # Simulate motion detected
-mosquitto_pub -h 192.168.18.236 -t home/motion1/motion -m '{"device_id":"test","location":"Test Area","event":"MOTION_DETECTED","timestamp":"'$(date +%s)'"}' -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/motion -m '{"device_id":"test","location":"Test Area","event":"MOTION_DETECTED","timestamp":"'$(date +%s)'"}' -u homeguard -P pu2clr123456
 
 # Simulate motion cleared
-mosquitto_pub -h 192.168.18.236 -t home/motion1/motion -m '{"device_id":"test","location":"Test Area","event":"MOTION_CLEARED","timestamp":"'$(date +%s)'","duration":"30s"}' -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/motion -m '{"device_id":"test","location":"Test Area","event":"MOTION_CLEARED","timestamp":"'$(date +%s)'","duration":"30s"}' -u homeguard -P pu2clr123456
 ```
 
 ## Troubleshooting
@@ -190,15 +190,15 @@ mosquitto_pub -h 192.168.18.236 -t home/motion1/motion -m '{"device_id":"test","
 1. **Controller doesn't respond to motion:**
    - Check if motion detector is publishing to `home/motion1/motion`
    - Verify MQTT broker connection
-   - Ensure motion detector is working: `mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v`
+   - Ensure motion detector is working: `mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v`
 
 2. **Light doesn't turn ON/OFF:**
    - Check if relay controller is responding to commands
-   - Test manual control: `mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456`
-   - Verify relay status: `mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/relay1/stat" -v`
+   - Test manual control: `mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456`
+   - Verify relay status: `mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/relay1/stat" -v`
 
 3. **Connection issues:**
-   - Check MQTT broker is running: `telnet 192.168.18.236 1883`
+   - Check MQTT broker is running: `telnet 192.168.18.198 1883`
    - Verify credentials are correct
    - Ensure ESP-01S devices are powered and connected
 
@@ -210,12 +210,12 @@ mosquitto_pub -h 192.168.18.236 -t home/motion1/motion -m '{"device_id":"test","
 ### Debug Commands
 ```bash
 # Monitor everything
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "#" -v
 
 # Check specific device status
 ping 192.168.18.193  # Motion detector
 ping 192.168.18.192  # Relay controller
-ping 192.168.18.236    # MQTT broker
+ping 192.168.18.198    # MQTT broker
 ```
 
 ## Integration Tips

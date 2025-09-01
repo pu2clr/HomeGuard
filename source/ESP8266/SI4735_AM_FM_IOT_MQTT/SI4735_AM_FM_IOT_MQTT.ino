@@ -26,24 +26,24 @@
   Examples of usage with mosquitto:
   # Change frequency to 10390 (FM 103.9 MHz):
 
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/frequency" -m "10390"
+  mosquitto_pub -h 192.168.18.198 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
+  mosquitto_pub -h 192.168.18.198 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/frequency" -m "10390"
 
 
   # Change band to AM:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "AM"
+  mosquitto_pub -h 192.168.18.198 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "AM"
 
   # Change band to FM:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
+  mosquitto_pub -h 192.168.18.198 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
 
   # Change band to SW:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "SW"
+  mosquitto_pub -h 192.168.18.198 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "SW"
 
   # Change volume to 30:
-  mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/volume" -m "30"
+  mosquitto_pub -h 192.168.18.198 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/volume" -m "30"
 
   # Monitor received commands (debug):
-  mosquitto_sub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/#" -v
+  mosquitto_sub -h 192.168.18.198 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/#" -v
 
   Fill in the credentials below before compiling!
 
@@ -59,7 +59,7 @@
 // Adicione usuário e senha do broker
 #define WIFI_SSID     "APRC"
 #define WIFI_PASSWORD "Ap69Rc642023"
-#define MQTT_BROKER   "192.168.18.236" 
+#define MQTT_BROKER   "192.168.18.198" 
 #define MQTT_PORT     1883
 #define MQTT_USER     "homeguard"
 #define MQTT_PASS     "pu2clr123456"

@@ -39,7 +39,7 @@ Created a motion detection sketch for ESP-01S based on the working `mqtt.ino` co
 - **Power:** 3.3V stable supply (same as relay module)
 
 ### MQTT Communication
-- **Broker:** Same as working setup (192.168.18.236)
+- **Broker:** Same as working setup (192.168.18.198)
 - **Credentials:** homeguard / pu2clr123456
 - **Topics:** `home/motion1/` hierarchy
 - **Messages:** JSON format for rich data
@@ -80,7 +80,7 @@ const char* password = "YOUR_PASSWORD";
 IPAddress local_IP(192, 168, 18, 193);  // Different IP
 
 // Same MQTT broker
-const char* mqtt_server = "192.168.18.236";
+const char* mqtt_server = "192.168.18.198";
 const char* mqtt_user = "homeguard";
 const char* mqtt_pass = "pu2clr123456";
 ```
@@ -95,7 +95,7 @@ const char* mqtt_pass = "pu2clr123456";
 ### 4. Monitor Events
 ```bash
 # Real-time monitoring
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
 
 # Python monitoring
 python motion_monitor.py

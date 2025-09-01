@@ -32,8 +32,8 @@
 
   Tests:
 
-  mosquitto_pub -h 192.168.18.236  -u homeguard  -P pu2clr123456  -t "home/RDA5807/volume" -m "10"
-  mosquitto_pub -h 192.168.18.236  -u homeguard  -P pu2clr123456  -t "home/RDA5807/frequency" -m "10390"
+  mosquitto_pub -h 192.168.18.198  -u homeguard  -P pu2clr123456  -t "home/RDA5807/volume" -m "10"
+  mosquitto_pub -h 192.168.18.198  -u homeguard  -P pu2clr123456  -t "home/RDA5807/frequency" -m "10390"
 
   Recommended board: ESP32 or ESP8266
 

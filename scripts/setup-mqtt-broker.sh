@@ -1,6 +1,6 @@
 #!/bin/bash
 # HomeGuard MQTT Broker Setup Script for Raspberry Pi 4
-# IP: 192.168.18.236
+# IP: 192.168.18.198
 
 set -e
 
@@ -12,7 +12,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration variables
-BROKER_IP="192.168.18.236"
+BROKER_IP="192.168.18.198"
 HOMEGUARD_USER="homeguard"
 HOMEGUARD_PASS="pu2clr123456"
 ADMIN_USER="admin"

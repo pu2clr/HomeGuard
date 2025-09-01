@@ -57,7 +57,7 @@ python3 scripts/motion_monitor_sqlite.py
 **Configuração:**
 ```python
 # MQTT Broker
-BROKER_HOST = "192.168.18.236"
+BROKER_HOST = "192.168.18.198"
 BROKER_PORT = 1883
 USERNAME = "homeguard"
 PASSWORD = "homeguard"

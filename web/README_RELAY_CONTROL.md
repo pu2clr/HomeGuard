@@ -20,7 +20,7 @@ O sistema Flask agora inclui **controle real de relés via MQTT** com as seguint
 
 ```python
 MQTT_CONFIG = {
-    'broker_host': '192.168.18.236',  # 🔧 ALTERE AQUI o IP do seu broker MQTT
+    'broker_host': '192.168.18.198',  # 🔧 ALTERE AQUI o IP do seu broker MQTT
     'broker_port': 1883,
     'username': None,  # Se precisar de autenticação
     'password': None,  # Se precisar de autenticação
@@ -30,7 +30,7 @@ MQTT_CONFIG = {
 ```
 
 ### **⚠️ Importante:** 
-- **Substitua `192.168.18.236`** pelo IP real do seu broker MQTT
+- **Substitua `192.168.18.198`** pelo IP real do seu broker MQTT
 - Se usar **autenticação**, configure `username` e `password`
 - Se usar **porta diferente**, altere `broker_port`
 

@@ -48,16 +48,16 @@ TOPIC_INFO = "homeguard/relay/ESP01_RELAY_001/info"        // ESP01 → Flask (i
 ### **📤 Comandos (Flask → ESP01):**
 ```bash
 # Ligar relé
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "ON"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "ON"
 
 # Desligar relé  
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "OFF"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "OFF"
 
 # Alternar estado
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "TOGGLE"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "TOGGLE"
 
 # Solicitar status
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "STATUS"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "STATUS"
 ```
 
 ### **📩 Respostas (ESP01 → Flask):**
@@ -123,27 +123,27 @@ NC   → Not used (normally closed)
 ### **1. Monitor MQTT Topics:**
 ```bash
 # Monitor todos os tópicos
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "#" -v
 
 # Monitor apenas um relé
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/#" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/#" -v
 ```
 
 ### **2. Test Individual Relay:**
 ```bash
 # Testar ESP01_RELAY_001
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "ON"
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "OFF"
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "TOGGLE"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "ON"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "OFF"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "TOGGLE"
 ```
 
 ### **3. Check Device Info:**
 ```bash
 # Solicitar informações detalhadas
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "STATUS"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/command" -m "STATUS"
 
 # Ver resposta em JSON
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/info" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "homeguard/relay/ESP01_RELAY_001/info" -v
 ```
 
 ---
@@ -166,10 +166,10 @@ mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "homeguard/relay
 ### **🔌 Verificação Flask:**
 ```bash
 # Verificar se o Flask reconhece os relés
-curl http://192.168.18.236:5000/api/relays
+curl http://192.168.18.198:5000/api/relays
 
 # Controlar via Flask
-curl http://192.168.18.236:5000/api/relay/ESP01_RELAY_001/on
+curl http://192.168.18.198:5000/api/relay/ESP01_RELAY_001/on
 ```
 
 ---

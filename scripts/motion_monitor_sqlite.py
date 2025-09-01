@@ -26,7 +26,7 @@ MOTION_TABLE = 'motion_sensors'
 RELAY_TABLE = 'relay_activity'
 
 # Configuração MQTT padrão
-BROKER = '192.168.18.236'
+BROKER = '192.168.18.198'
 PORT = 1883
 USERNAME = 'homeguard'
 PASSWORD = 'pu2clr123456'

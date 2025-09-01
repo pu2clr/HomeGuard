@@ -23,7 +23,7 @@ MQTT_CONFIG_DIR="/etc/mosquitto/conf.d"
 MQTT_LOG_DIR="/var/log/mosquitto"
 MQTT_DATA_DIR="/var/lib/mosquitto"
 
-BROKER_IP="192.168.18.236"
+BROKER_IP="192.168.18.198"
 USERNAME="homeguard"
 PASSWORD="pu2clr123456"
 

@@ -22,9 +22,9 @@
   - Restart: sudo systemctl restart mosquitto
 
   Testing Commands:
-  - Monitor all topics: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v
-  - Monitor temperature: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/temperature/ESP01_DHT11_001/data" -v
-  - Monitor humidity: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/humidity/ESP01_DHT11_001/data" -v
+  - Monitor all topics: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "#" -v
+  - Monitor temperature: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/temperature/ESP01_DHT11_001/data" -v
+  - Monitor humidity: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/humidity/ESP01_DHT11_001/data" -v
 
 */
 
@@ -73,7 +73,7 @@ IPAddress gateway(192, 168, 18, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 // ======== MQTT Broker Configuration (matches Flask config) ========
-const char* mqtt_server = "192.168.18.236"; // Must match MQTT_CONFIG['broker_host']
+const char* mqtt_server = "192.168.18.198"; // Must match MQTT_CONFIG['broker_host']
 const int   mqtt_port   = 1883;             // Must match MQTT_CONFIG['broker_port']  
 const char* mqtt_user   = "homeguard";      // Must match MQTT_CONFIG['username']
 const char* mqtt_pass   = "pu2clr123456";   // Must match MQTT_CONFIG['password']

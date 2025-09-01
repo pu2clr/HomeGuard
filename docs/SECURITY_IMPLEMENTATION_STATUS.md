@@ -47,10 +47,10 @@ python motion_sensor_monitor.py --tls --port 8883 --ca-cert /etc/mosquitto/certs
 ### **Passo 1: Setup Básico de Segurança**
 ```bash
 # Fazer upload do script para o Raspberry Pi
-scp scripts/setup-mqtt-security.sh pi@192.168.18.236:/home/pi/
+scp scripts/setup-mqtt-security.sh pi@192.168.18.198:/home/pi/
 
 # Executar no Raspberry Pi
-ssh pi@192.168.18.236
+ssh pi@192.168.18.198
 sudo bash /home/pi/setup-mqtt-security.sh
 ```
 
@@ -73,7 +73,7 @@ ls build/*/motion_detector_template_secure.ino.bin
 ### **Passo 4: Monitoramento Seguro**
 ```bash
 # Copiar certificado CA para máquina local (uma vez)
-scp pi@192.168.18.236:/etc/mosquitto/certs/ca.crt /etc/mosquitto/certs/
+scp pi@192.168.18.198:/etc/mosquitto/certs/ca.crt /etc/mosquitto/certs/
 
 # Executar monitor com TLS
 ./templates/motion_sensor/start_monitor_secure.sh
@@ -136,11 +136,11 @@ message_size_limit 1048576
 ### **1. Teste de Conexão TLS**
 ```bash
 # Teste básico TLS
-mosquitto_sub -h 192.168.18.236 -p 8883 --cafile /etc/mosquitto/certs/ca.crt \
+mosquitto_sub -h 192.168.18.198 -p 8883 --cafile /etc/mosquitto/certs/ca.crt \
     -u homeguard -P pu2clr123456 -t home/test -v
 
 # Publicar mensagem teste
-mosquitto_pub -h 192.168.18.236 -p 8883 --cafile /etc/mosquitto/certs/ca.crt \
+mosquitto_pub -h 192.168.18.198 -p 8883 --cafile /etc/mosquitto/certs/ca.crt \
     -u homeguard -P pu2clr123456 -t home/test -m "TLS Test Message"
 ```
 
@@ -151,7 +151,7 @@ openssl x509 -in /etc/mosquitto/certs/ca.crt -noout -text
 openssl x509 -in /etc/mosquitto/certs/server.crt -noout -dates -subject
 
 # Verificar conexão TLS
-openssl s_client -connect 192.168.18.236:8883 -CAfile /etc/mosquitto/certs/ca.crt
+openssl s_client -connect 192.168.18.198:8883 -CAfile /etc/mosquitto/certs/ca.crt
 ```
 
 ### **3. Monitor de Logs**

@@ -44,7 +44,7 @@ const char* password = "SUA_SENHA_WIFI";
 
 ### 3. **Broker MQTT**
 ```cpp
-const char* mqtt_server = "192.168.18.236";  // IP do Raspberry Pi
+const char* mqtt_server = "192.168.18.198";  // IP do Raspberry Pi
 const char* mqtt_user = "homeguard";
 const char* mqtt_pass = "pu2clr123456";
 ```
@@ -104,17 +104,17 @@ const char* mqtt_pass = "pu2clr123456";
 
 **Monitorar todos os dados:**
 ```bash
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/+" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/+" -v
 ```
 
 **Monitorar apenas dados do sensor:**
 ```bash
-mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/data" -v
+mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/data" -v
 ```
 
 **Solicitar leitura imediata:**
 ```bash
-mosquitto_pub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "READ"
+mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "READ"
 ```
 
 ## ⏱️ Temporização
@@ -151,7 +151,7 @@ Dados enviados via MQTT - Temp: 25.1°C, Humid: 60.2%
 - Aguardar 2 segundos após ligar para estabilizar
 
 ### **MQTT não conecta:**
-- Verificar IP do broker (192.168.18.236)
+- Verificar IP do broker (192.168.18.198)
 - Confirmar credenciais (homeguard:pu2clr123456)
 - Testar conectividade de rede
 

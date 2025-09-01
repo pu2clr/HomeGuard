@@ -1,5 +1,5 @@
 # HomeGuard MQTT Broker - Quick Reference
-**Raspberry Pi 4 Broker IP: 192.168.18.236**
+**Raspberry Pi 4 Broker IP: 192.168.18.198**
 
 ## 🚀 Quick Setup on Raspberry Pi
 
@@ -10,8 +10,8 @@ chmod +x setup-mqtt-broker.sh
 ./setup-mqtt-broker.sh
 
 # 2. Or manual setup from project directory
-scp scripts/setup-mqtt-broker.sh pi@192.168.18.236:~/
-ssh pi@192.168.18.236
+scp scripts/setup-mqtt-broker.sh pi@192.168.18.198:~/
+ssh pi@192.168.18.198
 ./setup-mqtt-broker.sh
 ```
 
@@ -29,35 +29,35 @@ ssh pi@192.168.18.236
 ### Basic Connection Test
 ```bash
 # Test authentication
-mosquitto_pub -h 192.168.18.236 -t test/hello -m "Hello World" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t test/hello -m "Hello World" -u homeguard -P pu2clr123456
 
 # Subscribe to test
-mosquitto_sub -h 192.168.18.236 -t test/hello -u homeguard -P pu2clr123456
+mosquitto_sub -h 192.168.18.198 -t test/hello -u homeguard -P pu2clr123456
 ```
 
 ### HomeGuard Device Commands
 ```bash
 # Monitor all HomeGuard devices
-mosquitto_sub -h 192.168.18.236 -t "home/#" -u homeguard -P pu2clr123456 -v
+mosquitto_sub -h 192.168.18.198 -t "home/#" -u homeguard -P pu2clr123456 -v
 
 # Relay control
-mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.236 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
 
 # Motion sensor status
-mosquitto_pub -h 192.168.18.236 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### System Monitoring (Admin)
 ```bash
 # Connected clients
-mosquitto_sub -h 192.168.18.236 -t '$SYS/broker/clients/connected' -u admin -P [admin_password]
+mosquitto_sub -h 192.168.18.198 -t '$SYS/broker/clients/connected' -u admin -P [admin_password]
 
 # Broker uptime
-mosquitto_sub -h 192.168.18.236 -t '$SYS/broker/uptime' -u admin -P [admin_password]
+mosquitto_sub -h 192.168.18.198 -t '$SYS/broker/uptime' -u admin -P [admin_password]
 
 # All system topics
-mosquitto_sub -h 192.168.18.236 -t '$SYS/#' -u admin -P [admin_password] -v
+mosquitto_sub -h 192.168.18.198 -t '$SYS/#' -u admin -P [admin_password] -v
 ```
 
 ## 🔧 Service Management
@@ -92,20 +92,20 @@ sudo tail -f /var/log/mosquitto/monitor.log
 Change in all `.ino` files:
 ```cpp
 // OLD
-const char* mqtt_server = "192.168.18.236";
+const char* mqtt_server = "192.168.18.198";
 
 // NEW  
-const char* mqtt_server = "192.168.18.236";
+const char* mqtt_server = "192.168.18.198";
 ```
 
 ### 2. Update Python Scripts
 Change in all `.py` files:
 ```python
 # OLD
-def __init__(self, broker_host="192.168.18.236", ...):
+def __init__(self, broker_host="192.168.18.198", ...):
 
 # NEW
-def __init__(self, broker_host="192.168.18.236", ...):
+def __init__(self, broker_host="192.168.18.198", ...):
 ```
 
 ### 3. Automatic Update Script
@@ -121,10 +121,10 @@ def __init__(self, broker_host="192.168.18.236", ...):
 ./scripts/validate-mqtt-broker.sh
 
 # Manual ping test
-ping 192.168.18.236
+ping 192.168.18.198
 
 # Port connectivity
-nc -z 192.168.18.236 1883
+nc -z 192.168.18.198 1883
 ```
 
 ## 🔒 Security Features
