@@ -28,10 +28,10 @@
 const char* ssid = "APRC";
 const char* password = "Ap69Rc642023";
 
-// ESP-01S fixed IP
-IPAddress local_IP(192, 168, 18, 140);  // Different IP from relay module
-IPAddress gateway(192, 168, 18, 1);
-IPAddress subnet(255, 255, 255, 0);
+// ESP-01S using DHCP (no fixed IP)
+// IPAddress local_IP(192, 168, 18, 140);  // Different IP from relay module
+// IPAddress gateway(192, 168, 18, 1);
+// IPAddress subnet(255, 255, 255, 0);
 
 // ======== MQTT Broker Configuration ========
 const char* mqtt_server = "192.168.18.198"; // Local MQTT broker IP
@@ -204,6 +204,7 @@ void checkMotionSensor() {
     // Publish motion detection
     String motionEvent = "{";
     motionEvent += "\"device_id\":\"" + deviceID + "\",";
+    motionEvent += "\"device_name\":\"Motion Sensor " + deviceID + "\",";
     motionEvent += "\"location\":\"" + deviceLocation + "\",";
     motionEvent += "\"event\":\"MOTION_DETECTED\",";
     motionEvent += "\"timestamp\":\"" + String(currentTime) + "\",";
@@ -227,6 +228,7 @@ void checkMotionSensor() {
     // Publish motion cleared
     String motionEvent = "{";
     motionEvent += "\"device_id\":\"" + deviceID + "\",";
+    motionEvent += "\"device_name\":\"Motion Sensor " + deviceID + "\",";
     motionEvent += "\"location\":\"" + deviceLocation + "\",";
     motionEvent += "\"event\":\"MOTION_CLEARED\",";
     motionEvent += "\"timestamp\":\"" + String(currentTime) + "\",";
@@ -276,8 +278,8 @@ void setup() {
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, HIGH); // LED OFF (assuming active LOW)
   
-  // Connect to WiFi
-  WiFi.config(local_IP, gateway, subnet);
+  // Connect to WiFi using DHCP
+  // WiFi.config(local_IP, gateway, subnet);
   WiFi.begin(ssid, password);
   
   int wifiAttempts = 0;

@@ -178,12 +178,12 @@ class MQTTRelayController:
                 'device_id': device_id,
                 'device_name': data.get('device_name', device_id),
                 'location': data.get('location', 'Não definido'),
-                'motion_detected': data.get('motion', 'DETECTED') == 'DETECTED',
+                'motion_detected': data.get('event', 'MOTION_CLEARED') == 'MOTION_DETECTED',
                 'timestamp_received': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 'raw_payload': payload
             }
             
-            print(f"🚶 Processando motion de {device_id}: {data.get('motion', 'N/A')}")
+            print(f"🚶 Processando motion de {device_id}: {data.get('event', 'N/A')}")
             
             # Enviar via POST para o endpoint do Flask
             response = requests.post(
