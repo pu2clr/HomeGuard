@@ -37,7 +37,6 @@
 // #define RELAY_002  // Luz da Área de Serviço
 // #define RELAY_003  // Bomba d'Água
 
-#include "wifi_info.h" // Please rename the file wifi_infoX.h to wifi_info.h and change the SSID and password
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
@@ -68,8 +67,8 @@ IPAddress
 #endif
 
 // ======== Wi-Fi Network Configuration ========
-const char *ssid = YOUR_SSID;
-const char *password = YOUR_PASSWORD;
+const char *ssid = "APRC";
+const char *password = "Ap69Rc642023";
 // ======== Network Configuration ========
 IPAddress gateway(192, 168, 18, 1);
 IPAddress subnet(255, 255, 255, 0);
