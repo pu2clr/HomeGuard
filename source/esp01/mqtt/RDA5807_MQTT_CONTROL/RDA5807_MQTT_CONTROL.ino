@@ -11,7 +11,7 @@
   ESP8266 Dev Module Wire up
   | Device name               | RDA5807 Pin          | ESP8266 Dev Module |
   | ------------------------- | -------------------- | ------------------ |
-  | RDA5807                   |                      |                    | 
+  | RDA5807                   |                      |      ESP01         | 
   |                           | VCC                  |      3.3V          |
   |                           | GND                  |      GND           |    
   |                           | SDIO / SDA (pin 2)   |      GPIO0         |

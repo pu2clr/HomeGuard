@@ -1,4 +1,10 @@
 /*
+  This sketch is an example of using the ESP01 (IoT Module based on ESP8266) to control 
+  an AM/SW/FM receiver based on the SI4735 DSP using the MQTT protocol. 
+  To control the SI4735, this sketch uses the library developed by me and available on the 
+  Arduino platform (available at https://github.com/pu2clr/SI4735).
+
+
   AM/FM/SW SI4735 IoT Receiver via MQTT - ESP8266
 
 
@@ -11,37 +17,39 @@
   | pin 17  |  pin 11  | SCLK   |   5 (SCL / GPIO5)  |
 
   
+  Inspired by the AM_FM_SERIAL_MONITOR.ino example  
+  Remote control via MQTT:
+    - home/radio/frequency : change frequency (int)
+    - home/radio/band      : change band ("AM", "FM", "SW")
+    - home/radio/volume    : change volume (0-63)
 
-  Inspirado no exemplo AM_FM_SERIAL_MONITOR.ino
-  Controle remoto via MQTT:
-    - home/radio/frequency : altera frequência (int)
-    - home/radio/band      : altera banda ("AM", "FM", "SW")
-    - home/radio/volume    : altera volume (0-63)
-
-  Exemplos de uso com mosquitto:
-  # Alterar frequência para 10390 (FM 103.9 MHz):
+  Examples of usage with mosquitto:
+  # Change frequency to 10390 (FM 103.9 MHz):
 
   mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
   mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/frequency" -m "10390"
 
 
-  # Alterar banda para AM:
+  # Change band to AM:
   mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "AM"
 
-  # Alterar banda para FM:
+  # Change band to FM:
   mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "FM"
 
-  # Alterar banda para SW:
+  # Change band to SW:
   mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/band" -m "SW"
 
-  # Alterar volume para 30:
+  # Change volume to 30:
   mosquitto_pub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/volume" -m "30"
 
-  # Monitorar comandos recebidos (debug):
+  # Monitor received commands (debug):
   mosquitto_sub -h 192.168.18.236 -p 1883 -u homeguard -P pu2clr123456 -t "home/radio/#" -v
 
-  Preencha as credenciais abaixo antes de compilar!
+  Fill in the credentials below before compiling!
+
+  Ricardo Caratti <rcaratti@pu2clr.com>
 */
+
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>

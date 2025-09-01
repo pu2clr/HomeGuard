@@ -1,10 +1,31 @@
 /**
-  HomeGuard DHT11 Monitor for ESP-01S
-  Parametrized version for easy configuration via Arduino IDE or arduino-cli
+  HomeGuard Temperature & Humidity Monitor for ESP-01S
+  Compatible with Flask Dashboard MQTT System
   
-  CONFIGURATION:
-  - Set parameters below as #define or const values before uploading.
-  - You can use "Tools > Define Symbols" in Arduino IDE or --build-property in arduino-cli for automation.
+  QUICK CONFIG: Uncomment ONE line below for your ESP01:
+  // #define SENSOR_001  // Sala (192.168.18.195)
+  // #define SENSOR_002  // Cozinha (192.168.18.196)  
+  // #define SENSOR_003  // Quarto (192.168.18.197)
+  
+  Hardware connections:
+  - DHT11 VCC -> 3.3V
+  - DHT11 GND -> GND
+  - DHT11 DATA -> GPIO2 (PIN 2) with 10kΩ pull-up resistor
+  - Status LED -> GPIO0 (PIN 0) [Optional]
+
+  MQTT Broker Setup:
+  - Install mosquitto broker: sudo apt install mosquitto mosquitto-clients
+  - Password setup: sudo mosquitto_passwd -c /etc/mosquitto/passwd homeguard
+  - Config authentication in /etc/mosquitto/mosquitto.conf:
+    allow_anonymous false
+    password_file /etc/mosquitto/passwd
+  - Restart: sudo systemctl restart mosquitto
+
+  Testing Commands:
+  - Monitor all topics: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "#" -v
+  - Monitor temperature: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/temperature/ESP01_DHT11_001/data" -v
+  - Monitor humidity: mosquitto_sub -h 192.168.18.236 -u homeguard -P pu2clr123456 -t "home/humidity/ESP01_DHT11_001/data" -v
+
 */
 
 // ======== User Parameters (Edit these for your device) ========
