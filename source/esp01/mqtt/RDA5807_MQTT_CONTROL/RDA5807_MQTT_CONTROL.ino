@@ -52,7 +52,7 @@
 
 const char* ssid = "APRC";
 const char* password = "Ap69Rc642023";
-const char* mqtt_server = "192.168.18.236";
+const char* mqtt_server = "192.168.18.198";
 const char* mqtt_user = "homeguard";
 const char* mqtt_pass = "pu2clr123456";
 
