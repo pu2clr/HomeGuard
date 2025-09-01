@@ -1,2 +1,0 @@
-#define YOUR_SSID "XXXX"
-#define YOUR_PASSWORD "XXXXXXXX"

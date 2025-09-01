@@ -28,32 +28,39 @@
 
 */
 
+// ======== DHT Hardware Configuration ========
+#define DHT_PIN 2  // GPIO2 for DHT data pin
+// Selecione o tipo de sensor: DHT11 ou DHT22
+#define DHT_SENSOR_TYPE DHT11  // Altere para DHT22 se usar o sensor branco
+#define STATUS_LED_PIN 0       // GPIO0 for status LED (optional)
+
+
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID        "ESP01_DHT11_BRANCO"   // Unique device ID
-#define DEVICE_NAME      "sala"        // Device display name
-#define DEVICE_LOCATION  "Sala"          // Location name
+#define DEVICE_ID "ESP01_DHT11_01"            // Unique device ID
+#define DEVICE_NAME "corredor"                // Device display name
+#define DEVICE_LOCATION "Corredor Ventilado"  // Location name
 
-#define LOCAL_IP_1       192                    // Device local IP
-#define LOCAL_IP_2       168
-#define LOCAL_IP_3       18
-#define LOCAL_IP_4       152
+#define LOCAL_IP_1 192  // Device local IP
+#define LOCAL_IP_2 168
+#define LOCAL_IP_3 18
+#define LOCAL_IP_4 152
 
-#define GATEWAY_1        192                    // Your network gateway
-#define GATEWAY_2        168
-#define GATEWAY_3        18
-#define GATEWAY_4        1
+#define GATEWAY_1 192  // Your network gateway
+#define GATEWAY_2 168
+#define GATEWAY_3 18
+#define GATEWAY_4 1
 
-#define SUBNET_1         255                    // Your network subnet
-#define SUBNET_2         255
-#define SUBNET_3         255
-#define SUBNET_4         0
+#define SUBNET_1 255  // Your network subnet
+#define SUBNET_2 255
+#define SUBNET_3 255
+#define SUBNET_4 0
 
-#define MQTT_SERVER      "192.168.18.198"       // MQTT broker IP
-#define MQTT_PORT        1883                   // MQTT broker port
-#define MQTT_USER        "homeguard"            // MQTT username
-#define MQTT_PASS        "pu2clr123456"         // MQTT password
-#define WIFI_SSID        "APRC"                 // WiFi SSID
-#define WIFI_PASS        "Ap69Rc642023"        // WiFi password
+#define MQTT_SERVER "192.168.18.198"  // MQTT broker IP
+#define MQTT_PORT 1883                // MQTT broker port
+#define MQTT_USER "homeguard"         // MQTT username
+#define MQTT_PASS "pu2clr123456"      // MQTT password
+#define WIFI_SSID "APRC"              // WiFi SSID
+#define WIFI_PASS "Ap69Rc642023"      // WiFi password
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
@@ -66,9 +73,9 @@ IPAddress subnet(SUBNET_1, SUBNET_2, SUBNET_3, SUBNET_4);
 
 // ======== MQTT Broker Configuration ========
 const char* mqtt_server = MQTT_SERVER;
-const int   mqtt_port   = MQTT_PORT;
-const char* mqtt_user   = MQTT_USER;
-const char* mqtt_pass   = MQTT_PASS;
+const int mqtt_port = MQTT_PORT;
+const char* mqtt_user = MQTT_USER;
+const char* mqtt_pass = MQTT_PASS;
 
 // ======== Device Info ========
 const char* DEVICE_ID_STR = DEVICE_ID;
@@ -79,20 +86,16 @@ const char* DEVICE_LOCATION_STR = DEVICE_LOCATION;
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASS;
 
-// ======== DHT11 Hardware Configuration ========
-#define DHT_PIN 2         // GPIO2 for DHT11 data pin
-#define DHT_TYPE DHT11    // DHT 11
-#define STATUS_LED_PIN 0  // GPIO0 for status LED (optional)
 
-DHT dht(DHT_PIN, DHT_TYPE);
+DHT dht(DHT_PIN, DHT_SENSOR_TYPE);
 WiFiClient espClient;
 PubSubClient client(espClient);
 
 // ======== MQTT Topics ========
 String TOPIC_TEMPERATURE = String("home/temperature/") + DEVICE_ID_STR + "/data";
-String TOPIC_HUMIDITY    = String("home/humidity/") + DEVICE_ID_STR + "/data";
-String TOPIC_STATUS      = String("home/sensor/") + DEVICE_ID_STR + "/status";
-String TOPIC_INFO        = String("home/sensor/") + DEVICE_ID_STR + "/info";
+String TOPIC_HUMIDITY = String("home/humidity/") + DEVICE_ID_STR + "/data";
+String TOPIC_STATUS = String("home/sensor/") + DEVICE_ID_STR + "/status";
+String TOPIC_INFO = String("home/sensor/") + DEVICE_ID_STR + "/info";
 
 // ======== Sensor State Variables ========
 float temperature = NAN;
@@ -105,9 +108,9 @@ unsigned long lastDataSend = 0;
 int failedReadings = 0;
 
 // Timing intervals
-const unsigned long READING_INTERVAL = 120000;   // 2 minutes
-const unsigned long HEARTBEAT_INTERVAL = 600000; // 10 minutes
-const unsigned long DATA_SEND_INTERVAL = 120000; // 2 minutes
+const unsigned long READING_INTERVAL = 120000;    // 2 minutes
+const unsigned long HEARTBEAT_INTERVAL = 600000;  // 10 minutes
+const unsigned long DATA_SEND_INTERVAL = 120000;  // 2 minutes
 const float TEMP_THRESHOLD = 0.5;
 const float HUMID_THRESHOLD = 2.0;
 
@@ -131,7 +134,7 @@ void readSensor() {
     failedReadings++;
     device_status.sensor_ok = false;
     digitalWrite(STATUS_LED_PIN, !digitalRead(STATUS_LED_PIN));
-    Serial.println("Erro ao ler DHT11!");
+    Serial.println("Erro ao ler DHT!");
   } else {
     failedReadings = 0;
     device_status.sensor_ok = true;
@@ -154,11 +157,12 @@ void sendSensorData(bool forceUpdate = false) {
   bool humidChanged = abs(humidity - lastHumidity) >= HUMID_THRESHOLD;
   bool timeToSend = (millis() - lastDataSend) >= DATA_SEND_INTERVAL;
   if (forceUpdate || tempChanged || humidChanged || timeToSend) {
+    String sensorTypeStr = (DHT_SENSOR_TYPE == DHT11) ? "DHT11" : "DHT22";
     String tempPayload = "{";
     tempPayload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
-    tempPayload += "\"device_name\":\"" + String(DEVICE_NAME_STR) + "\",";
+    tempPayload += "\"name\":\"" + String(DEVICE_NAME_STR) + "\",";
     tempPayload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
-    tempPayload += "\"sensor_type\":\"DHT11\",";
+    tempPayload += "\"sensor_type\":\"" + sensorTypeStr + "\",";
     tempPayload += "\"temperature\":" + String(temperature, 1) + ",";
     tempPayload += "\"unit\":\"°C\",";
     tempPayload += "\"rssi\":" + String(WiFi.RSSI()) + ",";
@@ -170,7 +174,7 @@ void sendSensorData(bool forceUpdate = false) {
     humidPayload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
     humidPayload += "\"device_name\":\"" + String(DEVICE_NAME_STR) + "\",";
     humidPayload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
-    humidPayload += "\"sensor_type\":\"DHT11\",";
+    humidPayload += "\"sensor_type\":\"" + sensorTypeStr + "\",";
     humidPayload += "\"humidity\":" + String(humidity, 1) + ",";
     humidPayload += "\"unit\":\"%\",";
     humidPayload += "\"rssi\":" + String(WiFi.RSSI()) + ",";
@@ -197,7 +201,8 @@ void sendDeviceInfo() {
   info += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
   info += "\"device_name\":\"" + String(DEVICE_NAME_STR) + "\",";
   info += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
-  info += "\"sensor_type\":\"DHT11\",";
+  String sensorTypeStr = (DHT_SENSOR_TYPE == DHT11) ? "DHT11" : "DHT22";
+  info += "\"sensor_type\":\"" + sensorTypeStr + "\",";
   info += "\"ip\":\"" + WiFi.localIP().toString() + "\",";
   info += "\"rssi\":" + String(WiFi.RSSI()) + ",";
   info += "\"uptime\":" + String(millis()) + ",";
@@ -205,7 +210,7 @@ void sendDeviceInfo() {
   info += "\"failed_readings\":" + String(device_status.failed_readings) + ",";
   info += "\"last_temperature\":" + String(device_status.last_temp, 1) + ",";
   info += "\"last_humidity\":" + String(device_status.last_humid, 1) + ",";
-  info += "\"firmware\":\"HomeGuard_DHT11_v1.0\"";
+  info += "\"firmware\":\"HomeGuard_DHT_v1.0\"";
   info += "}";
   client.publish(TOPIC_INFO.c_str(), info.c_str(), true);
 }
@@ -220,12 +225,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (command.equalsIgnoreCase("STATUS")) {
     sendStatus();
     sendDeviceInfo();
-  }
-  else if (command.equalsIgnoreCase("READ")) {
+  } else if (command.equalsIgnoreCase("READ")) {
     readSensor();
     sendSensorData(true);
-  }
-  else if (command.equalsIgnoreCase("INFO")) {
+  } else if (command.equalsIgnoreCase("INFO")) {
     sendDeviceInfo();
   }
 }
