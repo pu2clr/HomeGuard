@@ -260,9 +260,9 @@ void publishEvent(bool motion) {
   String payload = "{";
   payload += "\"motion\":" + String(motion ? 1 : 0) + ",";
   payload += "\"ts\":\"" + getTimestamp() + "\",";
-  payload += "\"id\":\"" + String(DEVICE_ID_STR) + "\",";
+  payload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
   payload += "\"name\":\"" + String(DEVICE_NAME_STR) + "\",";
-  payload += "\"loc\":\"" + String(DEVICE_LOCATION_STR) + "\"";
+  payload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\"";
   payload += "}";
   
   client.publish(TOPIC_EVENT.c_str(), payload.c_str(), false); // not retained
