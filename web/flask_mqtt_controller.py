@@ -37,6 +37,14 @@ class MQTTRelayController:
             "home/sensor/+/info"
         ]
         
+        # Tópicos Motion Sensor para monitoramento
+        self.motion_topics = [
+            "home/motion_sensor/+/motion",
+            "home/motion_sensor/+/status",
+            "home/motion_sensor/+/heartbeat",
+            "home/motion_sensor/+/config"
+        ]
+        
         # Controle de throttling para DHT11 (evitar spam)
         self.last_dht11_data = {}  # device_id: {'timestamp': datetime, 'data': {}}
         self.dht11_throttle_seconds = 120  # Mínimo 120 segundos (2 minutos) entre processamentos
@@ -58,9 +66,14 @@ class MQTTRelayController:
             # Subscrever aos tópicos DHT11
             for topic in self.dht11_topics:
                 client.subscribe(topic)
-                print(f"� Subscrito em DHT11: {topic}")
+                print(f"🌡️  Subscrito em DHT11: {topic}")
                 
-            print(f"📊 Total de tópicos monitorados: {len(RELAYS_CONFIG) + len(self.dht11_topics)}")
+            # Subscrever aos tópicos Motion Sensor
+            for topic in self.motion_topics:
+                client.subscribe(topic)
+                print(f"🚶 Subscrito em Motion: {topic}")
+                
+            print(f"📊 Total de tópicos monitorados: {len(RELAYS_CONFIG) + len(self.dht11_topics) + len(self.motion_topics)}")
         else:
             self.connected = False
             print(f"❌ Falha na conexão MQTT: {rc}")
@@ -96,6 +109,9 @@ class MQTTRelayController:
             
             # Processar mensagens DHT11
             self._process_dht11_message(topic, payload)
+            
+            # Processar mensagens Motion Sensor
+            self._process_motion_message(topic, payload)
                     
         except Exception as e:
             print(f"❌ Erro ao processar mensagem MQTT: {e}")
@@ -126,6 +142,65 @@ class MQTTRelayController:
                 
         except Exception as e:
             print(f"❌ Erro ao processar mensagem DHT11: {e}")
+
+    def _process_motion_message(self, topic, payload):
+        """Processar mensagens dos sensores de movimento"""
+        try:
+            # Verificar se é um tópico motion_sensor
+            if topic.startswith("home/motion_sensor/") and "/motion" in topic:
+                # Extrair device_id do tópico: home/motion_sensor/{device_id}/motion
+                device_id = topic.split('/')[2]
+                self._send_motion_data_to_flask(device_id, payload, "motion")
+                
+            elif topic.startswith("home/motion_sensor/") and "/status" in topic:
+                device_id = topic.split('/')[2]
+                print(f"🚶 Status motion {device_id}: {payload}")
+                
+            elif topic.startswith("home/motion_sensor/") and "/heartbeat" in topic:
+                device_id = topic.split('/')[2]
+                print(f"💓 Heartbeat motion {device_id}: {payload}")
+                
+            elif topic.startswith("home/motion_sensor/") and "/config" in topic:
+                device_id = topic.split('/')[2]
+                print(f"⚙️  Config motion {device_id}: {payload}")
+                
+        except Exception as e:
+            print(f"❌ Erro ao processar mensagem Motion: {e}")
+
+    def _send_motion_data_to_flask(self, device_id, payload, event_type):
+        """Enviar dados do sensor de movimento para o Flask via API local"""
+        try:
+            # Parse do payload JSON
+            data = json.loads(payload)
+            
+            # Preparar dados para inserção no banco
+            flask_data = {
+                'device_id': device_id,
+                'device_name': data.get('device_name', device_id),
+                'location': data.get('location', 'Não definido'),
+                'motion_detected': data.get('motion', 'DETECTED') == 'DETECTED',
+                'timestamp_received': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'raw_payload': payload
+            }
+            
+            print(f"🚶 Processando motion de {device_id}: {data.get('motion', 'N/A')}")
+            
+            # Enviar via POST para o endpoint do Flask
+            response = requests.post(
+                'http://localhost:5000/api/motion',
+                json=flask_data,
+                timeout=5
+            )
+            
+            if response.status_code == 200:
+                print(f"✅ Motion data enviado para Flask: {device_id}")
+            else:
+                print(f"❌ Erro ao enviar motion data: {response.status_code}")
+                
+        except requests.exceptions.RequestException as e:
+            print(f"🔌 Flask não disponível para motion data: {e}")
+        except Exception as e:
+            print(f"❌ Erro ao enviar motion data para Flask: {e}")
 
     def _send_sensor_data_to_flask(self, device_id, payload, sensor_type):
         """Enviar dados do sensor para o Flask via API local (combinando temp e humidity)"""

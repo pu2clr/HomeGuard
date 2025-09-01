@@ -115,14 +115,30 @@ class FlaskHomeGuardDashboard:
                 )
             """)
             
+            # Criar tabela para sensores de movimento
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS motion_sensors (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    device_id TEXT NOT NULL,
+                    device_name TEXT NOT NULL,
+                    location TEXT NOT NULL,
+                    motion_detected BOOLEAN NOT NULL,
+                    timestamp_received TEXT NOT NULL,
+                    raw_payload TEXT,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            
             # Criar índices
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_dht11_device ON dht11_sensors(device_id)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_dht11_timestamp ON dht11_sensors(timestamp_received)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_alerts_device ON sensor_alerts(device_id)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_alerts_active ON sensor_alerts(is_active)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_motion_device ON motion_sensors(device_id)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_motion_timestamp ON motion_sensors(timestamp_received)")
             
             conn.commit()
-            print("✅ Banco de dados inicializado com suporte a sensores DHT11")
+            print("✅ Banco de dados inicializado com suporte a sensores DHT11 e Motion")
             
         except Exception as e:
             print(f"❌ Erro ao inicializar banco de dados: {e}")
@@ -722,6 +738,50 @@ def api_resolve_alert():
         return jsonify({'success': True})
         
     except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 400
+
+@app.route('/api/motion', methods=['POST'])
+def api_motion_data():
+    """API para receber dados de sensores de movimento"""
+    try:
+        data = request.get_json()
+        
+        # Validar dados obrigatórios
+        required_fields = ['device_id', 'device_name', 'location']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'success': False, 'error': f'Campo obrigatório: {field}'}), 400
+        
+        # Conectar ao banco de dados
+        conn = dashboard.get_db_connection()
+        if not conn:
+            return jsonify({'success': False, 'error': 'Erro de conexão com banco'}), 500
+        
+        cursor = conn.cursor()
+        
+        # Inserir dados na tabela motion_sensors
+        cursor.execute(f"""
+            INSERT INTO {dashboard.motion_table} (
+                device_id, device_name, location, motion_detected, 
+                timestamp_received, raw_payload, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (
+            data['device_id'],
+            data['device_name'], 
+            data['location'],
+            data.get('motion_detected', False),
+            data.get('timestamp_received', datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+            data.get('raw_payload', '{}'),
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        ))
+        
+        conn.commit()
+        conn.close()
+        
+        return jsonify({'success': True, 'message': 'Dados de movimento salvos'})
+        
+    except Exception as e:
+        print(f"Erro ao salvar dados de movimento: {e}")
         return jsonify({'success': False, 'error': str(e)}), 400
 
 @app.route('/')

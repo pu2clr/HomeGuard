@@ -15,9 +15,9 @@
  * - Device identification and heartbeat
  * 
  * MQTT Commands:
- * - mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
- * - mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
- * - mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
+ * - mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_sensor/+/#" -v
+ * - mosquitto_pub -h 192.168.18.198 -t home/motion_sensor/{device_id}/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+ * - mosquitto_pub -h 192.168.18.198 -t home/motion_sensor/{device_id}/cmnd -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
  */
 
 #include <ESP8266WiFi.h>
@@ -43,21 +43,12 @@ const char* mqtt_pass   = "pu2clr123456"; // Password
 #define PIN_MOTION_SENSOR 2    // GPIO2 for PIR sensor (digital input)
 #define PIN_LED 0              // GPIO0 for status LED (optional)
 
-
-
+// ======== MQTT Topics (dynamic by deviceID) ========
 String TOPIC_CMD;
 String TOPIC_STATUS;
 String TOPIC_MOTION;
 String TOPIC_HEARTBEAT;
 String TOPIC_CONFIG;
-
-
-// ======== MQTT Topics ========
-const char* TOPIC_CMD = "home/motion1/cmnd";        // Topic for commands
-const char* TOPIC_STATUS = "home/motion1/status";   // Topic for general status
-const char* TOPIC_MOTION = "home/motion1/motion";   // Topic for motion events
-const char* TOPIC_HEARTBEAT = "home/motion1/heartbeat"; // Topic for heartbeat
-const char* TOPIC_CONFIG = "home/motion1/config";   // Topic for configuration
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -88,6 +79,13 @@ void initializeDevice() {
   deviceMAC.replace(":", "");
   deviceMAC.toLowerCase();
   deviceID = "motion_" + deviceMAC.substring(6); // Use last 6 chars of MAC
+  
+  // Define topics dynamically based on device_id
+  TOPIC_CMD      = "home/motion_sensor/" + deviceID + "/cmnd";
+  TOPIC_STATUS   = "home/motion_sensor/" + deviceID + "/status";
+  TOPIC_MOTION   = "home/motion_sensor/" + deviceID + "/motion";
+  TOPIC_HEARTBEAT= "home/motion_sensor/" + deviceID + "/heartbeat";
+  TOPIC_CONFIG   = "home/motion_sensor/" + deviceID + "/config";
   
   Serial.println("=== HomeGuard Motion Detector ===");
   Serial.println("Device ID: " + deviceID);
@@ -151,10 +149,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 // ======== Publish MQTT Message ========
-void publishMessage(const char* topic, String message) {
+void publishMessage(String topic, String message) {
   if (client.connected()) {
-    client.publish(topic, message.c_str());
-    Serial.println("Published [" + String(topic) + "]: " + message);
+    client.publish(topic.c_str(), message.c_str());
+    Serial.println("Published [" + topic + "]: " + message);
   }
 }
 
@@ -253,7 +251,7 @@ void reconnect() {
       Serial.println("MQTT connected!");
       
       // Subscribe to command topic
-      client.subscribe(TOPIC_CMD);
+      client.subscribe(TOPIC_CMD.c_str());
       
       // Announce device online
       publishMessage(TOPIC_STATUS, "ONLINE");
