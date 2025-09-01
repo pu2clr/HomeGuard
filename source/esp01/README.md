@@ -356,3 +356,39 @@ homeguard/
 
 For advanced Python client usage, see `/python/README.md`
 For troubleshooting help, see `/docs/troubleshooting.md`
+
+
+
+## Device MQTT Monitor examples
+
+% mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/#" -v       
+
+home/motion/MOTION_01/status offline
+home/motion/MOTION_02/status offline
+home/motion/MOTION_03/status online
+
+home/RDA5807/frequency 10390
+
+home/motion/MOTION_03/heartbeat {"uptime":180,"rssi":-55}
+
+home/RDA5807/volume 4
+home/RDA5807/status Unmuted
+
+home/motion/MOTION_03/event {"motion":1,"ts":"218","device_id":"MOTION_03","name":"MAKER_SPACE","location":"Maker Space"}
+home/motion/MOTION_03/event {"motion":0,"ts":"225","device_id":"MOTION_03","name":"MAKER_SPACE","location":"Maker Space"}
+home/motion/MOTION_03/event {"motion":1,"ts":"231","device_id":"MOTION_03","name":"MAKER_SPACE","location":"Maker Space"}
+home/motion/MOTION_03/event {"motion":0,"ts":"239","device_id":"MOTION_03","name":"MAKER_SPACE","location":"Maker Space"}
+home/motion/MOTION_03/heartbeat {"uptime":240,"rssi":-58}
+home/motion/MOTION_03/event {"motion":1,"ts":"245","device_id":"MOTION_03","name":"MAKER_SPACE","location":"Maker Space"}
+
+home/sensor/ESP01_DHT11_BRANCO/status online
+home/temperature/ESP01_DHT11_BRANCO/data {"device_id":"ESP01_DHT11_BRANCO","device_name":"sala","location":"Sala","sensor_type":"DHT11","temperature":26.1,"unit":"°C","rssi":-63,"uptime":120084,"timestamp":"120084"}
+home/humidity/ESP01_DHT11_BRANCO/data {"device_id":"ESP01_DHT11_BRANCO","device_name":"sala","location":"Sala","sensor_type":"DHT11","humidity":54.0,"unit":"%","rssi":-63,"uptime":120086,"timestamp":"120086"}
+home/temperature/ESP01_DHT11_BRANCO/data {"device_id":"ESP01_DHT11_BRANCO","device_name":"sala","location":"Sala","sensor_type":"DHT11","temperature":26.9,"unit":"°C","rssi":-62,"uptime":126478,"timestamp":"126478"}
+home/humidity/ESP01_DHT11_BRANCO/data {"device_id":"ESP01_DHT11_BRANCO","device_name":"sala","location":"Sala","sensor_type":"DHT11","humidity":50.0,"unit":"%","rssi":-62,"uptime":126480,"timestamp":"126480"}
+home/motion/MOTION_03/heartbeat {"uptime":540,"rssi":-60}
+
+
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-53,"uptime":4698,"relay_state":"off","last_command":"BOOT","firmware":"HomeGuard_v1.0"}
+home/relay/ESP01_RELAY_001/status off
+

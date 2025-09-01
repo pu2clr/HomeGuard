@@ -26,7 +26,7 @@
 #define DEBUG 1
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID        "MOTION_02"                // Unique device ID
+#define DEVICE_ID        "MOTION_03"                // Unique device ID
 #define DEVICE_NAME      "MAKER_SPACE"                  // Device display name
 #define DEVICE_LOCATION  "Maker Space"        // Location name
 
