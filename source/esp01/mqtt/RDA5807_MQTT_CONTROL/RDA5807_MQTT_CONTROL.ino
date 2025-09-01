@@ -1,8 +1,11 @@
 /*
-  Controle do rádio RDA5807 via MQTT
-  Exemplos de comandos usando mosquitto:
+  This sketch is an example of using the ESP01 (IoT Module based on ESP8266) to control an FM receiver 
+  based on the RDA5807 DSP using the MQTT protocol. To control the RDA5807, this sketch uses the library 
+  developed by me and available on the Arduino platform (available at https://github.com/pu2clr/RDA5807).
 
-  Para saber mais sobre o RDA5807, consulte o repositório do github https://github.com/pu2clr/RDA5807
+  RDA5807 radio control via MQTT
+
+  For more information about the RDA5807, please check the GitHub repository: https://github.com/pu2clr/RDA5807
   
 
   ESP8266 Dev Module Wire up
@@ -15,25 +18,29 @@
   |                           | SCLK (pin 1)         |      GPIO2         |
   | ------------------------- | -------------------- | ------------------ |
 
+  #  Examples of commands using mosquitto:
 
-
-  # Mudar frequência para 103.9 MHz (10390 kHz)
+  # Change frequency to 103.9 MHz (10390 kHz)
   mosquitto_pub -h <BROKER_IP> -t home/RDA5807/frequency -m "10390"
 
-  # Mudar volume para 10
+  # Change volume to 10
   mosquitto_pub -h <BROKER_IP> -t home/RDA5807/volume -m "10"
 
-  # Você pode usar o mosquitto_sub para monitorar os tópicos
+  # You can use mosquitto_sub to monitor the topics
   mosquitto_sub -h <BROKER_IP> -t home/RDA5807/frequency
   mosquitto_sub -h <BROKER_IP> -t home/RDA5807/volume
 
   Tests:
 
-  mosquitto_pub -h 192.168.18.236  -u homeguard  -P pu2clr123456  -t "home/RDA5807/volume" -m "30"
+  mosquitto_pub -h 192.168.18.236  -u homeguard  -P pu2clr123456  -t "home/RDA5807/volume" -m "10"
   mosquitto_pub -h 192.168.18.236  -u homeguard  -P pu2clr123456  -t "home/RDA5807/frequency" -m "10390"
 
-  Placa recomendada: ESP32 ou ESP8266
+  Recommended board: ESP32 or ESP8266
+
+  Author: Ricardo Lima Caratti.
+
 */
+
 
 #include <Wire.h>
 #include <ESP8266WiFi.h>
@@ -64,6 +71,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (strcmp(topic, "home/RDA5807/volume") == 0) {
     int vol = msg.toInt();
     rx.setVolume(vol); // volume de 0 a 15
+    if (vol == 0) {
+      rx.setMute(true);
+      client.publish("home/RDA5807/status", "Muted");
+    } else {
+      rx.setMute(false);
+      client.publish("home/RDA5807/status", "Unmuted");
+    }
   }
 }
 
@@ -91,12 +105,15 @@ void setup() {
 
   Wire.begin(ESP01_I2C_SDA, ESP01_I2C_SCL);
   rx.setup();
-  rx.setFrequency(9390);
-  rx.setVolume(14);
+  delay(300);
 
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+
+  rx.setFrequency(10390);
+  delay(100);
+  rx.setVolume(9);
 }
 
 void loop() {
