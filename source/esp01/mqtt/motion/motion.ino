@@ -267,6 +267,7 @@ void publishEvent(bool motion) {
   payload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
   payload += "\"name\":\"" + String(DEVICE_NAME_STR) + "\",";
   payload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\"";
+  payload += "\"sensor_type\":\"REGULAR_IR_SENSOR\",";
   payload += "\"ip\":\"" + WiFi.localIP().toString() + "\"";
   payload += "}";
 
