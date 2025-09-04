@@ -26,14 +26,32 @@
   # Change volume to 10
   mosquitto_pub -h <BROKER_IP> -t home/RDA5807/volume -m "10"
 
-  # You can use mosquitto_sub to monitor the topics
+  # You can use mosquitto_sub to monitor the topics and JSON status
   mosquitto_sub -h <BROKER_IP> -t home/RDA5807/frequency
   mosquitto_sub -h <BROKER_IP> -t home/RDA5807/volume
+  mosquitto_sub -h <BROKER_IP> -t home/RDA5807/status
 
   Tests:
 
   mosquitto_pub -h 192.168.18.198  -u homeguard  -P pu2clr123456  -t "home/RDA5807/volume" -m "10"
   mosquitto_pub -h 192.168.18.198  -u homeguard  -P pu2clr123456  -t "home/RDA5807/frequency" -m "10390"
+
+  # Monitor status in JSON format:
+  mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/RDA5807/status" -v
+
+  JSON Status Format:
+  {
+    "device_id": "RDA5807",
+    "name": "Rádio DSP", 
+    "location": "Quarto",
+    "ip": "192.168.18.xxx",
+    "frequency": 10390,
+    "volume": 9,
+    "command": "frequency|volume|init|reconnect",
+    "value": "command_value",
+    "action": "human_readable_description",
+    "timestamp": "milliseconds_since_boot"
+  }
 
   Recommended board: ESP32 or ESP8266
 
@@ -56,9 +74,36 @@ const char* mqtt_server = "192.168.18.198";
 const char* mqtt_user = "homeguard";
 const char* mqtt_pass = "pu2clr123456";
 
+// ======== Device Information ========
+#define DEVICE_ID        "RDA5807"
+#define DEVICE_NAME      "Rádio DSP"
+#define DEVICE_LOCATION  "Quarto"
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 RDA5807 rx;
+
+// ======== Current Device State ========
+int currentFrequency = 10390;  // Default frequency in kHz
+int currentVolume = 9;         // Default volume (0-15)
+
+// ======== Publish Device Status JSON ========
+void publishDeviceStatus(const String& command, const String& value, const String& action) {
+  String payload = "{";
+  payload += "\"device_id\":\"" + String(DEVICE_ID) + "\",";
+  payload += "\"name\":\"" + String(DEVICE_NAME) + "\",";
+  payload += "\"location\":\"" + String(DEVICE_LOCATION) + "\",";
+  payload += "\"ip\":\"" + WiFi.localIP().toString() + "\",";
+  payload += "\"frequency\":" + String(currentFrequency) + ",";
+  payload += "\"volume\":" + String(currentVolume) + ",";
+  payload += "\"command\":\"" + command + "\",";
+  payload += "\"value\":\"" + value + "\",";
+  payload += "\"action\":\"" + action + "\",";
+  payload += "\"timestamp\":\"" + String(millis()) + "\"";
+  payload += "}";
+  
+  client.publish("home/RDA5807/status", payload.c_str(), false);
+}
 
 void callback(char* topic, byte* payload, unsigned int length) {
   String msg;
@@ -66,18 +111,29 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   if (strcmp(topic, "home/RDA5807/frequency") == 0) {
     int freq = msg.toInt();
+    currentFrequency = freq;  // Update current frequency
     rx.setFrequency(freq); // freq em kHz, ex: 10390 para 103.9 MHz
+    
+    // Publish status with device information
+    String freqMHz = String(freq / 100.0, 1) + " MHz";
+    publishDeviceStatus("frequency", msg, "Frequência alterada para " + freqMHz);
   }
   if (strcmp(topic, "home/RDA5807/volume") == 0) {
     int vol = msg.toInt();
+    currentVolume = vol;  // Update current volume
     rx.setVolume(vol); // volume de 0 a 15
+    
+    String action;
     if (vol == 0) {
       rx.setMute(true);
-      client.publish("home/RDA5807/status", "Muted");
+      action = "Volume zerado - Rádio silenciado";
     } else {
       rx.setMute(false);
-      client.publish("home/RDA5807/status", "Unmuted");
+      action = "Volume alterado para " + msg + "/15";
     }
+    
+    // Publish status with device information
+    publishDeviceStatus("volume", msg, action);
   }
 }
 
@@ -95,6 +151,10 @@ void reconnect() {
     if (client.connect("RDA5807Client", mqtt_user, mqtt_pass)) {
       client.subscribe("home/RDA5807/frequency");
       client.subscribe("home/RDA5807/volume");
+      
+      // Publish reconnection status
+      publishDeviceStatus("reconnect", "success", "Reconectado ao broker MQTT");
+      
     } else {
       delay(5000);
     }
@@ -111,9 +171,29 @@ void setup() {
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
 
+  // Connect to MQTT and wait for connection
+  while (!client.connected()) {
+    if (client.connect("RDA5807Client", mqtt_user, mqtt_pass)) {
+      client.subscribe("home/RDA5807/frequency");
+      client.subscribe("home/RDA5807/volume");
+      
+      // Publish initial device information
+      publishDeviceStatus("init", "startup", "Dispositivo RDA5807 inicializado com sucesso");
+      
+      break;
+    } else {
+      delay(5000);
+    }
+  }
+
+  // Set initial frequency and volume
   rx.setFrequency(10390);
   delay(100);
   rx.setVolume(9);
+  
+  // Publish initial settings
+  publishDeviceStatus("frequency", "10390", "Frequência inicial configurada para 103.9 MHz");
+  publishDeviceStatus("volume", "9", "Volume inicial configurado para 9/15");
 }
 
 void loop() {
