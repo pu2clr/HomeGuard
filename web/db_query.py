@@ -7,10 +7,14 @@ Provides utilities to query and analyze activity data
 import sqlite3
 import json
 import argparse
+import os
 from datetime import datetime, timedelta
 from collections import Counter
 
-DB_PATH = '/Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/db/homeguard.db'
+# Database configuration - usando caminho relativo
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+DB_PATH = os.path.join(PROJECT_ROOT, 'db', 'homeguard.db')
 
 def get_connection():
     """Get database connection"""

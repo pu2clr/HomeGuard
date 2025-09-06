@@ -16,10 +16,12 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from web.mqtt_activity_logger import MQTTActivityLogger
 
-# Service configuration
+# Service configuration - usando caminhos relativos
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 SERVICE_NAME = "HomeGuard MQTT Logger"
 PID_FILE = "/tmp/homeguard_mqtt_logger.pid"
-LOG_FILE = "/Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/logs/mqtt_service.log"
+LOG_FILE = os.path.join(PROJECT_ROOT, "logs", "mqtt_service.log")
 
 class MQTTLoggerService:
     def __init__(self):

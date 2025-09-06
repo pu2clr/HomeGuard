@@ -8,8 +8,10 @@ import sqlite3
 import os
 from datetime import datetime
 
-# Database configuration
-DB_PATH = "/Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/db/homeguard.db"
+# Database configuration - usando caminho relativo ao script
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)  # Vai para a pasta pai (HomeGuard)
+DB_PATH = os.path.join(PROJECT_ROOT, "db", "homeguard.db")
 DB_DIR = os.path.dirname(DB_PATH)
 
 def init_database():

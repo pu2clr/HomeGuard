@@ -15,6 +15,7 @@ import json
 import logging
 import signal
 import sys
+import os
 from datetime import datetime
 from threading import Lock
 import time
@@ -29,8 +30,11 @@ MQTT_CONFIG = {
     'keepalive': 60
 }
 
+# Database configuration - usando caminho relativo
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 DB_CONFIG = {
-    'path': '/Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/db/homeguard.db',
+    'path': os.path.join(PROJECT_ROOT, 'db', 'homeguard.db'),
     'timeout': 20.0
 }
 
@@ -39,12 +43,13 @@ db_lock = Lock()
 message_count = 0
 start_time = time.time()
 
-# Setup logging
+# Setup logging - usando caminho relativo
+LOG_FILE = os.path.join(SCRIPT_DIR, 'mqtt_logger.log')
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('/Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/web/mqtt_logger.log'),
+        logging.FileHandler(LOG_FILE),
         logging.StreamHandler()
     ]
 )
