@@ -66,7 +66,7 @@
 
 #define ZMPT_PIN         A0                        // Analog pin for ZMPT101B
 #define RELAY_PIN        0                         // GPIO0 for relay control
-#define GRID_THRESHOLD   100                       // Threshold for grid detection (adjust experimentally)
+#define GRID_THRESHOLD   300                       // Threshold for grid detection (adjust experimentally)
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
