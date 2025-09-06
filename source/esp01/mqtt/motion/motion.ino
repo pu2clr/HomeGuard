@@ -29,14 +29,14 @@
 #define DEBUG 1
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID "MOTION_00"         // Unique device ID
-#define DEVICE_NAME "Maker"     // Device display name
-#define DEVICE_LOCATION "Espaço Maker" // Location name
+#define DEVICE_ID "MOTION_IR02"         // Unique device ID
+#define DEVICE_NAME "varanda"     // Device display name
+#define DEVICE_LOCATION "Varanda Quarto" // Location name
 
 #define LOCAL_IP_1 192
 #define LOCAL_IP_2 168
 #define LOCAL_IP_3 18
-#define LOCAL_IP_4 115
+#define LOCAL_IP_4 114
 
 #define GATEWAY_1 192
 #define GATEWAY_2 168
@@ -266,7 +266,7 @@ void publishEvent(bool motion) {
   payload += "\"ts\":\"" + getTimestamp() + "\",";
   payload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
   payload += "\"name\":\"" + String(DEVICE_NAME_STR) + "\",";
-  payload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\"";
+  payload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
   payload += "\"sensor_type\":\"REGULAR_IR_SENSOR\",";
   payload += "\"ip\":\"" + WiFi.localIP().toString() + "\"";
   payload += "}";
@@ -284,6 +284,7 @@ void publishHeartbeat() {
   unsigned long uptime = (millis() - bootTime) / 1000;
 
   String payload = "{";
+  payload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
   payload += "\"uptime\":" + String(uptime) + ",";
   payload += "\"rssi\":" + String(WiFi.RSSI());
   payload += "}";

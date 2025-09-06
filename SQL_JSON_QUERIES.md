@@ -274,4 +274,39 @@ for row in results:
    WHERE json_valid(message) = 1;
    ```
 
+## 🔧 Correção de Dados Malformados
+
+### Identificar JSON inválido
+```sql
+-- Ver quantos registros têm JSON inválido
+SELECT 
+    topic,
+    COUNT(*) as invalid_count
+FROM activity 
+WHERE json_valid(message) = 0
+GROUP BY topic
+ORDER BY invalid_count DESC;
+```
+
+### Ver mensagens malformadas
+```sql
+-- Examinar mensagens problemáticas
+SELECT id, topic, message 
+FROM activity 
+WHERE json_valid(message) = 0 
+LIMIT 5;
+```
+
+### Corrigir padrão comum dos sensores de movimento
+```sql
+-- Corrigir quotes duplos consecutivos (backup primeiro!)
+UPDATE activity 
+SET message = REPLACE(message, '""sensor_type"', '","sensor_type"')
+WHERE topic LIKE 'home/motion/%'
+    AND json_valid(message) = 0;
+```
+
+**⚠️ Sempre faça backup antes de correções em massa!**  
+**Consulte o arquivo `FIX_MALFORMED_JSON.md` para procedimentos detalhados.**
+
 Essas consultas SQL permitem análises ad-hoc diretas no banco sem precisar de scripts Python! 🎯
