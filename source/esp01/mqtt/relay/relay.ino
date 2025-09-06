@@ -42,7 +42,7 @@
 
 // ======== Device Configuration (Auto-selected based on #define above) ========
 #if defined(RELAY_001)
-const char *DEVICE_ID = "ESP01_RELAY_001";
+const char *DEVICE_ID = "RELAY_001";
 const char *RELAY_NAME = "Luz da Sala";
 const char *RELAY_LOCATION = "Sala";
 IPAddress local_IP(192, 168, 18, 192);
@@ -58,12 +58,12 @@ const char *RELAY_LOCATION = "Externa";
 IPAddress local_IP(192, 168, 18, 194);
 #else
 // Default configuration - CHANGE THESE VALUES FOR YOUR SETUP
-const char *DEVICE_ID = "ESP01_RELAY_001"; // Must match RELAYS_CONFIG[n]['id']
+const char *DEVICE_ID = "RELAY_001"; // Must match RELAYS_CONFIG[n]['id']
 const char *RELAY_NAME = "Luz da Sala"; // Must match RELAYS_CONFIG[n]['name']
 const char *RELAY_LOCATION = "Sala"; // Must match RELAYS_CONFIG[n]['location']
 IPAddress
     local_IP(192, 168, 18,
-             192); // ESP01_RELAY_001 -> .192, ESP01_RELAY_002 -> .193, etc
+             191); // ESP01_RELAY_001 -> .192, ESP01_RELAY_002 -> .193, etc
 #endif
 
 // ======== Wi-Fi Network Configuration ========
