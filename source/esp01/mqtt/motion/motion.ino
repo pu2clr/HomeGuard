@@ -29,14 +29,14 @@
 #define DEBUG 1
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID "MOTION_IR02"         // Unique device ID
-#define DEVICE_NAME "varanda"     // Device display name
-#define DEVICE_LOCATION "Varanda Quarto" // Location name
+#define DEVICE_ID "MOTION_IR03"         // Unique device ID
+#define DEVICE_NAME "mezanino"     // Device display name
+#define DEVICE_LOCATION "Mezanino" // Location name
 
 #define LOCAL_IP_1 192
 #define LOCAL_IP_2 168
 #define LOCAL_IP_3 18
-#define LOCAL_IP_4 114
+#define LOCAL_IP_4 112
 
 #define GATEWAY_1 192
 #define GATEWAY_2 168
