@@ -31,30 +31,31 @@ DB_PATH = os.path.join(PROJECT_ROOT, "db", "homeguard.db")
 
 ### Passo 1: Instalar Dependências
 ```bash
-# No Raspberry Pi, instale o paho-mqtt
-sudo apt update
-sudo apt install python3-pip
-pip3 install paho-mqtt
+# Método Simples (RECOMENDADO):
+cd ~/HomeGuard/web
+./install_simple.sh
 
-# OU se usar conda:
-conda install -c conda-forge paho-mqtt
+# OU método completo com fallback:
+./install_raspberry.sh
+
+# OU manualmente:
+sudo apt update
+sudo apt install python3-paho-mqtt python3-full
 ```
 
 ### Passo 2: Testar o Sistema
 ```bash
 cd ~/HomeGuard/web
-python3 test_system.py
+python3 quick_test.py
 ```
 
-### Passo 3: Inicializar o Banco de Dados
+### Passo 3: Inicializar o Banco de Dados (se necessário)
 ```bash
-cd ~/HomeGuard/web
 python3 init_database.py
 ```
 
 ### Passo 4: Iniciar o Serviço MQTT
 ```bash
-cd ~/HomeGuard/web
 python3 mqtt_service.py start
 ```
 

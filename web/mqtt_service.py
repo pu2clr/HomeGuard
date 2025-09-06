@@ -11,10 +11,13 @@ import signal
 import threading
 from datetime import datetime
 
-# Add the parent directory to the path to import mqtt_activity_logger
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from web.mqtt_activity_logger import MQTTActivityLogger
+# Import mqtt_activity_logger from the same directory
+try:
+    from mqtt_activity_logger import MQTTActivityLogger
+except ImportError:
+    # If that fails, try adding current directory to path
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from mqtt_activity_logger import MQTTActivityLogger
 
 # Service configuration - usando caminhos relativos
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

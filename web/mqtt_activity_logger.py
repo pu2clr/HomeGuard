@@ -153,49 +153,95 @@ def signal_handler(signum, frame):
     
     sys.exit(0)
 
+class MQTTActivityLogger:
+    """
+    MQTT Activity Logger Class
+    Provides an object-oriented interface to the MQTT logging functionality
+    """
+    
+    def __init__(self):
+        self.client = None
+        self.running = False
+        self.start_time = None
+        
+    def start(self):
+        """Start the MQTT logger"""
+        global start_time
+        start_time = time.time()
+        self.start_time = start_time
+        self.running = True
+        
+        logger.info("🚀 Starting HomeGuard MQTT Activity Logger")
+        logger.info(f"🏠 MQTT Broker: {MQTT_CONFIG['host']}:{MQTT_CONFIG['port']}")
+        logger.info(f"📡 Topic filter: {MQTT_CONFIG['topic']}")
+        logger.info(f"💾 Database: {DB_CONFIG['path']}")
+        
+        # Setup signal handlers
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
+        
+        # Create MQTT client
+        self.client = mqtt.Client()
+        self.client.username_pw_set(MQTT_CONFIG['username'], MQTT_CONFIG['password'])
+        
+        # Set callbacks
+        self.client.on_connect = on_connect
+        self.client.on_disconnect = on_disconnect
+        self.client.on_message = on_message
+        
+        try:
+            # Connect to broker
+            logger.info("🔌 Connecting to MQTT broker...")
+            self.client.connect(MQTT_CONFIG['host'], MQTT_CONFIG['port'], MQTT_CONFIG['keepalive'])
+            
+            # Start the loop
+            logger.info("👂 Starting to listen for MQTT messages...")
+            logger.info("💡 Press Ctrl+C to stop")
+            logger.info("-" * 60)
+            
+            self.client.loop_forever()
+            
+        except KeyboardInterrupt:
+            logger.info("\n🛑 Keyboard interrupt received")
+            self.stop()
+            
+        except Exception as e:
+            logger.error(f"❌ Fatal error: {e}")
+            log_to_database('system/error', f'Fatal error in MQTT logger: {str(e)}')
+            self.stop()
+            raise
+    
+    def stop(self):
+        """Stop the MQTT logger"""
+        self.running = False
+        if self.client:
+            logger.info("🔌 Disconnecting from MQTT broker...")
+            self.client.disconnect()
+            self.client.loop_stop()
+        
+        # Log final statistics
+        if self.start_time:
+            uptime = time.time() - self.start_time
+            logger.info("📊 Final Statistics:")
+            logger.info(f"   - Total messages captured: {message_count}")
+            logger.info(f"   - Uptime: {uptime:.1f} seconds")
+            if uptime > 0:
+                logger.info(f"   - Average rate: {message_count/uptime:.2f} msg/sec")
+        
+        logger.info("✅ MQTT Activity Logger stopped")
+
 def main():
     """Main function to start MQTT listener"""
-    global start_time
-    start_time = time.time()
-    
-    logger.info("🚀 Starting HomeGuard MQTT Activity Logger")
-    logger.info(f"🏠 MQTT Broker: {MQTT_CONFIG['host']}:{MQTT_CONFIG['port']}")
-    logger.info(f"📡 Topic filter: {MQTT_CONFIG['topic']}")
-    logger.info(f"💾 Database: {DB_CONFIG['path']}")
-    
-    # Setup signal handlers
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-    
-    # Create MQTT client
-    client = mqtt.Client()
-    client.username_pw_set(MQTT_CONFIG['username'], MQTT_CONFIG['password'])
-    
-    # Set callbacks
-    client.on_connect = on_connect
-    client.on_disconnect = on_disconnect
-    client.on_message = on_message
-    
+    logger_instance = MQTTActivityLogger()
     try:
-        # Connect to broker
-        logger.info("🔌 Connecting to MQTT broker...")
-        client.connect(MQTT_CONFIG['host'], MQTT_CONFIG['port'], MQTT_CONFIG['keepalive'])
-        
-        # Start the loop
-        logger.info("👂 Starting to listen for MQTT messages...")
-        logger.info("💡 Press Ctrl+C to stop")
-        logger.info("-" * 60)
-        
-        client.loop_forever()
-        
+        logger_instance.start()
     except KeyboardInterrupt:
         logger.info("\n🛑 Keyboard interrupt received")
-        signal_handler(signal.SIGINT, None)
-        
     except Exception as e:
         logger.error(f"❌ Fatal error: {e}")
-        log_to_database('system/error', f'Fatal error in MQTT logger: {str(e)}')
         sys.exit(1)
+    finally:
+        logger_instance.stop()
 
 if __name__ == "__main__":
     main()
