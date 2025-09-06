@@ -5,7 +5,7 @@
 -- Estrutura da tabela activity
 CREATE TABLE activity (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    created_at TEXT NOT NULL DEFAULT (datetime('now', 'utc')),
+    created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
     topic TEXT,
     message TEXT
 );
