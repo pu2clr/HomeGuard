@@ -31,15 +31,15 @@
 
 // ======== User Parameters (Edit these for your device) ========
 
-#define DEVICE_ID        "ESP8266_GRID_MONITOR"   // Unique device ID
-#define DEVICE_NAME      "Monitor Rede"           // Device display name
-#define DEVICE_LOCATION  "Quadro"                 // Location name
+#define DEVICE_ID        "GRID_MONITOR"   // Unique device ID
+#define DEVICE_NAME      "Monitor Rede"   // Device display name
+#define DEVICE_LOCATION  "Home"         // Location name
 
 // Device local IP
 #define LOCAL_IP_1       192
 #define LOCAL_IP_2       168
 #define LOCAL_IP_3       18
-#define LOCAL_IP_4       210
+#define LOCAL_IP_4       90
 
 // Network Getway IP
 #define GATEWAY_1        192
