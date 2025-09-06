@@ -22,7 +22,23 @@ Utilitários para consultar e analisar os dados capturados.
 
 ## 🚀 Como Usar
 
-### Inicializar o Banco de Dados
+### Para Raspberry Pi (Ambiente Externally-Managed)
+
+**Opção 1: Instalação Simples (Recomendada)**
+```bash
+cd /Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/web
+./install_simple.sh
+```
+
+**Opção 2: Instalação Completa (com Virtual Environment)**
+```bash
+cd /Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/web
+./install_raspberry.sh
+```
+
+### Para Outros Sistemas
+
+#### Inicializar o Banco de Dados
 ```bash
 cd /Users/rcaratti/Desenvolvimento/eu/Arduino/HomeGuard/web
 python3 init_database.py
