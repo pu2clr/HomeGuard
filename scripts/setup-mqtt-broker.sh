@@ -1,6 +1,6 @@
 #!/bin/bash
 # HomeGuard MQTT Broker Setup Script for Raspberry Pi 4
-# IP: 192.168.18.198
+# IP: 192.168.1.102
 
 set -e
 
@@ -12,7 +12,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration variables
-BROKER_IP="192.168.18.198"
+BROKER_IP="192.168.1.102"
 HOMEGUARD_USER="homeguard"
 HOMEGUARD_PASS="pu2clr123456"
 ADMIN_USER="admin"
@@ -299,8 +299,8 @@ print_status "Backup system configured"
 # Configure firewall
 echo -e "${BLUE}🔥 Configuring firewall...${NC}"
 if command -v ufw &> /dev/null; then
-    sudo ufw allow from 192.168.18.0/24 to any port 1883 comment 'MQTT HomeGuard'
-    sudo ufw allow from 192.168.18.0/24 to any port 8883 comment 'MQTT SSL HomeGuard'
+    sudo ufw allow from 192.168.1.0/24 to any port 1883 comment 'MQTT HomeGuard'
+    sudo ufw allow from 192.168.1.0/24 to any port 8883 comment 'MQTT SSL HomeGuard'
     print_status "UFW firewall configured"
 else
     print_warning "UFW not installed. Please configure firewall manually."

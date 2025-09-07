@@ -1,7 +1,7 @@
 # HomeGuard MQTT Broker Setup - Raspberry Pi 4
 
 ## Overview
-This guide configures a Raspberry Pi 4 (IP: 192.168.18.198) as a secure MQTT broker for the HomeGuard system using Mosquitto with authentication and SSL/TLS encryption.
+This guide configures a Raspberry Pi 4 (IP: 192.168.1.102) as a secure MQTT broker for the HomeGuard system using Mosquitto with authentication and SSL/TLS encryption.
 
 ## Installation
 
@@ -93,7 +93,7 @@ sudo nano /etc/mosquitto/mosquitto.conf
 **Main Configuration (`/etc/mosquitto/mosquitto.conf`):**
 ```
 # HomeGuard MQTT Broker Configuration
-# Raspberry Pi 4 - IP: 192.168.18.198
+# Raspberry Pi 4 - IP: 192.168.1.102
 
 # Basic settings
 pid_file /run/mosquitto/mosquitto.pid
@@ -146,7 +146,7 @@ sudo openssl req -new -x509 -days 3650 -extensions v3_ca -keyout /etc/mosquitto/
 
 # Generate server key and certificate
 sudo openssl genrsa -out /etc/mosquitto/certs/server.key 2048
-sudo openssl req -new -key /etc/mosquitto/certs/server.key -out /etc/mosquitto/certs/server.csr -subj "/C=BR/ST=RJ/L=Petropolis/O=HomeGuard/OU=MQTT/CN=192.168.18.198"
+sudo openssl req -new -key /etc/mosquitto/certs/server.key -out /etc/mosquitto/certs/server.csr -subj "/C=BR/ST=RJ/L=Petropolis/O=HomeGuard/OU=MQTT/CN=192.168.1.102"
 sudo openssl x509 -req -in /etc/mosquitto/certs/server.csr -CA /etc/mosquitto/ca_certificates/ca.crt -CAkey /etc/mosquitto/ca_certificates/ca.key -CAcreateserial -out /etc/mosquitto/certs/server.crt -days 3650
 
 # Set permissions
@@ -211,8 +211,8 @@ sudo ufw allow 1883/tcp comment 'MQTT'
 sudo ufw allow 8883/tcp comment 'MQTT SSL'
 
 # Allow from specific network only (more secure)
-sudo ufw allow from 192.168.18.0/24 to any port 1883
-sudo ufw allow from 192.168.18.0/24 to any port 8883
+sudo ufw allow from 192.168.1.0/24 to any port 1883
+sudo ufw allow from 192.168.1.0/24 to any port 8883
 
 # Check status
 sudo ufw status
@@ -221,8 +221,8 @@ sudo ufw status
 ### 2. iptables Rules (alternative)
 ```bash
 # Allow MQTT from local network only
-sudo iptables -A INPUT -s 192.168.18.0/24 -p tcp --dport 1883 -j ACCEPT
-sudo iptables -A INPUT -s 192.168.18.0/24 -p tcp --dport 8883 -j ACCEPT
+sudo iptables -A INPUT -s 192.168.1.0/24 -p tcp --dport 1883 -j ACCEPT
+sudo iptables -A INPUT -s 192.168.1.0/24 -p tcp --dport 8883 -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 1883 -j DROP
 sudo iptables -A INPUT -p tcp --dport 8883 -j DROP
 
@@ -242,7 +242,7 @@ sudo nano /usr/local/bin/mosquitto-monitor.sh
 # HomeGuard MQTT Broker Monitor
 
 LOGFILE="/var/log/mosquitto/monitor.log"
-BROKER_IP="192.168.18.198"
+BROKER_IP="192.168.1.102"
 ADMIN_USER="admin"
 
 # Function to log messages
@@ -327,52 +327,52 @@ sudo systemctl start mosquitto-monitor.timer
 ### 1. Basic Connection Test
 ```bash
 # Test connection (should fail without credentials)
-mosquitto_pub -h 192.168.18.198 -t "test/topic" -m "test message"
+mosquitto_pub -h 192.168.1.102 -t "test/topic" -m "test message"
 
 # Test with credentials
-mosquitto_pub -h 192.168.18.198 -t "test/topic" -m "test message" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "test/topic" -m "test message" -u homeguard -P pu2clr123456
 
 # Subscribe test
-mosquitto_sub -h 192.168.18.198 -t "test/topic" -u homeguard -P pu2clr123456
+mosquitto_sub -h 192.168.1.102 -t "test/topic" -u homeguard -P pu2clr123456
 ```
 
 ### 2. HomeGuard Device Test
 ```bash
 # Test relay commands
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
 
 # Test motion sensor
-mosquitto_sub -h 192.168.18.198 -t "home/motion1/#" -u homeguard -P pu2clr123456 -v
+mosquitto_sub -h 192.168.1.102 -t "home/motion1/#" -u homeguard -P pu2clr123456 -v
 
 # Monitor all HomeGuard traffic
-mosquitto_sub -h 192.168.18.198 -t "home/#" -u homeguard -P pu2clr123456 -v
+mosquitto_sub -h 192.168.1.102 -t "home/#" -u homeguard -P pu2clr123456 -v
 ```
 
 ### 3. SSL/TLS Test (if configured)
 ```bash
 # Test SSL connection
-mosquitto_pub -h 192.168.18.198 -p 8883 --cafile /etc/mosquitto/ca_certificates/ca.crt -t "test/ssl" -m "ssl test" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -p 8883 --cafile /etc/mosquitto/ca_certificates/ca.crt -t "test/ssl" -m "ssl test" -u homeguard -P pu2clr123456
 ```
 
 ## Device Configuration Updates
 
 ### Update ESP-01S Sketches
-You'll need to update the IP address in your Arduino sketches from `192.168.18.198` to `192.168.18.198`:
+You'll need to update the IP address in your Arduino sketches from `192.168.1.102` to `192.168.1.102`:
 
 **For relay.ino:**
 ```cpp
-const char* mqtt_server = "192.168.18.198"; // Updated IP
+const char* mqtt_server = "192.168.1.102"; // Updated IP
 ```
 
 **For motion_detector.ino:**
 ```cpp
-const char* mqtt_server = "192.168.18.198"; // Updated IP
+const char* mqtt_server = "192.168.1.102"; // Updated IP
 ```
 
 **For motion_light_controller.py:**
 ```python
-def __init__(self, broker_host="192.168.18.198", ...):  # Updated IP
+def __init__(self, broker_host="192.168.1.102", ...):  # Updated IP
 ```
 
 ## Monitoring and Maintenance
@@ -383,20 +383,20 @@ def __init__(self, broker_host="192.168.18.198", ...):  # Updated IP
 sudo tail -f /var/log/mosquitto/mosquitto.log
 
 # Monitor system topics
-mosquitto_sub -h 192.168.18.198 -t '$SYS/#' -u admin -P your_admin_password -v
+mosquitto_sub -h 192.168.1.102 -t '$SYS/#' -u admin -P your_admin_password -v
 
 # Check active connections
-mosquitto_sub -h 192.168.18.198 -t '$SYS/broker/clients/connected' -u admin -P your_admin_password
+mosquitto_sub -h 192.168.1.102 -t '$SYS/broker/clients/connected' -u admin -P your_admin_password
 ```
 
 ### 2. Performance Monitoring
 ```bash
 # Check memory usage
-mosquitto_sub -h 192.168.18.198 -t '$SYS/broker/heap/current' -u admin -P your_admin_password
+mosquitto_sub -h 192.168.1.102 -t '$SYS/broker/heap/current' -u admin -P your_admin_password
 
 # Check message statistics
-mosquitto_sub -h 192.168.18.198 -t '$SYS/broker/messages/received' -u admin -P your_admin_password
-mosquitto_sub -h 192.168.18.198 -t '$SYS/broker/messages/sent' -u admin -P your_admin_password
+mosquitto_sub -h 192.168.1.102 -t '$SYS/broker/messages/received' -u admin -P your_admin_password
+mosquitto_sub -h 192.168.1.102 -t '$SYS/broker/messages/sent' -u admin -P your_admin_password
 ```
 
 ### 3. Backup Configuration
@@ -480,7 +480,7 @@ sudo mosquitto -c /etc/mosquitto/mosquitto.conf -v
 sudo mosquitto_passwd /etc/mosquitto/passwd/passwords username
 
 # Monitor connections
-mosquitto_sub -h 192.168.18.198 -t '$SYS/broker/clients/connected' -u admin -P password
+mosquitto_sub -h 192.168.1.102 -t '$SYS/broker/clients/connected' -u admin -P password
 ```
 
 This configuration provides a secure, monitored, and maintainable MQTT broker setup for your HomeGuard system.

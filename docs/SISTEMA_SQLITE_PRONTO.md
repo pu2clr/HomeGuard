@@ -66,7 +66,7 @@ python3 scripts/db_utility.py --sensor ESP01_001
 
 ### MQTT
 ```python
-BROKER_HOST = "192.168.18.198"
+BROKER_HOST = "192.168.1.102"
 BROKER_PORT = 1883
 USERNAME = "homeguard" 
 PASSWORD = "homeguard"

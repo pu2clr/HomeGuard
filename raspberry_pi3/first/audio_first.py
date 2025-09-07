@@ -36,7 +36,7 @@ class FirstFloorAudioSimulator(BaseAudioPresenceSimulator):
     def get_default_config(self):
         """First floor specific configuration"""
         return {
-            "mqtt_broker": "192.168.18.6",
+            "mqtt_broker": "192.168.1.6",
             "mqtt_port": 1883,
             "mqtt_user": "homeguard",
             "mqtt_pass": "pu2clr123456",

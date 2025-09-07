@@ -131,7 +131,7 @@ Independente do método escolhido, você terá:
 
 O sistema será **idêntico ao comando**:
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t 'home/#' -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t 'home/#' -v
 ```
 
 Mas com **persistência permanente** no banco de dados! 🎯

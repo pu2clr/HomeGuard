@@ -6,345 +6,345 @@ home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"c
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":29.2,"unit":"°C","rssi":-62,"uptime":126434,"timestamp":"126434"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":55.0,"unit":"%","rssi":-56,"uptime":246512,"timestamp":"246512"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":70.9,"unit":"%","rssi":-62,"uptime":126436,"timestamp":"126436"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":150000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":150000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
 home/relay/ESP01_RELAY_001/status off
 home/motion/MOTION_00/heartbeat {"uptime":240,"rssi":-55}
-home/motion/MOTION_02/event {"motion":1,"ts":"503","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"244","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"509","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"512","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"249","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":1,"ts":"255","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-63,"uptime":180000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":0,"ts":"258","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"522","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"503","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"244","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"509","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"512","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"249","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"255","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-63,"uptime":180000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":0,"ts":"258","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"522","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/RDA5807/frequency 10570
 home/RDA5807/frequency 10270
-home/motion/MOTION_00/event {"motion":1,"ts":"271","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"539","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"271","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"539","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":540,"rssi":-61}
-home/motion/MOTION_00/event {"motion":0,"ts":"277","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":1,"ts":"282","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-56,"uptime":210000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":0,"ts":"285","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"551","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"277","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"282","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-56,"uptime":210000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":0,"ts":"285","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"551","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":29.8,"unit":"°C","rssi":-62,"uptime":246520,"timestamp":"246520"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":68.8,"unit":"%","rssi":-62,"uptime":246522,"timestamp":"246522"}
 home/motion/MOTION_00/heartbeat {"uptime":300,"rssi":-50}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":30.6,"unit":"°C","rssi":-51,"uptime":366605,"timestamp":"366605"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":54.0,"unit":"%","rssi":-51,"uptime":366607,"timestamp":"366607"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-54,"uptime":240000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"582","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"585","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"324","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"594","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"333","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-54,"uptime":240000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"582","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"585","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"324","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"594","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"333","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_02/heartbeat {"uptime":600,"rssi":-63}
-home/motion/MOTION_02/event {"motion":0,"ts":"607","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-59,"uptime":270000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"607","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-59,"uptime":270000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
 home/relay/ESP01_RELAY_001/command ON
 home/relay/ESP01_RELAY_001/status on
 home/relay/ESP01_RELAY_001/status on
 home/relay/ESP01_RELAY_001/command OFF
 home/relay/ESP01_RELAY_001/status off
 home/relay/ESP01_RELAY_001/status off
-home/motion/MOTION_02/event {"motion":1,"ts":"618","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"356","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"621","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"618","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"356","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"621","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_00/heartbeat {"uptime":360,"rssi":-57}
-home/motion/MOTION_02/event {"motion":1,"ts":"625","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"362","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"628","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":300000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"641","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"382","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"645","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"386","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"650","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"392","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"394","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"658","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"625","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"362","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"628","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":300000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"641","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"382","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"645","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"386","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"650","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"392","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"394","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"658","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":660,"rssi":-62}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-58,"uptime":330000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"672","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"410","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"674","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"677","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"415","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-58,"uptime":330000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"672","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"410","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"674","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"677","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"415","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":30.1,"unit":"°C","rssi":-67,"uptime":366534,"timestamp":"366534"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":68.1,"unit":"%","rssi":-67,"uptime":366536,"timestamp":"366536"}
-home/motion/MOTION_00/event {"motion":1,"ts":"419","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"419","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_00/heartbeat {"uptime":420,"rssi":-55}
-home/motion/MOTION_02/event {"motion":0,"ts":"684","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"684","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":30.5,"unit":"°C","rssi":-58,"uptime":486717,"timestamp":"486717"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":54.0,"unit":"%","rssi":-58,"uptime":486719,"timestamp":"486719"}
-home/motion/MOTION_02/event {"motion":1,"ts":"687","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"428","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":360000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":0,"ts":"700","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"714","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"716","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"687","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"428","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":360000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"700","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"714","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"716","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":720,"rssi":-60}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-56,"uptime":390000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"731","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"734","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-56,"uptime":390000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"731","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"734","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_00/heartbeat {"uptime":480,"rssi":-52}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-56,"uptime":420000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"759","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"501","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"504","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":1,"ts":"508","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"512","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"775","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"779","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-56,"uptime":420000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"759","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"501","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"504","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"508","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"512","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"775","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"779","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":780,"rssi":-63}
-home/motion/MOTION_02/event {"motion":0,"ts":"781","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-55,"uptime":450000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"781","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-55,"uptime":450000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":30.5,"unit":"°C","rssi":-65,"uptime":486564,"timestamp":"486564"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":67.1,"unit":"%","rssi":-65,"uptime":486566,"timestamp":"486566"}
-home/motion/MOTION_02/event {"motion":1,"ts":"802","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"802","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_00/heartbeat {"uptime":540,"rssi":-53}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":30.8,"unit":"°C","rssi":-56,"uptime":606758,"timestamp":"606758"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":53.0,"unit":"%","rssi":-56,"uptime":606760,"timestamp":"606760"}
-home/motion/MOTION_02/event {"motion":0,"ts":"807","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":480000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"833","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"836","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"807","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":480000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"833","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"836","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":840,"rssi":-63}
-home/motion/MOTION_02/event {"motion":1,"ts":"844","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"847","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-55,"uptime":510000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"854","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"856","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"844","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"847","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-55,"uptime":510000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"854","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"856","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_00/heartbeat {"uptime":600,"rssi":-54}
-home/motion/MOTION_02/event {"motion":1,"ts":"863","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"868","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"877","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-55,"uptime":540000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":0,"ts":"879","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"886","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"889","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"894","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"896","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"863","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"868","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"877","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-55,"uptime":540000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"879","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"886","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"889","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"894","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"896","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":900,"rssi":-64}
-home/motion/MOTION_02/event {"motion":1,"ts":"902","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"904","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-55,"uptime":570000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"910","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"913","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"902","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"904","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-55,"uptime":570000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"910","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"913","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":30.6,"unit":"°C","rssi":-62,"uptime":606578,"timestamp":"606578"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":66.5,"unit":"%","rssi":-62,"uptime":606579,"timestamp":"606580"}
-home/motion/MOTION_02/event {"motion":1,"ts":"921","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"921","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_00/heartbeat {"uptime":660,"rssi":-51}
-home/motion/MOTION_02/event {"motion":0,"ts":"925","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"925","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":30.9,"unit":"°C","rssi":-57,"uptime":726870,"timestamp":"726870"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":53.0,"unit":"%","rssi":-57,"uptime":726872,"timestamp":"726872"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":600000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"940","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"944","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"947","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"950","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"957","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":600000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"940","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"944","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"947","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"950","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"957","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":960,"rssi":-64}
-home/motion/MOTION_02/event {"motion":0,"ts":"963","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":630000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"983","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"963","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":630000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"983","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_00/heartbeat {"uptime":720,"rssi":-54}
-home/motion/MOTION_02/event {"motion":0,"ts":"986","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":660000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1002","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1006","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1009","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1013","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"986","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":660000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1002","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1006","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1009","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1013","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":1020,"rssi":-63}
-home/motion/MOTION_02/event {"motion":1,"ts":"1021","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1024","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-58,"uptime":690000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1029","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1033","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1021","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1024","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-58,"uptime":690000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1029","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1033","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":30.7,"unit":"°C","rssi":-63,"uptime":726606,"timestamp":"726606"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":66.2,"unit":"%","rssi":-63,"uptime":726608,"timestamp":"726608"}
 home/motion/MOTION_00/heartbeat {"uptime":780,"rssi":-52}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":31.0,"unit":"°C","rssi":-58,"uptime":846973,"timestamp":"846973"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":52.0,"unit":"%","rssi":-58,"uptime":846975,"timestamp":"846975"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1057","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":720000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1061","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1068","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"806","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1071","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"809","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1057","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":720000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1061","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1068","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"806","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1071","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"809","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_02/heartbeat {"uptime":1080,"rssi":-62}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-56,"uptime":750000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":1,"ts":"835","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1099","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1102","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"840","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-56,"uptime":750000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":1,"ts":"835","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1099","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1102","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"840","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_00/heartbeat {"uptime":840,"rssi":-54}
-home/motion/MOTION_00/event {"motion":1,"ts":"853","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1117","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-54,"uptime":780000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1119","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"857","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1123","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"860","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1125","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1128","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"868","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1131","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1136","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"876","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"853","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1117","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-54,"uptime":780000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1119","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"857","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1123","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"860","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1125","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1128","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"868","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1131","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1136","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"876","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_02/heartbeat {"uptime":1140,"rssi":-67}
-home/motion/MOTION_02/event {"motion":0,"ts":"1140","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1143","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1147","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"884","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-58,"uptime":810000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1159","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"897","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1140","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1143","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1147","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"884","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-58,"uptime":810000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1159","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"897","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":31.0,"unit":"°C","rssi":-62,"uptime":846647,"timestamp":"846647"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":66.0,"unit":"%","rssi":-62,"uptime":846648,"timestamp":"846649"}
 home/motion/MOTION_00/heartbeat {"uptime":900,"rssi":-53}
-home/motion/MOTION_02/event {"motion":0,"ts":"1163","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"901","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1163","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"901","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":31.1,"unit":"°C","rssi":-57,"uptime":967062,"timestamp":"967062"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":52.0,"unit":"%","rssi":-57,"uptime":967064,"timestamp":"967064"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1176","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":840000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":1,"ts":"916","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1180","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"918","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":1,"ts":"922","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1185","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1187","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"925","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1192","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1195","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1176","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":840000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":1,"ts":"916","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1180","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"918","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"922","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1185","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1187","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"925","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1192","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1195","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":1200,"rssi":-63}
-home/motion/MOTION_02/event {"motion":1,"ts":"1202","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"940","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"942","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-64,"uptime":870000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":1,"ts":"946","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1212","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"951","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1202","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"940","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"942","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-64,"uptime":870000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":1,"ts":"946","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1212","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"951","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_00/heartbeat {"uptime":960,"rssi":-56}
-home/motion/MOTION_02/event {"motion":1,"ts":"1230","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"973","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1237","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-58,"uptime":900000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":0,"ts":"977","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1241","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"980","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1246","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"983","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1248","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"989","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"993","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1230","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"973","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1237","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-58,"uptime":900000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":0,"ts":"977","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1241","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"980","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1246","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"983","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1248","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"989","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"993","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_02/heartbeat {"uptime":1260,"rssi":-64}
-home/motion/MOTION_00/event {"motion":1,"ts":"998","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1263","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1265","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1003","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-60,"uptime":930000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1271","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1013","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1015","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1280","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"998","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1263","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1265","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1003","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-60,"uptime":930000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1271","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1013","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1015","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1280","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":31.2,"unit":"°C","rssi":-62,"uptime":966704,"timestamp":"966704"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":65.3,"unit":"%","rssi":-62,"uptime":966706,"timestamp":"966706"}
 home/motion/MOTION_00/heartbeat {"uptime":1020,"rssi":-51}
-home/motion/MOTION_02/event {"motion":0,"ts":"1284","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1284","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":31.3,"unit":"°C","rssi":-56,"uptime":1087120,"timestamp":"1087120"}
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","command":"init","value":"startup","action":"Dispositivo RDA5807 inicializado com sucesso","timestamp":"7925"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","command":"init","value":"startup","action":"Dispositivo RDA5807 inicializado com sucesso","timestamp":"7925"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":51.0,"unit":"%","rssi":-56,"uptime":1087122,"timestamp":"1087122"}
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","command":"frequency","value":"10390","action":"Frequência inicial configurada para 103.9 MHz","timestamp":"8058"}
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","command":"volume","value":"9","action":"Volume inicial configurado para 9/15","timestamp":"8059"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","command":"frequency","value":"10390","action":"Frequência inicial configurada para 103.9 MHz","timestamp":"8058"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","command":"volume","value":"9","action":"Volume inicial configurado para 9/15","timestamp":"8059"}
 home/RDA5807/frequency 10270
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","command":"frequency","value":"10270","action":"Frequência alterada para 102.7 MHz","timestamp":"16111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-60,"uptime":960000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","command":"frequency","value":"10270","action":"Frequência alterada para 102.7 MHz","timestamp":"16111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-60,"uptime":960000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
 home/RDA5807/frequency 10570
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","command":"frequency","value":"10570","action":"Frequência alterada para 105.7 MHz","timestamp":"25429"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","command":"frequency","value":"10570","action":"Frequência alterada para 105.7 MHz","timestamp":"25429"}
 home/RDA5807/volume 10
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","command":"volume","value":"10","action":"Volume alterado para 10/15","timestamp":"30034"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1048","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1312","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1051","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1316","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","command":"volume","value":"10","action":"Volume alterado para 10/15","timestamp":"30034"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1048","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1312","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1051","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1316","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":1320,"rssi":-60}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-59,"uptime":990000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-59,"uptime":990000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
 home/motion/MOTION_00/heartbeat {"uptime":1080,"rssi":-53}
-home/motion/MOTION_02/event {"motion":1,"ts":"1349","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1352","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-58,"uptime":1020000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1349","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1352","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-58,"uptime":1020000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
 home/motion/MOTION_02/heartbeat {"uptime":1380,"rssi":-65}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-57,"uptime":1050000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1399","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-57,"uptime":1050000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1399","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":31.2,"unit":"°C","rssi":-63,"uptime":1086771,"timestamp":"1086771"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":65.0,"unit":"%","rssi":-63,"uptime":1086773,"timestamp":"1086773"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1402","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1402","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_00/heartbeat {"uptime":1140,"rssi":-53}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":31.4,"unit":"°C","rssi":-57,"uptime":1207176,"timestamp":"1207176"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":51.0,"unit":"%","rssi":-57,"uptime":1207178,"timestamp":"1207178"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1415","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-55,"uptime":1080000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1422","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1162","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1427","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1166","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1171","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1173","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1437","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1415","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-55,"uptime":1080000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1422","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1162","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1427","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1166","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1171","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1173","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1437","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":1440,"rssi":-63}
-home/motion/MOTION_02/event {"motion":1,"ts":"1446","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-55,"uptime":1110000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1189","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1452","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1457","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1196","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1460","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1200","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1446","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-55,"uptime":1110000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1189","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1452","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1457","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1196","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1460","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1200","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/motion/MOTION_00/heartbeat {"uptime":1200,"rssi":-56}
-home/motion/MOTION_00/event {"motion":0,"ts":"1203","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1470","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1207","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1212","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1475","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-59,"uptime":1140000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1490","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1492","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1495","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1234","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1498","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1203","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1470","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1207","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1212","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1475","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-59,"uptime":1140000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1490","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1492","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1495","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1234","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1498","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/motion/MOTION_02/heartbeat {"uptime":1500,"rssi":-62}
-home/motion/MOTION_00/event {"motion":0,"ts":"1240","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1504","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1243","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1507","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-55,"uptime":1170000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1249","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":1,"ts":"1513","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1254","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1519","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1256","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1240","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1504","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1243","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1507","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-55,"uptime":1170000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1249","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1513","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1254","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1519","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1256","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
 home/temperature/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","temperature":31.2,"unit":"°C","rssi":-60,"uptime":1206866,"timestamp":"1206866"}
 home/humidity/ESP01_DHT22_BRANCO/data {"device_id":"ESP01_DHT22_BRANCO","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT22","humidity":65.2,"unit":"%","rssi":-60,"uptime":1206868,"timestamp":"1206868"}
 home/motion/MOTION_00/heartbeat {"uptime":1260,"rssi":-53}
-home/motion/MOTION_02/event {"motion":1,"ts":"1524","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1524","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
 home/temperature/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","temperature":31.3,"unit":"°C","rssi":-58,"uptime":1327239,"timestamp":"1327239"}
 home/humidity/ESP01_DHT11_AZUL/data {"device_id":"ESP01_DHT11_AZUL","device_name":"corredor","location":"Corredor Ventilado","sensor_type":"DHT11","humidity":51.0,"unit":"%","rssi":-58,"uptime":1327241,"timestamp":"1327241"}
-home/motion/MOTION_02/event {"motion":0,"ts":"1526","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1264","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1266","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":1,"ts":"1270","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/motion/MOTION_00/event {"motion":0,"ts":"1273","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.18.115"}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-62,"uptime":1200000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","frequency":10390,"volume":9,"command":"init","value":"startup","action":"Dispositivo RDA5807 inicializado com sucesso","timestamp":"8078"}
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","frequency":10390,"volume":9,"command":"frequency","value":"10390","action":"Frequência inicial configurada para 103.9 MHz","timestamp":"8210"}
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","frequency":10390,"volume":9,"command":"volume","value":"9","action":"Volume inicial configurado para 9/15","timestamp":"8211"}
+home/motion/MOTION_02/event {"motion":0,"ts":"1526","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1264","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1266","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":1,"ts":"1270","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/motion/MOTION_00/event {"motion":0,"ts":"1273","device_id":"MOTION_00","name":"Maker","location":"Espaço Maker""sensor_type":"REGULAR_IR_SENSOR","ip":"192.168.1.115"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-62,"uptime":1200000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","frequency":10390,"volume":9,"command":"init","value":"startup","action":"Dispositivo RDA5807 inicializado com sucesso","timestamp":"8078"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","frequency":10390,"volume":9,"command":"frequency","value":"10390","action":"Frequência inicial configurada para 103.9 MHz","timestamp":"8210"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","frequency":10390,"volume":9,"command":"volume","value":"9","action":"Volume inicial configurado para 9/15","timestamp":"8211"}
 home/motion/MOTION_02/heartbeat {"uptime":1560,"rssi":-60}
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-54,"uptime":1230000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-54,"uptime":1230000,"relay_state":"off","last_command":"OFF","firmware":"HomeGuard_v1.0"}
 home/RDA5807/frequency 10570
-home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.18.238","frequency":10570,"volume":9,"command":"frequency","value":"10570","action":"Frequência alterada para 105.7 MHz","timestamp":"32484"}
+home/RDA5807/status {"device_id":"RDA5807","name":"Rádio DSP","location":"Quarto","ip":"192.168.1.238","frequency":10570,"volume":9,"command":"frequency","value":"10570","action":"Frequência alterada para 105.7 MHz","timestamp":"32484"}
 home/motion/MOTION_00/heartbeat {"uptime":1320,"rssi":-51}
-home/motion/MOTION_02/event {"motion":1,"ts":"1597","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.18.111"}
+home/motion/MOTION_02/event {"motion":1,"ts":"1597","device_id":"MOTION_02","name":"varanda","location":"Varanda/Quarto""ip":"192.168.1.111"}

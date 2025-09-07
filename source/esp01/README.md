@@ -361,7 +361,7 @@ For troubleshooting help, see `/docs/troubleshooting.md`
 
 ## Device MQTT Monitor examples
 
-% mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/#" -v       
+% mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/#" -v       
 
 home/motion/MOTION_01/status offline
 home/motion/MOTION_02/status offline
@@ -389,6 +389,6 @@ home/humidity/ESP01_DHT11_BRANCO/data {"device_id":"ESP01_DHT11_BRANCO","device_
 home/motion/MOTION_03/heartbeat {"uptime":540,"rssi":-60}
 
 
-home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.18.192","rssi":-53,"uptime":4698,"relay_state":"off","last_command":"BOOT","firmware":"HomeGuard_v1.0"}
+home/relay/ESP01_RELAY_001/info {"RELAY_ID":"ESP01_RELAY_001","name":"Luz da Sala","location":"Sala","ip":"192.168.1.192","rssi":-53,"uptime":4698,"relay_state":"off","last_command":"BOOT","firmware":"HomeGuard_v1.0"}
 home/relay/ESP01_RELAY_001/status off
 

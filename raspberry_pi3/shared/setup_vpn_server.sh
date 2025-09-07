@@ -156,7 +156,7 @@ DNS = 8.8.8.8, 1.1.1.1
 # HomeGuard Server
 PublicKey = $SERVER_PUBLIC_KEY
 Endpoint = $EXTERNAL_IP:51820
-AllowedIPs = 10.200.200.0/24, 192.168.18.0/24
+AllowedIPs = 10.200.200.0/24, 192.168.1.0/24
 PersistentKeepalive = 25
 CLIENTEOF
 
@@ -242,7 +242,7 @@ cat > ~/HomeGuard_Remote_Access_Guide.md << 'EOF'
 - **Server IP**: Check with: `curl ifconfig.me`
 - **VPN Port**: 51820 (UDP)
 - **VPN Network**: 10.200.200.0/24
-- **HomeGuard Network**: 192.168.18.0/24
+- **HomeGuard Network**: 192.168.1.0/24
 
 ## 📱 Setting up Mobile Clients
 
@@ -276,21 +276,21 @@ cat > ~/HomeGuard_Remote_Access_Guide.md << 'EOF'
 Once connected to VPN, access services at:
 
 ### MQTT Broker:
-- **Host**: 192.168.18.198 (or your Pi's IP)
+- **Host**: 192.168.1.102 (or your Pi's IP)
 - **Port**: 1883
 - **User**: homeguard
 - **Pass**: pu2clr123456
 
 ### HomeGuard Devices:
-- **Motion Detector**: 192.168.18.193
-- **Relay Controller**: 192.168.18.192
-- **Audio System**: 192.168.18.198 (Pi IP)
+- **Motion Detector**: 192.168.1.193
+- **Relay Controller**: 192.168.1.192
+- **Audio System**: 192.168.1.102 (Pi IP)
 
 ### Example Remote Commands:
 ```bash
 # From mobile/desktop with VPN connected:
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.198 -t home/audio/cmnd -m "DOGS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/audio/cmnd -m "DOGS" -u homeguard -P pu2clr123456
 ```
 
 ## 🛠️ Management Commands

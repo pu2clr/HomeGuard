@@ -8,11 +8,11 @@ This system provides automated compilation and upload for 5 different motion sen
 
 | Location | IP Address | MQTT Topic | Description |
 |----------|------------|------------|-------------|
-| **Garagem** | 192.168.18.201 | `home/motion_garagem` | Garage motion detection |
-| **Área Serviço** | 192.168.18.202 | `home/motion_area_servico` | Service area monitoring |
-| **Varanda** | 192.168.18.203 | `home/motion_varanda` | Balcony/terrace monitoring |
-| **Mezanino** | 192.168.18.204 | `home/motion_mezanino` | Mezzanine level detection |
-| **Ad-Hoc** | 192.168.18.205 | `home/motion_adhoc` | Flexible/temporary location |
+| **Garagem** | 192.168.1.201 | `home/motion_garagem` | Garage motion detection |
+| **Área Serviço** | 192.168.1.202 | `home/motion_area_servico` | Service area monitoring |
+| **Varanda** | 192.168.1.203 | `home/motion_varanda` | Balcony/terrace monitoring |
+| **Mezanino** | 192.168.1.204 | `home/motion_mezanino` | Mezzanine level detection |
+| **Ad-Hoc** | 192.168.1.205 | `home/motion_adhoc` | Flexible/temporary location |
 
 ## 🚀 Quick Start
 
@@ -102,12 +102,12 @@ Each sensor is compiled with unique parameters:
 ```cpp
 // Build-time defines (set automatically by scripts)
 #define DEVICE_LOCATION "Garagem"           // Location name
-#define DEVICE_IP_LAST_OCTET 201           // IP: 192.168.18.201
+#define DEVICE_IP_LAST_OCTET 201           // IP: 192.168.1.201
 #define MQTT_TOPIC_SUFFIX "motion_garagem" // MQTT topic base
 ```
 
 ### Automatic Code Generation
-- **IP Address**: `192.168.18.{DEVICE_IP_LAST_OCTET}`
+- **IP Address**: `192.168.1.{DEVICE_IP_LAST_OCTET}`
 - **Device ID**: `motion_{IP_OCTET}_{MAC_SUFFIX}`
 - **MQTT Topics**: `home/{MQTT_TOPIC_SUFFIX}/{subtopic}`
 
@@ -126,13 +126,13 @@ home/{sensor_topic}/
 ### Example Commands
 ```bash
 # Check device status
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 
 # Monitor all motion events
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
 
 # Configure sensitivity
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "SENSITIVITY_HIGH" -u homeguard -P pu2clr123456
 ```
 
 ## 🔍 Troubleshooting
@@ -166,10 +166,10 @@ arduino-cli lib list | grep PubSubClient
 ### Network Issues
 ```bash
 # Test IP connectivity
-ping 192.168.18.201
+ping 192.168.1.201
 
 # Check MQTT broker
-mosquitto_pub -h 192.168.18.198 -t test -m "hello" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t test -m "hello" -u homeguard -P pu2clr123456
 
 # Monitor device output
 screen /dev/tty.usbserial-XXXX 115200
@@ -181,7 +181,7 @@ screen /dev/tty.usbserial-XXXX 115200
 1. ✅ Remove GPIO0 from GND (exit programming mode)
 2. ✅ Power cycle ESP-01S
 3. ✅ Connect PIR sensor to GPIO2
-4. ✅ Test network connectivity: `ping 192.168.18.{IP}`
+4. ✅ Test network connectivity: `ping 192.168.1.{IP}`
 5. ✅ Test MQTT responses: `STATUS` command
 6. ✅ Verify motion detection events
 
@@ -191,7 +191,7 @@ screen /dev/tty.usbserial-XXXX 115200
 ./scripts/test-all-motion-sensors.sh
 
 # Monitor continuous operation
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
 ```
 
 ## 📈 Advanced Usage
@@ -258,7 +258,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client()
 client.username_pw_set("homeguard", "pu2clr123456")
 client.on_message = on_message
-client.connect("192.168.18.198", 1883, 60)
+client.connect("192.168.1.102", 1883, 60)
 
 # Subscribe to all motion sensors
 client.subscribe("home/motion_+/motion")

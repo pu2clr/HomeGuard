@@ -134,7 +134,7 @@ test_mqtt_connection() {
     fi
     
     # Test MQTT connection
-    timeout 5s mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+    timeout 5s mosquitto_pub -h 192.168.1.6 -u homeguard -P pu2clr123456 \
         -t "homeguard/test/connection" -m "test" 2>/dev/null
     return $?
 }
@@ -182,7 +182,7 @@ test_config_validation() {
 import json
 config = json.load(open('raspberry_pi3/ground/ground_config.json'))
 assert config['floor'] == 'ground'
-assert config['mqtt_broker'] == '192.168.18.6'
+assert config['mqtt_broker'] == '192.168.1.6'
 assert 'motion_responses' in config
 assert 'schedules' in config
 " 2>/dev/null || all_good=1
@@ -192,7 +192,7 @@ assert 'schedules' in config
 import json
 config = json.load(open('raspberry_pi3/first/first_config.json'))
 assert config['floor'] == 'first'
-assert config['mqtt_broker'] == '192.168.18.6'
+assert config['mqtt_broker'] == '192.168.1.6'
 assert 'motion_responses' in config
 assert 'schedules' in config
 " 2>/dev/null || all_good=1

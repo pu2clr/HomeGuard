@@ -28,7 +28,7 @@ except ImportError:
     exit(1)
 
 class MotionLightController:
-    def __init__(self, broker_host="192.168.18.198", broker_port=1883, 
+    def __init__(self, broker_host="192.168.1.102", broker_port=1883, 
                  username="homeguard", password="pu2clr123456", 
                  light_delay=5):
         """
@@ -315,7 +315,7 @@ class MotionLightController:
 
 def main():
     parser = argparse.ArgumentParser(description='HomeGuard Motion-Activated Light Controller')
-    parser.add_argument('--broker', default='192.168.18.198', help='MQTT broker IP')
+    parser.add_argument('--broker', default='192.168.1.102', help='MQTT broker IP')
     parser.add_argument('--port', type=int, default=1883, help='MQTT broker port')
     parser.add_argument('--username', default='homeguard', help='MQTT username')
     parser.add_argument('--password', default='pu2clr123456', help='MQTT password')

@@ -4,7 +4,7 @@ Test script for Motion-Activated Light Controller
 Tests the integration between motion detector and relay control
 """
 
-BROKER="192.168.18.198"
+BROKER="192.168.1.102"
 USERNAME="homeguard"
 PASSWORD="pu2clr123456"
 
@@ -54,9 +54,9 @@ echo ""
 
 echo "🔧 Troubleshooting:"
 echo "   - Ensure both ESP-01S devices are powered and connected"
-echo "   - Motion detector should be at IP 192.168.18.193"
-echo "   - Relay controller should be at IP 192.168.18.192"
-echo "   - MQTT broker should be running at 192.168.18.198"
+echo "   - Motion detector should be at IP 192.168.1.193"
+echo "   - Relay controller should be at IP 192.168.1.192"
+echo "   - MQTT broker should be running at 192.168.1.102"
 echo ""
 
 echo "📊 Monitor in real-time:"

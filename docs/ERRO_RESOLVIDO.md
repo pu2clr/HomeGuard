@@ -40,11 +40,11 @@ Executei o teste e **tudo funciona corretamente**:
 🏠 HomeGuard Motion Sensor Configuration
 
 Available sensors:
-  1. Garagem         (IP: 192.168.18.201, Topic: motion_garagem)
-  2. Area_Servico    (IP: 192.168.18.202, Topic: motion_area_servico)
-  3. Varanda         (IP: 192.168.18.203, Topic: motion_varanda)
-  4. Mezanino        (IP: 192.168.18.204, Topic: motion_mezanino)
-  5. Ad_Hoc          (IP: 192.168.18.205, Topic: motion_adhoc)
+  1. Garagem         (IP: 192.168.1.201, Topic: motion_garagem)
+  2. Area_Servico    (IP: 192.168.1.202, Topic: motion_area_servico)
+  3. Varanda         (IP: 192.168.1.203, Topic: motion_varanda)
+  4. Mezanino        (IP: 192.168.1.204, Topic: motion_mezanino)
+  5. Ad_Hoc          (IP: 192.168.1.205, Topic: motion_adhoc)
 ```
 
 ## 🛠️ **PROBLEMA TÉCNICO IDENTIFICADO E CORRIGIDO**
@@ -89,7 +89,7 @@ $ ./scripts/compile-motion-sensors-auto.sh
 
 🏠 HomeGuard Motion Sensor Configuration
 Select sensor (1-6, q): 1
-✅ Selected: Garagem (192.168.18.201)
+✅ Selected: Garagem (192.168.1.201)
 
 Available USB ports:
   1. /dev/tty.usbserial-14120
@@ -112,10 +112,10 @@ Enter USB port: /dev/tty.usbserial-14120
 
 Agora você pode compilar e fazer upload dos 5 sensores de movimento sem problemas:
 
-- **Garagem**: 192.168.18.201
-- **Área Serviço**: 192.168.18.202  
-- **Varanda**: 192.168.18.203
-- **Mezanino**: 192.168.18.204
-- **Ad-Hoc**: 192.168.18.205
+- **Garagem**: 192.168.1.201
+- **Área Serviço**: 192.168.1.202  
+- **Varanda**: 192.168.1.203
+- **Mezanino**: 192.168.1.204
+- **Ad-Hoc**: 192.168.1.205
 
 **Execute e teste:** `./scripts/compile-motion-sensors-auto.sh` 🚀

@@ -19,12 +19,12 @@ GND        ->  GND
 
 ## Network Configuration
 - **WiFi Network**: YOUR_SSID
-- **Static IP**: 192.168.18.192
-- **Gateway**: 192.168.18.1
+- **Static IP**: 192.168.1.192
+- **Gateway**: 192.168.1.1
 - **Subnet**: 255.255.255.0
 
 ## MQTT Configuration
-- **Broker IP**: 192.168.18.198
+- **Broker IP**: 192.168.1.102
 - **Port**: 1883
 - **Username**: homeguard
 - **Password**: pu2clr123456
@@ -36,22 +36,22 @@ GND        ->  GND
 ## Commands
 ### Turn Relay ON
 ```bash
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
 ```
 
 ### Turn Relay OFF
 ```bash
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
 ```
 
 ### Monitor Status
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/relay1/stat" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/relay1/stat" -v
 ```
 
 ### Monitor All Topics
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
 ```
 
 ## Features

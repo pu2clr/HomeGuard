@@ -14,19 +14,19 @@
 
   MQTT Interaction Examples (using mosquitto):
   # Monitor grid status:
-  mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/status" -v
+  mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/status" -v
 
   # Monitor device info:
-  mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/info" -v
+  mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/info" -v
 
   # Command relay ON:
-  mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "ON"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "ON"
 
   # Command relay OFF:
-  mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "OFF"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "OFF"
 
   # Return relay to automatic mode:
-  mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "AUTO"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "AUTO"
 */
 
 // ======== User Parameters (Edit these for your device) ========
@@ -54,14 +54,14 @@
 #define SUBNET_4         0
 
 // Broker Configuration
-#define MQTT_SERVER      "192.168.18.198"         // MQTT broker IP
+#define MQTT_SERVER      "192.168.1.102"         // MQTT broker IP
 #define MQTT_PORT        1883                     // MQTT broker port
 #define MQTT_USER        "homeguard"              // MQTT username
 #define MQTT_PASS        "pu2clr123456"           // MQTT password
 
 // WIFI Configuration
-#define WIFI_SSID        "APRC"              // WiFi SSID
-#define WIFI_PASS        "Ap69Rc642023"          // WiFi password
+#define WIFI_SSID        "Homeguard"              // WiFi SSID
+#define WIFI_PASS        "pu2clr123456"          // WiFi password
 
 
 #define ZMPT_PIN         A0                        // Analog pin for ZMPT101B

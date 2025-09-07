@@ -3,7 +3,7 @@
 HomeGuard MQTT Activity Logger
 Captures all MQTT messages from home/* topics and logs to SQLite database
 
-Equivalent to: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/#" -v
+Equivalent to: mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/#" -v
 
 Author: HomeGuard System
 Date: September 6, 2025
@@ -22,7 +22,7 @@ import time
 
 # Configuration
 MQTT_CONFIG = {
-    'host': '192.168.18.198',
+    'host': '192.168.1.102',
     'port': 1883,
     'username': 'homeguard',
     'password': 'pu2clr123456',

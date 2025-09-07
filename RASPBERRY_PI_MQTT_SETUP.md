@@ -95,7 +95,7 @@ HomeGuard/
 ### Verificar se o Broker MQTT está Acessível
 ```bash
 # Testar conexão MQTT
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t 'home/#' -v -C 5
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t 'home/#' -v -C 5
 ```
 
 ### Executar como Serviço no Boot (Opcional)

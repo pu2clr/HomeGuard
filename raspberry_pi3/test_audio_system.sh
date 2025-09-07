@@ -3,7 +3,7 @@ echo "🧪 Testing HomeGuard Audio System..."
 
 # Test MQTT connection
 echo "📡 Testing MQTT connection..."
-mosquitto_pub -h 192.168.18.198 -t home/audio/ground/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/audio/ground/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 
 # Test audio playback
 echo "🔊 Testing audio playback..."

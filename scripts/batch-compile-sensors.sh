@@ -71,7 +71,7 @@ compile_sensor() {
     local sensor_key="$1"
     IFS=',' read -r location ip topic <<< "${SENSORS[$sensor_key]}"
     
-    print_info "Compiling $location (IP: 192.168.18.$ip)..."
+    print_info "Compiling $location (IP: 192.168.1.$ip)..."
     
     # Create sensor-specific directory
     local sensor_dir="$BUILD_DIR/${sensor_key}_motion_sensor"
@@ -131,7 +131,7 @@ EOF
 
     for sensor_key in $(echo "${!SENSORS[@]}" | tr ' ' '\n' | sort); do
         IFS=',' read -r location ip topic <<< "${SENSORS[$sensor_key]}"
-        echo "| $location | 192.168.18.$ip | firmware/${location}_motion_sensor.bin | home/$topic |" >> "$instructions_file"
+        echo "| $location | 192.168.1.$ip | firmware/${location}_motion_sensor.bin | home/$topic |" >> "$instructions_file"
     done
 
     cat >> "$instructions_file" << 'EOF'
@@ -176,19 +176,19 @@ The script will guide you through:
 ### Basic connectivity test:
 ```bash
 # Replace motion_garagem with the appropriate topic for your sensor
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_garagem/#" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_garagem/#" -v
 ```
 
 ### Device status check:
 ```bash
 # Replace motion_garagem with the appropriate topic for your sensor
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### Network ping test:
 ```bash
 # Replace with the appropriate IP for your sensor
-ping 192.168.18.201
+ping 192.168.1.201
 ```
 
 ## 🏠 MQTT Topic Structure
@@ -227,7 +227,7 @@ arduino-cli monitor -p /dev/tty.usbserial-XXXX -c baudrate=115200
 ### Network Issues:
 - ✅ WiFi network "YOUR_SSID" available
 - ✅ IP address not conflicting with other devices
-- ✅ MQTT broker running on 192.168.18.198
+- ✅ MQTT broker running on 192.168.1.102
 
 ### Motion Detection Issues:
 - ✅ PIR sensor connected to GPIO2
@@ -240,14 +240,14 @@ arduino-cli monitor -p /dev/tty.usbserial-XXXX -c baudrate=115200
 ```bash
 for topic in motion_garagem motion_area_servico motion_varanda motion_mezanino motion_adhoc; do
   echo "Checking $topic..."
-  mosquitto_pub -h 192.168.18.198 -t "home/$topic/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+  mosquitto_pub -h 192.168.1.102 -t "home/$topic/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
   sleep 2
 done
 ```
 
 ### Monitor all sensors:
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
 ```
 
 EOF
@@ -269,16 +269,16 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-BROKER="192.168.18.198"
+BROKER="192.168.1.102"
 USERNAME="homeguard"
 PASSWORD="pu2clr123456"
 
 declare -A SENSOR_IPS=(
-    ["motion_garagem"]="192.168.18.201"
-    ["motion_area_servico"]="192.168.18.202"
-    ["motion_varanda"]="192.168.18.203"
-    ["motion_mezanino"]="192.168.18.204"
-    ["motion_adhoc"]="192.168.18.205"
+    ["motion_garagem"]="192.168.1.201"
+    ["motion_area_servico"]="192.168.1.202"
+    ["motion_varanda"]="192.168.1.203"
+    ["motion_mezanino"]="192.168.1.204"
+    ["motion_adhoc"]="192.168.1.205"
 )
 
 echo -e "${BLUE}🧪 Testing all HomeGuard Motion Sensors${NC}"

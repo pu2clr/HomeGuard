@@ -3,9 +3,9 @@
   Compatible with Flask Dashboard MQTT System
 
   QUICK CONFIG: Uncomment ONE line below for your ESP01:
-  // #define RELAY_001  // Luz da Sala (192.168.18.192)
-  // #define RELAY_002  // Luz da Cozinha (192.168.18.193)
-  // #define RELAY_003  // Bomba d'Água (192.168.18.194)
+  // #define RELAY_001  // Luz da Sala (192.168.1.192)
+  // #define RELAY_002  // Luz da Cozinha (192.168.1.193)
+  // #define RELAY_003  // Bomba d'Água (192.168.1.194)
 
   Hardware connections:
   - Relay Module IN -> GPIO0 (PIN 0)
@@ -22,11 +22,11 @@
   - Restart: sudo systemctl restart mosquitto
 
   Testing Commands:
-  - Monitor all topics: mosquitto_sub -h 192.168.18.198 -u homeguard -P
+  - Monitor all topics: mosquitto_sub -h 192.168.1.102 -u homeguard -P
   pu2clr123456 -t "#" -v
-  - Send command: mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456
+  - Send command: mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456
   -t "home/relay/ESP01_RELAY_001/command" -m "ON"
-  - Check status: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456
+  - Check status: mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456
   -t "home/relay/ESP01_RELAY_001/status" -v
 
 */
@@ -45,37 +45,37 @@
 const char *DEVICE_ID = "RELAY_001";
 const char *RELAY_NAME = "Luz da Sala";
 const char *RELAY_LOCATION = "Sala";
-IPAddress local_IP(192, 168, 18, 192);
+IPAddress local_IP(192, 168, 1, 192);
 #elif defined(RELAY_002)
 const char *DEVICE_ID = "ESP01_RELAY_002";
 const char *RELAY_NAME = "Área de Serviço";
 const char *RELAY_LOCATION = "AreaServico";
-IPAddress local_IP(192, 168, 18, 193);
+IPAddress local_IP(192, 168, 1, 193);
 #elif defined(RELAY_003)
 const char *DEVICE_ID = "ESP01_RELAY_003";
 const char *RELAY_NAME = "Bomba d'Água";
 const char *RELAY_LOCATION = "Externa";
-IPAddress local_IP(192, 168, 18, 194);
+IPAddress local_IP(192, 168, 1, 194);
 #else
 // Default configuration - CHANGE THESE VALUES FOR YOUR SETUP
 const char *DEVICE_ID = "RELAY_001"; // Must match RELAYS_CONFIG[n]['id']
 const char *RELAY_NAME = "Luz da Sala"; // Must match RELAYS_CONFIG[n]['name']
 const char *RELAY_LOCATION = "Sala"; // Must match RELAYS_CONFIG[n]['location']
 IPAddress
-    local_IP(192, 168, 18,
+    local_IP(192, 168, 1,
              191); // ESP01_RELAY_001 -> .192, ESP01_RELAY_002 -> .193, etc
 #endif
 
 // ======== Wi-Fi Network Configuration ========
-const char *ssid = "APRC";
-const char *password = "Ap69Rc642023";
+const char *ssid = "Homeguard";
+const char *password = "pu2clr123456";
 // ======== Network Configuration ========
-IPAddress gateway(192, 168, 18, 1);
+IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 // ======== MQTT Broker Configuration (matches Flask config) ========
 const char *mqtt_server =
-    "192.168.18.198";                   // Must match MQTT_CONFIG['broker_host']
+    "192.168.1.102";                   // Must match MQTT_CONFIG['broker_host']
 const int mqtt_port = 1883;             // Must match MQTT_CONFIG['broker_port']
 const char *mqtt_user = "homeguard";    // Must match MQTT_CONFIG['username']
 const char *mqtt_pass = "pu2clr123456"; // Must match MQTT_CONFIG['password']

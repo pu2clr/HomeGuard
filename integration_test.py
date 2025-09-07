@@ -12,7 +12,7 @@ from datetime import datetime
 
 class AudioIntegrationTest:
     def __init__(self):
-        self.mqtt_broker = "192.168.18.198" 
+        self.mqtt_broker = "192.168.1.102" 
         self.mqtt_port = 1883
         self.mqtt_user = "homeguard"
         self.mqtt_pass = "pu2clr123456"

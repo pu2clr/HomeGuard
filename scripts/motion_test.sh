@@ -3,7 +3,7 @@
 # HomeGuard Motion Detector Test Script
 # Baseado na configuração MQTT que está funcionando
 
-BROKER_IP="192.168.18.198"
+BROKER_IP="192.168.1.102"
 MQTT_USER="homeguard"
 MQTT_PASS="pu2clr123456"
 

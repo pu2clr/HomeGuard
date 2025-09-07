@@ -107,7 +107,7 @@ python3 db_query.py --export data_48h.json --hours 48
 ## 🔧 Configurações MQTT
 
 O sistema está configurado para conectar ao broker MQTT:
-- **Host**: 192.168.18.198
+- **Host**: 192.168.1.102
 - **Porta**: 1883
 - **Usuário**: homeguard
 - **Senha**: pu2clr123456
@@ -187,7 +187,7 @@ Para verificar se tudo está funcionando:
 
 O sistema equivale exatamente ao comando:
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t 'home/#' -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t 'home/#' -v
 ```
 
 Mas com a vantagem de armazenar permanentemente todas as mensagens no banco de dados!

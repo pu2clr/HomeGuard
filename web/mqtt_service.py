@@ -61,7 +61,7 @@ class MQTTLoggerService:
         print(f"🚀 Starting {SERVICE_NAME}...")
         print(f"📋 PID: {os.getpid()}")
         print(f"📁 Log file: {LOG_FILE}")
-        print("📡 MQTT Broker: 192.168.18.198:1883")
+        print("📡 MQTT Broker: 192.168.1.102:1883")
         print("🔧 Press Ctrl+C to stop")
         print("-" * 60)
         

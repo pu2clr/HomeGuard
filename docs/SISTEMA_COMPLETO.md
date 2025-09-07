@@ -8,11 +8,11 @@ Você agora tem um **sistema completo** para compilar e fazer upload de firmware
 
 | # | Local | IP | MQTT Topic | Descrição |
 |---|-------|----|-----------| ----------|
-| 1 | **Garagem** | 192.168.18.201 | `motion_garagem` | Detecção na garagem |
-| 2 | **Área Serviço** | 192.168.18.202 | `motion_area_servico` | Monitoramento área de serviço |
-| 3 | **Varanda** | 192.168.18.203 | `motion_varanda` | Detecção na varanda |
-| 4 | **Mezanino** | 192.168.18.204 | `motion_mezanino` | Monitoramento do mezanino |
-| 5 | **Ad-Hoc** | 192.168.18.205 | `motion_adhoc` | Localização flexível |
+| 1 | **Garagem** | 192.168.1.201 | `motion_garagem` | Detecção na garagem |
+| 2 | **Área Serviço** | 192.168.1.202 | `motion_area_servico` | Monitoramento área de serviço |
+| 3 | **Varanda** | 192.168.1.203 | `motion_varanda` | Detecção na varanda |
+| 4 | **Mezanino** | 192.168.1.204 | `motion_mezanino` | Monitoramento do mezanino |
+| 5 | **Ad-Hoc** | 192.168.1.205 | `motion_adhoc` | Localização flexível |
 
 ## 🚀 **COMO USAR (3 FORMAS)**
 
@@ -55,7 +55,7 @@ Você agora tem um **sistema completo** para compilar e fazer upload de firmware
 ```cpp
 // Definidos automaticamente pelo script
 #define DEVICE_LOCATION "Garagem"           // Nome do local
-#define DEVICE_IP_LAST_OCTET 201           // IP: 192.168.18.201  
+#define DEVICE_IP_LAST_OCTET 201           // IP: 192.168.1.201  
 #define MQTT_TOPIC_SUFFIX "motion_garagem" // Tópico MQTT
 ```
 
@@ -85,10 +85,10 @@ home/motion_garagem/        # Exemplo para garagem
 ### **Teste Individual**
 ```bash
 # Verificar conectividade
-ping 192.168.18.201
+ping 192.168.1.201
 
 # Verificar MQTT
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### **Teste Todos os Sensores**
@@ -100,7 +100,7 @@ mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u hom
 ### **Monitoramento Contínuo**
 ```bash
 # Ver todos os eventos de movimento
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
 ```
 
 ## 🔄 **PROCESSO DE UPLOAD**
@@ -119,11 +119,11 @@ mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/m
 🏠 HomeGuard Motion Sensor Configuration
 
 Available sensors:
-  1. Garagem         (IP: 192.168.18.201, Topic: motion_garagem)
-  2. Area_Servico    (IP: 192.168.18.202, Topic: motion_area_servico) 
-  3. Varanda         (IP: 192.168.18.203, Topic: motion_varanda)
-  4. Mezanino        (IP: 192.168.18.204, Topic: motion_mezanino)
-  5. Ad_Hoc          (IP: 192.168.18.205, Topic: motion_adhoc)
+  1. Garagem         (IP: 192.168.1.201, Topic: motion_garagem)
+  2. Area_Servico    (IP: 192.168.1.202, Topic: motion_area_servico) 
+  3. Varanda         (IP: 192.168.1.203, Topic: motion_varanda)
+  4. Mezanino        (IP: 192.168.1.204, Topic: motion_mezanino)
+  5. Ad_Hoc          (IP: 192.168.1.205, Topic: motion_adhoc)
   6. Custom configuration
 
 Select sensor (1-6): █
@@ -168,11 +168,11 @@ HomeGuard/
 # ✅ Compilação e upload automáticos
 
 # 3. Testar o sensor
-ping 192.168.18.201
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+ping 192.168.1.201
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 
 # 4. Monitorar eventos
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_garagem/motion" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_garagem/motion" -v
 ```
 
 ## 🔥 **CARACTERÍSTICAS AVANÇADAS**

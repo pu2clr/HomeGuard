@@ -11,7 +11,7 @@ import paho.mqtt.client as mqtt
 
 class HomeGuardIntegrationTest:
     def __init__(self):
-        self.broker_host = "192.168.18.198"
+        self.broker_host = "192.168.1.102"
         self.broker_port = 1883
         self.username = "homeguard"
         self.password = "pu2clr123456"
@@ -172,14 +172,14 @@ class HomeGuardIntegrationTest:
         """Show system overview"""
         print("🏠 HomeGuard System Overview")
         print("=" * 40)
-        print("📡 MQTT Broker: 192.168.18.198:1883")
+        print("📡 MQTT Broker: 192.168.1.102:1883")
         print("🔐 Credentials: homeguard / pu2clr123456")
         print()
         print("🎛️ Active Components:")
-        print("   📱 ESP-01S Motion Detector (192.168.18.193)")
+        print("   📱 ESP-01S Motion Detector (192.168.1.193)")
         print("      Topics: home/motion1/motion, home/motion1/status")
         print()
-        print("   🔌 ESP-01S Relay Controller (192.168.18.192)")  
+        print("   🔌 ESP-01S Relay Controller (192.168.1.192)")  
         print("      Topics: home/relay1/cmnd, home/relay1/status")
         print()
         print("   🎵 Raspberry Pi Audio System")

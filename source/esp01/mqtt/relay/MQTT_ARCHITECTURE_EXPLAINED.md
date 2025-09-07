@@ -7,11 +7,11 @@
 ```
 PASSO 1: ESP01 Boot
 ├── Conecta ao Wi-Fi (YOUR_SSID)
-├── Obtém IP (192.168.18.192)
+├── Obtém IP (192.168.1.192)
 └── Inicia processo MQTT
 
 PASSO 2: Conexão MQTT
-├── ESP01 conecta ao Broker (192.168.18.198:1883)
+├── ESP01 conecta ao Broker (192.168.1.102:1883)
 ├── Autentica com usuário/senha (homeguard/pu2clr123456)
 ├── Se inscreve no tópico: homeguard/relay/ESP01_RELAY_001/command
 └── Publica status inicial nos tópicos de resposta
@@ -99,7 +99,7 @@ HomeGuard Relay Control - DEBUG VERSION
 [1245] Device ID: ESP01_RELAY_001
 [1250] Connecting to Wi-Fi: YOUR_SSID
 [3000] Wi-Fi connected!
-[3001] IP Address: 192.168.18.192
+[3001] IP Address: 192.168.1.192
 [3010] Attempting MQTT connection... (attempt 1)
 [3020] MQTT connected successfully!
 [3025] Subscribed to: homeguard/relay/ESP01_RELAY_001/command (success: 1)
@@ -123,7 +123,7 @@ No monitor serial, se a conexão MQTT falhar, você verá:
 Teste se o ESP01 consegue alcançar o broker:
 ```bash
 # Do ESP01 para o broker (se tivesse telnet):
-telnet 192.168.18.198 1883
+telnet 192.168.1.102 1883
 ```
 
 ## Próximos Passos

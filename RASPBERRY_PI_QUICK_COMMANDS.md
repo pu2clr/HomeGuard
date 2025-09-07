@@ -83,7 +83,7 @@ tail -f ../logs/mqtt_service.log
 
 ### Verificar conexão MQTT
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t 'home/#' -v -C 5
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t 'home/#' -v -C 5
 ```
 
 ### Ver crescimento do banco
@@ -117,7 +117,7 @@ Após alguns minutos rodando, você deve ver:
 O sistema estará capturando **todas** as mensagens MQTT e armazenando no banco SQLite local, equivalente ao comando:
 
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t 'home/#' -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t 'home/#' -v
 ```
 
 Mas com **persistência permanente** dos dados! 🎉

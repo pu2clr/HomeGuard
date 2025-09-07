@@ -19,7 +19,7 @@ except ImportError:
 
 class SimpleMotionMonitor:
     def __init__(self):
-        self.broker_host = "192.168.18.198"
+        self.broker_host = "192.168.1.102"
         self.broker_port = 1883
         self.username = "homeguard"
         self.password = "pu2clr123456"

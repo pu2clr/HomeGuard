@@ -15,7 +15,7 @@ Features:
 
 Usage:
     python motion_sensor_monitor.py
-    python motion_sensor_monitor.py --broker 192.168.18.198 --tls --port 8883
+    python motion_sensor_monitor.py --broker 192.168.1.102 --tls --port 8883
     python motion_sensor_monitor.py --locations Garagem,Varanda,Mezanino
 """
 
@@ -35,7 +35,7 @@ except ImportError:
     exit(1)
 
 class MotionSensorMonitor:
-    def __init__(self, broker_host="192.168.18.198", broker_port=1883, 
+    def __init__(self, broker_host="192.168.1.102", broker_port=1883, 
                  username="homeguard", password="pu2clr123456", 
                  locations=None, use_tls=False, ca_cert_path=None, 
                  cert_path=None, key_path=None):
@@ -495,7 +495,7 @@ class MotionSensorMonitor:
 
 def main():
     parser = argparse.ArgumentParser(description='HomeGuard Motion Sensor Monitor - Enhanced Security')
-    parser.add_argument('--broker', default='192.168.18.198', help='MQTT broker IP')
+    parser.add_argument('--broker', default='192.168.1.102', help='MQTT broker IP')
     parser.add_argument('--port', type=int, default=1883, help='MQTT broker port (1883 for plain, 8883 for TLS)')
     parser.add_argument('--username', default='homeguard', help='MQTT username')
     parser.add_argument('--password', default='pu2clr123456', help='MQTT password')

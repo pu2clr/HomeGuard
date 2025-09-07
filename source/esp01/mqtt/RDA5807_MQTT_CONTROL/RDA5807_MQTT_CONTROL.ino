@@ -33,18 +33,18 @@
 
   Tests:
 
-  mosquitto_pub -h 192.168.18.198  -u homeguard  -P pu2clr123456  -t "home/RDA5807/volume" -m "10"
-  mosquitto_pub -h 192.168.18.198  -u homeguard  -P pu2clr123456  -t "home/RDA5807/frequency" -m "10390"
+  mosquitto_pub -h 192.168.1.102  -u homeguard  -P pu2clr123456  -t "home/RDA5807/volume" -m "10"
+  mosquitto_pub -h 192.168.1.102  -u homeguard  -P pu2clr123456  -t "home/RDA5807/frequency" -m "10390"
 
   # Monitor status in JSON format:
-  mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/RDA5807/status" -v
+  mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/RDA5807/status" -v
 
   JSON Status Format:
   {
     "device_id": "RDA5807",
     "name": "Rádio DSP", 
     "location": "Quarto",
-    "ip": "192.168.18.xxx",
+    "ip": "192.168.1.xxx",
     "frequency": 10390,
     "volume": 9,
     "command": "frequency|volume|init|reconnect",
@@ -68,9 +68,9 @@
 #define ESP01_I2C_SDA 0     // GPIO0
 #define ESP01_I2C_SCL 2     // GPIO2 
 
-const char* ssid = "APRC";
-const char* password = "Ap69Rc642023";
-const char* mqtt_server = "192.168.18.198";
+const char* ssid = "Homeguard";
+const char* password = "pu2clr123456";
+const char* mqtt_server = "192.168.1.102";
 const char* mqtt_user = "homeguard";
 const char* mqtt_pass = "pu2clr123456";
 

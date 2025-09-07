@@ -154,7 +154,7 @@ PublicKey = $SERVER_PUBLIC_KEY
 Endpoint = $SERVER_ENDPOINT:51820
 
 # Allow HomeGuard networks
-AllowedIPs = 10.200.200.0/24, 192.168.18.0/24
+AllowedIPs = 10.200.200.0/24, 192.168.1.0/24
 
 # Mobile connection optimizations
 PersistentKeepalive = 25
@@ -296,10 +296,10 @@ sudo mmcli -m 0 --bearer-list
 VPN Settings:
 - MTU: 1280 (important for GSM)
 - Keepalive: 25 seconds
-- Allowed IPs: 10.200.200.0/24, 192.168.18.0/24
+- Allowed IPs: 10.200.200.0/24, 192.168.1.0/24
 
 MQTT Settings:
-- Host: 192.168.18.198 (via VPN)
+- Host: 192.168.1.102 (via VPN)
 - Keep-alive: 60 seconds
 - Clean Session: true
 ```

@@ -2,7 +2,7 @@
 # HomeGuard MQTT Broker Validation Script
 # Tests all aspects of the MQTT broker setup
 
-BROKER_IP="192.168.18.198"
+BROKER_IP="192.168.1.102"
 HOMEGUARD_USER="homeguard"
 HOMEGUARD_PASS="pu2clr123456"
 

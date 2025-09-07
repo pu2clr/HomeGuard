@@ -7,40 +7,40 @@
 // Descomente APENAS UMA linha abaixo:
 
 // Para Sensor da Sala:
-#define SENSOR_001  // Monitor Sala (IP: 192.168.18.195)
+#define SENSOR_001  // Monitor Sala (IP: 192.168.1.195)
 /*
 const char* DEVICE_ID = "ESP01_DHT11_001";
 const char* DEVICE_NAME = "Monitor Sala";
 const char* DEVICE_LOCATION = "Sala";
-IPAddress local_IP(192, 168, 18, 195);
+IPAddress local_IP(192, 168, 1, 195);
 */
 
 // Para Sensor da Cozinha:
-// #define SENSOR_002  // Monitor Cozinha (IP: 192.168.18.196)
+// #define SENSOR_002  // Monitor Cozinha (IP: 192.168.1.196)
 /*
 const char* DEVICE_ID = "ESP01_DHT11_002";
 const char* DEVICE_NAME = "Monitor Cozinha";
 const char* DEVICE_LOCATION = "Cozinha";
-IPAddress local_IP(192, 168, 18, 196);
+IPAddress local_IP(192, 168, 1, 196);
 */
 
 // Para Sensor do Quarto:
-// #define SENSOR_003  // Monitor Quarto (IP: 192.168.18.197)
+// #define SENSOR_003  // Monitor Quarto (IP: 192.168.1.197)
 /*
 const char* DEVICE_ID = "ESP01_DHT11_003";
 const char* DEVICE_NAME = "Monitor Quarto";
 const char* DEVICE_LOCATION = "Quarto";
-IPAddress local_IP(192, 168, 18, 197);
+IPAddress local_IP(192, 168, 1, 197);
 */
 
 // ======== CONFIGURAÇÕES DE REDE ========
 const char* ssid = "YOUR_SSID";                    // Nome da rede WiFi
 const char* password = "YOUR_PASSWORD";        // Senha da rede WiFi
-IPAddress gateway(192, 168, 18, 1);           // Gateway padrão
+IPAddress gateway(192, 168, 1, 1);           // Gateway padrão
 IPAddress subnet(255, 255, 255, 0);           // Máscara de rede
 
 // ======== CONFIGURAÇÕES MQTT ========
-const char* mqtt_server = "192.168.18.198";   // IP do broker MQTT (Raspberry Pi)
+const char* mqtt_server = "192.168.1.102";   // IP do broker MQTT (Raspberry Pi)
 const int   mqtt_port   = 1883;               // Porta do broker MQTT
 const char* mqtt_user   = "homeguard";        // Usuário MQTT
 const char* mqtt_pass   = "pu2clr123456";     // Senha MQTT
@@ -75,14 +75,14 @@ Comandos aceitos:
 // ======== COMANDOS DE TESTE ========
 /*
 // Monitorar todos os dados do sensor:
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/+" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/+" -v
 
 // Monitorar apenas dados do sensor (temperatura + umidade):
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/data" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/data" -v
 
 // Solicitar leitura imediata:
-mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "READ"
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "READ"
 
 // Solicitar status:
-mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "STATUS"
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sensor/ESP01_DHT11_001/command" -m "STATUS"
 */
