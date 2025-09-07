@@ -24,10 +24,8 @@
   Testing Commands:
   - Monitor all topics: mosquitto_sub -h 192.168.1.102 -u homeguard -P
   pu2clr123456 -t "#" -v
-  - Send command: mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456
-  -t "home/relay/ESP01_RELAY_001/command" -m "ON"
-  - Check status: mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456
-  -t "home/relay/ESP01_RELAY_001/status" -v
+  - Send command: mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/relay/RELAY_001/command" -m "ON"
+  - Check status: mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/relay/RELAY_001/status" -v
 
 */
 
@@ -45,25 +43,24 @@
 const char *DEVICE_ID = "RELAY_001";
 const char *RELAY_NAME = "Luz da Sala";
 const char *RELAY_LOCATION = "Sala";
-IPAddress local_IP(192, 168, 1, 192);
+IPAddress local_IP(192, 168, 1, 70);
 #elif defined(RELAY_002)
 const char *DEVICE_ID = "ESP01_RELAY_002";
 const char *RELAY_NAME = "Área de Serviço";
 const char *RELAY_LOCATION = "AreaServico";
-IPAddress local_IP(192, 168, 1, 193);
+IPAddress local_IP(192, 168, 1, 71);
 #elif defined(RELAY_003)
 const char *DEVICE_ID = "ESP01_RELAY_003";
 const char *RELAY_NAME = "Bomba d'Água";
 const char *RELAY_LOCATION = "Externa";
-IPAddress local_IP(192, 168, 1, 194);
+IPAddress local_IP(192, 168, 1, 72);
 #else
 // Default configuration - CHANGE THESE VALUES FOR YOUR SETUP
 const char *DEVICE_ID = "RELAY_001"; // Must match RELAYS_CONFIG[n]['id']
 const char *RELAY_NAME = "Luz da Sala"; // Must match RELAYS_CONFIG[n]['name']
 const char *RELAY_LOCATION = "Sala"; // Must match RELAYS_CONFIG[n]['location']
 IPAddress
-    local_IP(192, 168, 1,
-             191); // ESP01_RELAY_001 -> .192, ESP01_RELAY_002 -> .193, etc
+    local_IP(192, 168, 1, 70); 
 #endif
 
 // ======== Wi-Fi Network Configuration ========

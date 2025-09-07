@@ -31,19 +31,19 @@
 // ======== DHT Hardware Configuration ========
 #define DHT_PIN 2  // GPIO2 for DHT data pin
 // Selecione o tipo de sensor: DHT11 ou DHT22
-#define DHT_SENSOR_TYPE DHT22  // Altere para DHT22 se usar o sensor branco
+#define DHT_SENSOR_TYPE DHT11  // Altere para DHT22 se usar o sensor branco
 #define STATUS_LED_PIN 0       // GPIO0 for status LED (optional)
 
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID "ESP01_DHT22_BRANCO"            // Unique device ID
-#define DEVICE_NAME "corredor"                // Device display name
-#define DEVICE_LOCATION "Corredor Ventilado"  // Location name
+#define DEVICE_ID "DHT11_01"            // Unique device ID
+#define DEVICE_NAME "Maker"                // Device display name
+#define DEVICE_LOCATION "Maker Space"  // Location name
 
 #define LOCAL_IP_1 192  // Device local IP
 #define LOCAL_IP_2 168
 #define LOCAL_IP_3 1
-#define LOCAL_IP_4 153
+#define LOCAL_IP_4 81
 
 #define GATEWAY_1 192  // Your network gateway
 #define GATEWAY_2 168
