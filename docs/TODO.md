@@ -102,3 +102,76 @@
 **Status Geral do Projeto: 🟢 ATIVO - Fase de Validação**
 
 *Última atualização: 18/08/2025*
+
+
+
+### Paineis de Monitoramento
+
+-- Obtendo dados histórico de temperatura 
+SELECT 
+    created_at,
+    json_extract(message, '$.device_id') as device_id,
+    json_extract(message, '$.name') as name,
+    json_extract(message, '$.location') as location,
+    json_extract(message, '$.sensor_type') as sensor_type,
+    json_extract(message, '$.temperature') as temperature,
+    json_extract(message, '$.unit') as unit,
+    json_extract(message, '$.rssi') as rssi,
+    json_extract(message, '$.uptime') as uptime
+FROM activity 
+WHERE topic like  'home/temperature/%/data'
+    AND json_valid(message) = 1
+    AND json_extract(message, '$.temperature') IS NOT NULL
+ORDER BY created_at DESC
+
+-- Obtendo dados histórico de Umidade
+SELECT 
+    created_at,
+    json_extract(message, '$.device_id') as device_id,
+    json_extract(message, '$.name') as name,
+    json_extract(message, '$.location') as location,
+    json_extract(message, '$.sensor_type') as sensor_type,
+    json_extract(message, '$.humidity') as temperature,
+    json_extract(message, '$.unit') as unit,
+    json_extract(message, '$.rssi') as rssi,
+    json_extract(message, '$.uptime') as uptime
+FROM activity 
+WHERE topic like  'home/humidity/%/data'
+    AND json_valid(message) = 1
+    AND json_extract(message, '$.humidity') IS NOT NULL
+ORDER BY created_at DESC
+
+-- Obtendo detecção de movimento
+SELECT 
+    created_at,
+    json_extract(message, '$.device_id') as device_id,
+    json_extract(message, '$.name') as name,
+    json_extract(message, '$.location') as location
+FROM activity 
+WHERE topic like  'home/motion/%/event'
+    AND json_valid(message) = 1
+    AND json_extract(message, '$.motion') = 1
+ORDER BY created_at DESC
+
+-- Obtendo dados ação de relés
+SELECT 
+    created_at,
+    topic,
+	message
+FROM activity 
+WHERE topic like  'home/relay/%/command' AND message = 'ON'
+ORDER BY created_at DESC
+
+-- Obtendo dados do rádio DSP5807
+SELECT 
+    created_at,
+    json_extract(message, '$.device_id') as device_id,
+    json_extract(message, '$.name') as name,
+    json_extract(message, '$.location') as location,
+    json_extract(message, '$.command') as command,
+    json_extract(message, '$.value') as value,
+    json_extract(message, '$.location') as location,   
+    json_extract(message, '$.action') as action
+FROM activity 
+WHERE topic like  'home/RDA5807/status%'
+ORDER BY created_at DESC
