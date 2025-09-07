@@ -10,7 +10,7 @@
   - ZMPT101B VCC -> 3.3V
   - ZMPT101B GND -> GND
   - ZMPT101B OUT -> Analog Pin (A0)
-  - RELÉ -> GPIO0 (PIN 0)
+  - RELÉ -> GPIO4 
 
   MQTT Interaction Examples (using mosquitto):
   # Monitor grid status:
@@ -60,12 +60,13 @@
 #define MQTT_PASS        "pu2clr123456"           // MQTT password
 
 // WIFI Configuration
-#define WIFI_SSID        "YOUR_SSID"              // WiFi SSID
-#define WIFI_PASS        "YOUR_PASSWORD"          // WiFi password
+#define WIFI_SSID        "APRC"              // WiFi SSID
+#define WIFI_PASS        "Ap69Rc642023"          // WiFi password
 
 
 #define ZMPT_PIN         A0                        // Analog pin for ZMPT101B
-#define RELAY_PIN        0                         // GPIO0 for relay control
+#define RELAY_PIN        5                         // GPIO5 for relay control
+#define STATUS_LED_PIN   LED_BUILTIN               // Built-in LED for status indication
 #define GRID_THRESHOLD   300                       // Threshold for grid detection (adjust experimentally)
 
 #include <ESP8266WiFi.h>
@@ -140,8 +141,15 @@ void readGridSensor() {
     // Controle do relé: automático (falta de energia) ou manual (override)
     if (relayManualOverride) {
       digitalWrite(RELAY_PIN, relayManualState ? HIGH : LOW);
+      Serial.printf("Relay manual mode: %s (GPIO%d = %s)\n", 
+                   relayManualState ? "ON" : "OFF", RELAY_PIN, relayManualState ? "HIGH" : "LOW");
     } else {
       digitalWrite(RELAY_PIN, gridOnline ? LOW : HIGH); // HIGH aciona relé (luz emergência)
+      Serial.printf("Relay auto mode: Grid %s -> Relay %s (GPIO%d = %s)\n", 
+                   gridOnline ? "ONLINE" : "OFFLINE", 
+                   gridOnline ? "OFF" : "ON",
+                   RELAY_PIN,
+                   gridOnline ? "LOW" : "HIGH");
     }
     Serial.printf("Grid: %s (Valor: %d)\n", gridOnline ? "ONLINE" : "OFFLINE", sensorValue);
   }
@@ -194,6 +202,8 @@ void sendDeviceInfo() {
 
 // ======== Process MQTT commands ========
 void callback(char* topic, byte* payload, unsigned int length) {
+  (void)topic; // Suppress unused parameter warning
+  
   String command;
   for (unsigned int i = 0; i < length; i++) {
     command += (char)payload[i];
@@ -214,13 +224,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
     relayManualOverride = true;
     relayManualState = true;
     digitalWrite(RELAY_PIN, HIGH);
-    Serial.println("Comando remoto: ON");
+    Serial.printf("MQTT Command ON: GPIO%d set to HIGH\n", RELAY_PIN);
   }
   else if (command.equalsIgnoreCase("OFF")) {
     relayManualOverride = true;
     relayManualState = false;
     digitalWrite(RELAY_PIN, LOW);
-    Serial.println("Comando remoto: OFF");
+    Serial.printf("MQTT Command OFF: GPIO%d set to LOW\n", RELAY_PIN);
   }
   else if (command.equalsIgnoreCase("AUTO")) {
     relayManualOverride = false;
@@ -257,8 +267,16 @@ void reconnect() {
 void setup() {
   Serial.begin(115200);
   Serial.println("ESP8266 Grid Monitor iniciando...");
+  
+  // Configure pins
   pinMode(RELAY_PIN, OUTPUT);
-  digitalWrite(RELAY_PIN, LOW); // Relé desligado inicialmente
+  pinMode(STATUS_LED_PIN, OUTPUT);
+  
+  digitalWrite(RELAY_PIN, LOW);  // Relé ligado inicialmente (grid ainda não verificada)
+  Serial.printf("Relay initialized on GPIO%d: %s\n", RELAY_PIN, "ON (LOW)");
+  
+  digitalWrite(STATUS_LED_PIN, HIGH); // LED off initially (inverted logic)
+  
   device_status.online = false;
   device_status.grid_ok = false;
   device_status.failed_readings = 0;
@@ -280,7 +298,7 @@ void setup() {
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);
     readGridSensor();
-    digitalWrite(STATUS_LED_PIN, gridOnline ? HIGH : LOW);
+    digitalWrite(STATUS_LED_PIN, gridOnline ? LOW : HIGH); // LED_BUILTIN is inverted (LOW = ON)
   } else {
     Serial.println("Falha na conexão WiFi!");
   }
@@ -309,7 +327,7 @@ void loop() {
     lastHeartbeat = currentTime;
   }
   if (failedReadings > 10) {
-    digitalWrite(STATUS_LED_PIN, LOW);
+    digitalWrite(STATUS_LED_PIN, HIGH); // LED_BUILTIN OFF when too many failures
   }
   delay(100);
 }
