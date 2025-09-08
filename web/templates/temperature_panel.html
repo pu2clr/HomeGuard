@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}Painel de Temperatura - HomeGuard{% endblock %}
+
+{% block header %}Monitoramento de Temperatura{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Configurações de Visualização</h3>
+    <div class="controls">
+        <select id="hours-filter">
+            <option value="1">Última hora</option>
+            <option value="6">Últimas 6 horas</option>
+            <option value="24" selected>Últimas 24 horas</option>
+            <option value="168">Última semana</option>
+        </select>
+        
+        <select id="device-filter">
+            <option value="">Todos os dispositivos</option>
+        </select>
+        
+        <input type="number" id="limit-filter" placeholder="Limite de registros" value="50" min="10" max="500">
+        
+        <button onclick="loadTemperatureData()">Atualizar</button>
+        
+        <label>
+            <input type="checkbox" id="auto-refresh" checked> Auto-atualizar (30s)
+        </label>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="stat-card">
+        <div class="stat-number" id="avg-temp">-</div>
+        <div class="stat-label">Temperatura Média</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="min-temp">-</div>
+        <div class="stat-label">Temperatura Mínima</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="max-temp">-</div>
+        <div class="stat-label">Temperatura Máxima</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="active-devices">-</div>
+        <div class="stat-label">Dispositivos Ativos</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Gráfico de Temperatura ao Longo do Tempo</h3>
+    <div class="chart-container">
+        <canvas id="temperatureChart"></canvas>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Estatísticas por Dispositivo</h3>
+    <div id="device-stats">
+        <div class="loading">Carregando estatísticas...</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Histórico de Leituras</h3>
+    <div id="temperature-history">
+        <div class="loading">Carregando histórico...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let temperatureChart;
+let refreshEnabled = true;
+
+async function loadTemperatureData() {
+    const hours = document.getElementById('hours-filter').value;
+    const limit = document.getElementById('limit-filter').value;
+    const deviceFilter = document.getElementById('device-filter').value;
+    
+    try {
+        // Carregar dados de temperatura
+        let url = `/api/temperature/data?hours=${hours}&limit=${limit}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Filtrar por dispositivo se selecionado
+        const filteredData = deviceFilter ? 
+            data.filter(item => item.device_id === deviceFilter) : data;
+        
+        // Carregar estatísticas
+        await loadTemperatureStats(hours);
+        
+        // Atualizar gráfico
+        updateTemperatureChart(filteredData);
+        
+        // Atualizar histórico
+        updateTemperatureHistory(filteredData);
+        
+        // Atualizar filtro de dispositivos
+        updateDeviceFilter(data);
+        
+    } catch (error) {
+        console.error('Erro ao carregar dados de temperatura:', error);
+        showError('Erro ao carregar dados de temperatura');
+    }
+}
+
+async function loadTemperatureStats(hours) {
+    try {
+        const response = await fetch(`/api/temperature/stats?hours=${hours}`);
+        const stats = await response.json();
+        
+        if (stats.length === 0) {
+            document.getElementById('avg-temp').textContent = '-';
+            document.getElementById('min-temp').textContent = '-';
+            document.getElementById('max-temp').textContent = '-';
+            document.getElementById('active-devices').textContent = '0';
+            document.getElementById('device-stats').innerHTML = '<p>Nenhum dispositivo ativo</p>';
+            return;
+        }
+        
+        // Calcular estatísticas globais
+        const avgTemp = (stats.reduce((sum, device) => sum + device.avg_temp, 0) / stats.length).toFixed(1);
+        const minTemp = Math.min(...stats.map(device => device.min_temp)).toFixed(1);
+        const maxTemp = Math.max(...stats.map(device => device.max_temp)).toFixed(1);
+        
+        document.getElementById('avg-temp').textContent = `${avgTemp}°C`;
+        document.getElementById('min-temp').textContent = `${minTemp}°C`;
+        document.getElementById('max-temp').textContent = `${maxTemp}°C`;
+        document.getElementById('active-devices').textContent = stats.length;
+        
+        // Atualizar tabela de estatísticas por dispositivo
+        updateDeviceStatsTable(stats);
+        
+    } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+    }
+}
+
+function updateDeviceStatsTable(stats) {
+    const container = document.getElementById('device-stats');
+    
+    let html = '<table class="table"><thead><tr>';
+    html += '<th>Dispositivo</th><th>Local</th><th>Sensor</th><th>Leituras</th>';
+    html += '<th>Temp. Média</th><th>Min/Max</th><th>RSSI Médio</th>';
+    html += '<th>Última Leitura</th><th>Status</th></tr></thead><tbody>';
+    
+    stats.forEach(device => {
+        const statusClass = getStatusClass(device.last_reading);
+        html += `<tr>
+            <td><strong>${device.device_id}</strong></td>
+            <td>${device.location || 'N/A'}</td>
+            <td>${device.sensor_type || 'N/A'}</td>
+            <td>${device.total_readings}</td>
+            <td>${device.avg_temp}°C</td>
+            <td>${device.min_temp}°C / ${device.max_temp}°C</td>
+            <td>${device.avg_rssi} dBm</td>
+            <td>${formatDateTime(device.last_reading)}</td>
+            <td class="${statusClass}">${statusClass === 'status-online' ? 'Online' : 'Offline'}</td>
+        </tr>`;
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function updateTemperatureChart(data) {
+    const ctx = document.getElementById('temperatureChart').getContext('2d');
+    
+    if (temperatureChart) {
+        temperatureChart.destroy();
+    }
+    
+    // Agrupar dados por dispositivo
+    const deviceData = {};
+    data.forEach(item => {
+        if (!deviceData[item.device_id]) {
+            deviceData[item.device_id] = {
+                label: `${item.device_id} (${item.location || 'Sem local'})`,
+                data: [],
+                borderColor: getDeviceColor(item.device_id),
+                backgroundColor: getDeviceColor(item.device_id, 0.1),
+                fill: false,
+                tension: 0.4
+            };
+        }
+        
+        deviceData[item.device_id].data.push({
+            x: item.created_at,
+            y: parseFloat(item.temperature)
+        });
+    });
+    
+    // Ordenar dados por tempo
+    Object.values(deviceData).forEach(dataset => {
+        dataset.data.sort((a, b) => new Date(a.x) - new Date(b.x));
+    });
+    
+    temperatureChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: Object.values(deviceData)
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Temperatura ao Longo do Tempo'
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            hour: 'HH:mm',
+                            day: 'dd/MM'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tempo'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Temperatura (°C)'
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+}
+
+function updateTemperatureHistory(data) {
+    const container = document.getElementById('temperature-history');
+    
+    if (data.length === 0) {
+        container.innerHTML = '<p>Nenhum dado de temperatura encontrado</p>';
+        return;
+    }
+    
+    let html = '<table class="table"><thead><tr>';
+    html += '<th>Data/Hora</th><th>Dispositivo</th><th>Local</th>';
+    html += '<th>Sensor</th><th>Temperatura</th><th>RSSI</th><th>Uptime</th></tr></thead><tbody>';
+    
+    data.forEach(item => {
+        html += `<tr>
+            <td>${formatDateTime(item.created_at)}</td>
+            <td><strong>${item.device_id}</strong></td>
+            <td>${item.location || 'N/A'}</td>
+            <td>${item.sensor_type || 'N/A'}</td>
+            <td><strong>${item.temperature}${item.unit}</strong></td>
+            <td>${item.rssi} dBm</td>
+            <td>${item.uptime || 'N/A'}</td>
+        </tr>`;
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function updateDeviceFilter(data) {
+    const select = document.getElementById('device-filter');
+    const currentValue = select.value;
+    
+    // Obter dispositivos únicos
+    const devices = [...new Set(data.map(item => item.device_id))];
+    
+    // Manter apenas a opção "Todos"
+    select.innerHTML = '<option value="">Todos os dispositivos</option>';
+    
+    // Adicionar dispositivos
+    devices.forEach(deviceId => {
+        const option = document.createElement('option');
+        option.value = deviceId;
+        option.textContent = deviceId;
+        if (deviceId === currentValue) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+}
+
+function getDeviceColor(deviceId, alpha = 1) {
+    // Gerar cor consistente baseada no ID do dispositivo
+    let hash = 0;
+    for (let i = 0; i < deviceId.length; i++) {
+        hash = deviceId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    const hue = Math.abs(hash) % 360;
+    
+    if (alpha < 1) {
+        return `hsla(${hue}, 70%, 50%, ${alpha})`;
+    } else {
+        return `hsl(${hue}, 70%, 50%)`;
+    }
+}
+
+// Event listeners
+document.getElementById('hours-filter').addEventListener('change', loadTemperatureData);
+document.getElementById('device-filter').addEventListener('change', loadTemperatureData);
+document.getElementById('limit-filter').addEventListener('change', loadTemperatureData);
+
+document.getElementById('auto-refresh').addEventListener('change', function() {
+    refreshEnabled = this.checked;
+    if (refreshEnabled) {
+        startAutoRefresh(loadTemperatureData);
+    } else {
+        stopAutoRefresh();
+    }
+});
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    loadTemperatureData();
+    
+    if (refreshEnabled) {
+        startAutoRefresh(loadTemperatureData);
+    }
+});
+
+// Parar auto-refresh quando sair da página
+window.addEventListener('beforeunload', stopAutoRefresh);
+</script>
+{% endblock %}

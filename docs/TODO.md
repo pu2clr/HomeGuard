@@ -175,3 +175,68 @@ SELECT
 FROM activity 
 WHERE topic like  'home/RDA5807/status%'
 ORDER BY created_at DESC
+
+
+-- Views
+
+-- Obtendo dados histórico de temperatura 
+create VIEW vw_temperature_activity as
+SELECT 
+    created_at,
+    json_extract(message, '$.device_id') as device_id,
+    json_extract(message, '$.name') as name,
+    json_extract(message, '$.location') as location,
+    json_extract(message, '$.sensor_type') as sensor_type,
+    json_extract(message, '$.temperature') as temperature,
+    json_extract(message, '$.unit') as unit,
+    json_extract(message, '$.rssi') as rssi,
+    json_extract(message, '$.uptime') as uptime
+FROM activity 
+WHERE topic like  'home/temperature/%/data'
+    AND json_valid(message) = 1
+    AND json_extract(message, '$.temperature') IS NOT NULL
+ORDER BY created_at DESC;
+
+-- Obtendo dados histórico de Umidade
+create VIEW vw_humidity_activity as
+SELECT 
+    created_at,
+    json_extract(message, '$.device_id') as device_id,
+    json_extract(message, '$.name') as name,
+    json_extract(message, '$.location') as location,
+    json_extract(message, '$.sensor_type') as sensor_type,
+    json_extract(message, '$.humidity') as temperature,
+    json_extract(message, '$.unit') as unit,
+    json_extract(message, '$.rssi') as rssi,
+    json_extract(message, '$.uptime') as uptime
+FROM activity 
+WHERE topic like  'home/humidity/%/data'
+    AND json_valid(message) = 1
+    AND json_extract(message, '$.humidity') IS NOT NULL
+ORDER BY created_at DESC;
+
+
+-- Obtendo detecção de movimento
+create VIEW vw_motion_activity as
+SELECT 
+    created_at,
+    json_extract(message, '$.device_id') as device_id,
+    json_extract(message, '$.name') as name,
+    json_extract(message, '$.location') as location
+FROM activity 
+WHERE topic like  'home/motion/%/event'
+    AND json_valid(message) = 1
+    AND json_extract(message, '$.motion') = 1
+ORDER BY created_at DESC;
+
+
+-- Obtendo dados ação de relés
+create VIEW vw_relay_activity as
+SELECT 
+    created_at,
+    topic,
+	message  -- ON ou OFF
+FROM activity 
+WHERE topic like  'home/relay/%/command' -- AND message = 'ON'
+ORDER BY created_at DESC;
+
