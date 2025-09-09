@@ -137,19 +137,19 @@ Group=$USER
 WorkingDirectory=$PROJECT_DIR
 Environment=PATH=/usr/bin:/usr/local/bin
 Environment=PYTHONPATH=$PROJECT_DIR/web:$PROJECT_DIR
-ExecStart=$PYTHON_PATH $MQTT_SERVICE_PATH start
-ExecStop=$PYTHON_PATH $MQTT_SERVICE_PATH stop
+ExecStart=$PYTHON_PATH $PROJECT_DIR/web/mqtt_service.py start
+ExecStop=$PYTHON_PATH $PROJECT_DIR/web/mqtt_service.py stop
 ExecReload=/bin/kill -HUP \$MAINPID
 Restart=always
 RestartSec=10
 StartLimitInterval=60
 StartLimitBurst=3
 
-# Security settings
+# Security settings (relaxed for home directory access)
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ProtectHome=true
+ProtectHome=false
 ReadWritePaths=$PROJECT_DIR/logs $PROJECT_DIR/db /tmp
 ProtectKernelTunables=true
 ProtectKernelModules=true
@@ -187,6 +187,10 @@ log "✓ mqtt_service.py marcado como executável"
 chown -R "$USER:$USER" "$PROJECT_DIR/web"
 chown -R "$USER:$USER" "$PROJECT_DIR/logs" 2>/dev/null || true
 chown -R "$USER:$USER" "$PROJECT_DIR/db" 2>/dev/null || true
+
+# Garantir que o usuário systemd tenha acesso ao diretório do projeto
+chmod 755 "$PROJECT_DIR"
+chmod 755 "$(dirname "$PROJECT_DIR")" 2>/dev/null || true  # /home/homeguard
 
 log "✓ Permissões configuradas para usuário $USER"
 

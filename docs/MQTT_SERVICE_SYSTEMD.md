@@ -48,6 +48,9 @@ sudo ./scripts/setup-mqtt-service.sh
 ```bash
 # Verificar status do serviço
 ./scripts/manage-mqtt-service.sh status
+
+# Se houver erro de permissões, usar correção rápida:
+sudo ./scripts/fix-permissions.sh
 ```
 
 ### **Passo 3: Testar Reinicialização**
@@ -96,7 +99,7 @@ StartLimitBurst=3
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ProtectHome=true
+ProtectHome=false
 ReadWritePaths=/home/homeguard/HomeGuard/logs /home/homeguard/HomeGuard/db /tmp
 ProtectKernelTunables=true
 ProtectKernelModules=true
@@ -226,6 +229,30 @@ sqlite3 /home/homeguard/HomeGuard/db/homeguard.db "SELECT COUNT(*) as total_mess
 ## 🐛 Troubleshooting
 
 ### **Problemas de Caminhos de Arquivos**
+
+#### **Erro: "Permission denied" ou "Failed at step CHDIR"**
+```bash
+# Problema comum: systemd não consegue acessar diretório home
+# SOLUÇÃO RÁPIDA:
+sudo ./scripts/fix-permissions.sh
+
+# OU fazer manualmente:
+# 1. Corrigir permissões do diretório home
+sudo chmod 755 /home/homeguard
+sudo chown homeguard:homeguard /home/homeguard
+
+# 2. Corrigir permissões do projeto
+sudo chown -R homeguard:homeguard /home/homeguard/HomeGuard
+sudo chmod 755 /home/homeguard/HomeGuard
+
+# 3. Corrigir arquivo de serviço (ProtectHome=false)
+sudo nano /etc/systemd/system/homeguard-mqtt.service
+# Alterar: ProtectHome=true para ProtectHome=false
+
+# 4. Reiniciar serviço
+sudo systemctl daemon-reload
+sudo systemctl restart homeguard-mqtt
+```
 
 #### **Erro: "mqtt_service.py não encontrado"**
 ```bash
