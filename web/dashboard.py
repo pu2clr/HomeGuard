@@ -122,7 +122,7 @@ def api_humidity_data():
             'name': row['name'],
             'location': row['location'],
             'sensor_type': row['sensor_type'],
-            'humidity': row['temperature'],  # Note: a view usa 'temperature' para humidity
+            'humidity': row['humidity'],  # Agora usando o campo correto
             'unit': row['unit'],
             'rssi': row['rssi'],
             'uptime': row['uptime']
@@ -234,9 +234,9 @@ def api_humidity_stats():
             location,
             sensor_type,
             COUNT(*) as total_readings,
-            ROUND(AVG(CAST(temperature AS REAL)), 2) as avg_humidity,
-            ROUND(MIN(CAST(temperature AS REAL)), 2) as min_humidity,
-            ROUND(MAX(CAST(temperature AS REAL)), 2) as max_humidity,
+            ROUND(AVG(CAST(humidity AS REAL)), 2) as avg_humidity,
+            ROUND(MIN(CAST(humidity AS REAL)), 2) as min_humidity,
+            ROUND(MAX(CAST(humidity AS REAL)), 2) as max_humidity,
             ROUND(AVG(CAST(rssi AS INTEGER)), 0) as avg_rssi,
             MAX(created_at) as last_reading
         FROM vw_humidity_activity 
