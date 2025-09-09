@@ -46,7 +46,7 @@ test_mqtt() {
     echo "🔌 Testing MQTT connectivity..."
     
     if command -v mosquitto_pub &> /dev/null; then
-        mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+        mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
             -t "homeguard/test" -m "Setup test" &>/dev/null
         
         if [ $? -eq 0 ]; then

@@ -197,10 +197,10 @@ cp first/first_config.json first/first_config.json.backup
 ### Verificar Status
 ```bash
 # Via MQTT
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
     -t "homeguard/audio/ground/command" -m '{"command": "status"}'
     
-mosquitto_pub -h 192.168.18.6 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
     -t "homeguard/audio/first/command" -m '{"command": "status"}'
 ```
 
