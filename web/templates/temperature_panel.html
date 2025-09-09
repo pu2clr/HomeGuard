@@ -187,8 +187,18 @@ function updateDeviceStatsTable(stats) {
 function updateTemperatureChart(data) {
     const ctx = document.getElementById('temperatureChart').getContext('2d');
     
+    // Destruir gráfico existente de forma mais robusta
     if (temperatureChart) {
-        temperatureChart.destroy();
+        try {
+            temperatureChart.destroy();
+            temperatureChart = null;
+        } catch (e) {
+            console.warn('Erro ao destruir gráfico:', e);
+        }
+    }
+    
+    if (data.length === 0) {
+        return;
     }
     
     // Agrupar dados por dispositivo
@@ -205,62 +215,120 @@ function updateTemperatureChart(data) {
             };
         }
         
+        // Converter timestamp para Date object
+        const timestamp = new Date(item.created_at);
         deviceData[item.device_id].data.push({
-            x: item.created_at,
+            x: timestamp,
             y: parseFloat(item.temperature)
         });
     });
     
     // Ordenar dados por tempo
     Object.values(deviceData).forEach(dataset => {
-        dataset.data.sort((a, b) => new Date(a.x) - new Date(b.x));
+        dataset.data.sort((a, b) => a.x - b.x);
     });
     
-    temperatureChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: Object.values(deviceData)
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Temperatura ao Longo do Tempo'
+    try {
+        // Verificar se date adapter está disponível
+        if (typeof Chart.registry.getController('time') === 'undefined') {
+            // Fallback para escala linear
+            temperatureChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: Object.values(deviceData).map(dataset => ({
+                        ...dataset,
+                        data: dataset.data.map((point, index) => ({
+                            x: index,
+                            y: point.y
+                        }))
+                    }))
                 },
-                legend: {
-                    display: true,
-                    position: 'top'
-                }
-            },
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        displayFormats: {
-                            hour: 'HH:mm',
-                            day: 'dd/MM'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Temperatura ao Longo do Tempo'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
                         }
                     },
-                    title: {
-                        display: true,
-                        text: 'Tempo'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Temperatura (°C)'
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Sequência de Leituras'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Temperatura (°C)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
                     }
                 }
-            },
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            }
+            });
+        } else {
+            // Usar escala de tempo
+            temperatureChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: Object.values(deviceData)
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Temperatura ao Longo do Tempo'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    hour: 'HH:mm',
+                                    day: 'dd/MM'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Tempo'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Temperatura (°C)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
         }
-    });
+    } catch (error) {
+        console.error('Erro ao criar gráfico:', error);
+        showError('Erro ao criar gráfico: ' + error.message);
+    }
 }
 
 function updateTemperatureHistory(data) {
