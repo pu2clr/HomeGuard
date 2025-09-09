@@ -83,15 +83,29 @@ async function loadTemperatureData() {
     const limit = document.getElementById('limit-filter').value;
     const deviceFilter = document.getElementById('device-filter').value;
     
+    console.log('[DEBUG] loadTemperatureData iniciado', { hours, limit, deviceFilter });
+    
     try {
         // Carregar dados de temperatura
         let url = `/api/temperature/data?hours=${hours}&limit=${limit}`;
+        console.log('[DEBUG] Fazendo fetch para:', url);
+        
         const response = await fetch(url);
+        console.log('[DEBUG] Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
+        console.log('[DEBUG] Dados recebidos:', data.length, 'registros');
+        console.log('[DEBUG] Primeiro registro:', data[0]);
         
         // Filtrar por dispositivo se selecionado
         const filteredData = deviceFilter ? 
             data.filter(item => item.device_id === deviceFilter) : data;
+        
+        console.log('[DEBUG] Dados filtrados:', filteredData.length, 'registros');
         
         // Carregar estatísticas
         await loadTemperatureStats(hours);
@@ -106,8 +120,8 @@ async function loadTemperatureData() {
         updateDeviceFilter(data);
         
     } catch (error) {
-        console.error('Erro ao carregar dados de temperatura:', error);
-        showError('Erro ao carregar dados de temperatura');
+        console.error('[ERROR] Erro ao carregar dados de temperatura:', error);
+        showError('Erro ao carregar dados de temperatura: ' + error.message);
     }
 }
 

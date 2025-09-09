@@ -51,6 +51,11 @@ def temperature_panel():
     """Painel de temperatura"""
     return render_template('temperature_panel.html')
 
+@app.route('/temperature-debug')
+def temperature_debug():
+    """Painel de temperatura com debug"""
+    return render_template('temperature_debug.html')
+
 @app.route('/humidity')
 def humidity_panel():
     """Painel de umidade"""
@@ -74,6 +79,8 @@ def api_temperature_data():
     limit = request.args.get('limit', 50, type=int)
     hours = request.args.get('hours', 24, type=int)
     
+    print(f"[DEBUG] Temperature API chamada - hours={hours}, limit={limit}")
+    
     query = f"""
         SELECT * FROM vw_temperature_activity 
         WHERE created_at >= datetime('now', '-{hours} hours')
@@ -81,29 +88,40 @@ def api_temperature_data():
         LIMIT {limit}
     """
     
-    results = DatabaseManager.execute_query(query)
-    
-    data = []
-    for row in results:
-        data.append({
-            'created_at': row['created_at'],
-            'device_id': row['device_id'],
-            'name': row['name'],
-            'location': row['location'],
-            'sensor_type': row['sensor_type'],
-            'temperature': row['temperature'],
-            'unit': row['unit'],
-            'rssi': row['rssi'],
-            'uptime': row['uptime']
-        })
-    
-    return jsonify(data)
+    try:
+        results = DatabaseManager.execute_query(query)
+        print(f"[DEBUG] Query executada - {len(results)} resultados")
+        
+        data = []
+        for row in results:
+            data.append({
+                'created_at': row['created_at'],
+                'device_id': row['device_id'],
+                'name': row['name'],
+                'location': row['location'],
+                'sensor_type': row['sensor_type'],
+                'temperature': row['temperature'],
+                'unit': row['unit'],
+                'rssi': row['rssi'],
+                'uptime': row['uptime']
+            })
+        
+        print(f"[DEBUG] Dados processados - {len(data)} registros")
+        if data:
+            print(f"[DEBUG] Primeiro registro: {data[0]}")
+        
+        return jsonify(data)
+    except Exception as e:
+        print(f"[ERROR] Erro na API temperature/data: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/humidity/data')
 def api_humidity_data():
     """API para dados de umidade usando view"""
     limit = request.args.get('limit', 50, type=int)
     hours = request.args.get('hours', 24, type=int)
+    
+    print(f"[DEBUG] Humidity API chamada - hours={hours}, limit={limit}")
     
     query = f"""
         SELECT * FROM vw_humidity_activity 
@@ -112,23 +130,32 @@ def api_humidity_data():
         LIMIT {limit}
     """
     
-    results = DatabaseManager.execute_query(query)
-    
-    data = []
-    for row in results:
-        data.append({
-            'created_at': row['created_at'],
-            'device_id': row['device_id'],
-            'name': row['name'],
-            'location': row['location'],
-            'sensor_type': row['sensor_type'],
-            'humidity': row['humidity'],  # Agora usando o campo correto
-            'unit': row['unit'],
-            'rssi': row['rssi'],
-            'uptime': row['uptime']
-        })
-    
-    return jsonify(data)
+    try:
+        results = DatabaseManager.execute_query(query)
+        print(f"[DEBUG] Query executada - {len(results)} resultados")
+        
+        data = []
+        for row in results:
+            data.append({
+                'created_at': row['created_at'],
+                'device_id': row['device_id'],
+                'name': row['name'],
+                'location': row['location'],
+                'sensor_type': row['sensor_type'],
+                'humidity': row['humidity'],  # Agora usando o campo correto
+                'unit': row['unit'],
+                'rssi': row['rssi'],
+                'uptime': row['uptime']
+            })
+        
+        print(f"[DEBUG] Dados processados - {len(data)} registros")
+        if data:
+            print(f"[DEBUG] Primeiro registro: {data[0]}")
+        
+        return jsonify(data)
+    except Exception as e:
+        print(f"[ERROR] Erro na API humidity/data: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/motion/data')
 def api_motion_data():
