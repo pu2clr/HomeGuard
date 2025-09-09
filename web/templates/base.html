@@ -6,6 +6,26 @@
     <title>{% block title %}HomeGuard Dashboard{% endblock %}</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script>
+        // Verificar se Chart.js e adapter foram carregados
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Chart.js versão:', Chart.version);
+            console.log('Chart.js registry:', Chart.registry ? 'Disponível' : 'Não disponível');
+            
+            // Registrar escalas disponíveis
+            if (Chart.registry && Chart.registry.plugins) {
+                console.log('Plugins Chart.js registrados:', Object.keys(Chart.registry.plugins.items));
+            }
+            
+            // Verificar se adapter de tempo foi carregado
+            try {
+                const timeScale = Chart.registry ? Chart.registry.getScale('time') : null;
+                console.log('Escala de tempo:', timeScale ? 'Disponível' : 'Não disponível');
+            } catch (e) {
+                console.warn('Erro ao verificar escala de tempo:', e);
+            }
+        });
+    </script>
     <style>
         * {
             margin: 0;

@@ -229,19 +229,37 @@ function updateTemperatureChart(data) {
     });
     
     try {
-        // Verificar se date adapter está disponível
-        if (typeof Chart.registry.getController('time') === 'undefined') {
-            // Fallback para escala linear
+        // Verificar se escala de tempo está disponível
+        let useTimeScale = false;
+        try {
+            // Tentar registrar escala de tempo se não estiver disponível
+            if (Chart.registry && Chart.registry.getScale) {
+                const timeScale = Chart.registry.getScale('time');
+                useTimeScale = !!timeScale;
+            }
+        } catch (e) {
+            console.warn('Escala de tempo não disponível, usando linear:', e);
+            useTimeScale = false;
+        }
+        
+        if (!useTimeScale) {
+            // Fallback para escala linear com labels de tempo
+            const sortedData = Object.values(deviceData).map(dataset => ({
+                ...dataset,
+                data: dataset.data.map((point, index) => ({
+                    x: index,
+                    y: point.y,
+                    label: point.x.toLocaleTimeString('pt-BR', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    })
+                }))
+            }));
+            
             temperatureChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    datasets: Object.values(deviceData).map(dataset => ({
-                        ...dataset,
-                        data: dataset.data.map((point, index) => ({
-                            x: index,
-                            y: point.y
-                        }))
-                    }))
+                    datasets: sortedData
                 },
                 options: {
                     responsive: true,
@@ -254,6 +272,15 @@ function updateTemperatureChart(data) {
                         legend: {
                             display: true,
                             position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    const dataIndex = context[0].dataIndex;
+                                    const dataset = context[0].dataset.data;
+                                    return dataset[dataIndex]?.label || 'Ponto ' + dataIndex;
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -325,9 +352,44 @@ function updateTemperatureChart(data) {
                 }
             });
         }
+        
+        console.log('Gráfico criado com sucesso, escala:', useTimeScale ? 'time' : 'linear');
+        
     } catch (error) {
         console.error('Erro ao criar gráfico:', error);
         showError('Erro ao criar gráfico: ' + error.message);
+        
+        // Tentar criar gráfico básico como último recurso
+        try {
+            const basicData = Object.values(deviceData).map(dataset => ({
+                label: dataset.label,
+                data: dataset.data.map(point => point.y),
+                borderColor: dataset.borderColor,
+                backgroundColor: dataset.backgroundColor,
+                fill: false
+            }));
+            
+            temperatureChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.values(deviceData)[0]?.data.map((_, index) => `Ponto ${index + 1}`) || [],
+                    datasets: basicData
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Temperatura - Gráfico Básico'
+                        }
+                    }
+                }
+            });
+            console.log('Gráfico básico criado como fallback');
+        } catch (fallbackError) {
+            console.error('Falha no fallback básico:', fallbackError);
+        }
     }
 }
 
