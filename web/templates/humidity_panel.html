@@ -1,0 +1,501 @@
+{% extends "base.html" %}
+
+{% block title %}Painel de Umidade - HomeGuard{% endblock %}
+
+{% block header %}Monitoramento de Umidade{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Configurações de Visualização</h3>
+    <div class="controls">
+        <select id="hours-filter">
+            <option value="1">Última hora</option>
+            <option value="6">Últimas 6 horas</option>
+            <option value="24" selected>Últimas 24 horas</option>
+            <option value="168">Última semana</option>
+        </select>
+        
+        <select id="device-filter">
+            <option value="">Todos os dispositivos</option>
+        </select>
+        
+        <input type="number" id="limit-filter" placeholder="Limite de registros" value="50" min="10" max="500">
+        
+        <button onclick="loadHumidityData()">Atualizar</button>
+        
+        <label>
+            <input type="checkbox" id="auto-refresh" checked> Auto-atualizar (30s)
+        </label>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="stat-card">
+        <div class="stat-number" id="avg-humidity">-</div>
+        <div class="stat-label">Umidade Média</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="min-humidity">-</div>
+        <div class="stat-label">Umidade Mínima</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="max-humidity">-</div>
+        <div class="stat-label">Umidade Máxima</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="active-devices">-</div>
+        <div class="stat-label">Dispositivos Ativos</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Gráfico de Umidade ao Longo do Tempo</h3>
+    <div class="chart-container">
+        <canvas id="humidityChart"></canvas>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Análise de Conforto</h3>
+    <div id="comfort-analysis">
+        <div class="loading">Calculando análise de conforto...</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Estatísticas por Dispositivo</h3>
+    <div id="device-stats">
+        <div class="loading">Carregando estatísticas...</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Histórico de Leituras</h3>
+    <div id="humidity-history">
+        <div class="loading">Carregando histórico...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let humidityChart;
+let refreshEnabled = true;
+
+async function loadHumidityData() {
+    const hours = document.getElementById('hours-filter').value;
+    const limit = document.getElementById('limit-filter').value;
+    const deviceFilter = document.getElementById('device-filter').value;
+    
+    try {
+        // Carregar dados de umidade
+        let url = `/api/humidity/data?hours=${hours}&limit=${limit}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Filtrar por dispositivo se selecionado
+        const filteredData = deviceFilter ? 
+            data.filter(item => item.device_id === deviceFilter) : data;
+        
+        // Carregar estatísticas
+        await loadHumidityStats(hours);
+        
+        // Atualizar gráfico
+        updateHumidityChart(filteredData);
+        
+        // Atualizar análise de conforto
+        updateComfortAnalysis(filteredData);
+        
+        // Atualizar histórico
+        updateHumidityHistory(filteredData);
+        
+        // Atualizar filtro de dispositivos
+        updateDeviceFilter(data);
+        
+    } catch (error) {
+        console.error('Erro ao carregar dados de umidade:', error);
+        showError('Erro ao carregar dados de umidade');
+    }
+}
+
+async function loadHumidityStats(hours) {
+    try {
+        const response = await fetch(`/api/humidity/stats?hours=${hours}`);
+        const stats = await response.json();
+        
+        if (stats.length === 0) {
+            document.getElementById('avg-humidity').textContent = '-';
+            document.getElementById('min-humidity').textContent = '-';
+            document.getElementById('max-humidity').textContent = '-';
+            document.getElementById('active-devices').textContent = '0';
+            document.getElementById('device-stats').innerHTML = '<p>Nenhum dispositivo ativo</p>';
+            return;
+        }
+        
+        // Calcular estatísticas globais
+        const avgHumidity = (stats.reduce((sum, device) => sum + device.avg_humidity, 0) / stats.length).toFixed(1);
+        const minHumidity = Math.min(...stats.map(device => device.min_humidity)).toFixed(1);
+        const maxHumidity = Math.max(...stats.map(device => device.max_humidity)).toFixed(1);
+        
+        document.getElementById('avg-humidity').textContent = `${avgHumidity}%`;
+        document.getElementById('min-humidity').textContent = `${minHumidity}%`;
+        document.getElementById('max-humidity').textContent = `${maxHumidity}%`;
+        document.getElementById('active-devices').textContent = stats.length;
+        
+        // Atualizar tabela de estatísticas por dispositivo
+        updateDeviceStatsTable(stats);
+        
+    } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+    }
+}
+
+function updateDeviceStatsTable(stats) {
+    const container = document.getElementById('device-stats');
+    
+    let html = '<table class="table"><thead><tr>';
+    html += '<th>Dispositivo</th><th>Local</th><th>Sensor</th><th>Leituras</th>';
+    html += '<th>Umidade Média</th><th>Min/Max</th><th>RSSI Médio</th>';
+    html += '<th>Última Leitura</th><th>Status</th></tr></thead><tbody>';
+    
+    stats.forEach(device => {
+        const statusClass = getStatusClass(device.last_reading);
+        html += `<tr>
+            <td><strong>${device.device_id}</strong></td>
+            <td>${device.location || 'N/A'}</td>
+            <td>${device.sensor_type || 'N/A'}</td>
+            <td>${device.total_readings}</td>
+            <td>${device.avg_humidity}%</td>
+            <td>${device.min_humidity}% / ${device.max_humidity}%</td>
+            <td>${device.avg_rssi} dBm</td>
+            <td>${formatDateTime(device.last_reading)}</td>
+            <td class="${statusClass}">${statusClass === 'status-online' ? 'Online' : 'Offline'}</td>
+        </tr>`;
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function updateHumidityChart(data) {
+    const ctx = document.getElementById('humidityChart').getContext('2d');
+    
+    if (humidityChart) {
+        humidityChart.destroy();
+    }
+    
+    // Agrupar dados por dispositivo
+    const deviceData = {};
+    data.forEach(item => {
+        if (!deviceData[item.device_id]) {
+            deviceData[item.device_id] = {
+                label: `${item.device_id} (${item.location || 'Sem local'})`,
+                data: [],
+                borderColor: getDeviceColor(item.device_id),
+                backgroundColor: getDeviceColor(item.device_id, 0.1),
+                fill: false,
+                tension: 0.4
+            };
+        }
+        
+        deviceData[item.device_id].data.push({
+            x: item.created_at,
+            y: parseFloat(item.humidity)
+        });
+    });
+    
+    // Ordenar dados por tempo
+    Object.values(deviceData).forEach(dataset => {
+        dataset.data.sort((a, b) => new Date(a.x) - new Date(b.x));
+    });
+    
+    humidityChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: Object.values(deviceData)
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Umidade ao Longo do Tempo'
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            hour: 'HH:mm',
+                            day: 'dd/MM'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tempo'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Umidade (%)'
+                    },
+                    min: 0,
+                    max: 100
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+}
+
+function updateComfortAnalysis(data) {
+    const container = document.getElementById('comfort-analysis');
+    
+    if (data.length === 0) {
+        container.innerHTML = '<p>Sem dados para análise de conforto</p>';
+        return;
+    }
+    
+    // Analisar níveis de conforto baseado na umidade
+    const humidityValues = data.map(item => parseFloat(item.humidity));
+    const avgHumidity = humidityValues.reduce((sum, val) => sum + val, 0) / humidityValues.length;
+    
+    let comfortLevel, comfortClass, recommendations;
+    
+    if (avgHumidity < 30) {
+        comfortLevel = 'Muito Seco';
+        comfortClass = 'error';
+        recommendations = [
+            'Considere usar um umidificador',
+            'Mantenha plantas em casa',
+            'Evite aquecimento excessivo'
+        ];
+    } else if (avgHumidity < 40) {
+        comfortLevel = 'Seco';
+        comfortClass = 'status-offline';
+        recommendations = [
+            'Umidade um pouco baixa',
+            'Monitore o conforto respiratório',
+            'Considere umidificação leve'
+        ];
+    } else if (avgHumidity <= 60) {
+        comfortLevel = 'Ideal';
+        comfortClass = 'status-online';
+        recommendations = [
+            'Níveis de umidade ideais',
+            'Ambiente confortável',
+            'Mantenha a ventilação adequada'
+        ];
+    } else if (avgHumidity <= 70) {
+        comfortLevel = 'Úmido';
+        comfortClass = 'status-offline';
+        recommendations = [
+            'Umidade um pouco alta',
+            'Ventile melhor o ambiente',
+            'Monitore possível mofo'
+        ];
+    } else {
+        comfortLevel = 'Muito Úmido';
+        comfortClass = 'error';
+        recommendations = [
+            'Use desumidificador se possível',
+            'Melhore a ventilação',
+            'Cuidado com mofo e fungos'
+        ];
+    }
+    
+    // Análise por período do dia
+    const timeAnalysis = analyzeHumidityByTime(data);
+    
+    let html = `
+        <div class="grid">
+            <div class="stat-card">
+                <div class="stat-number ${comfortClass}">${comfortLevel}</div>
+                <div class="stat-label">Nível de Conforto</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${avgHumidity.toFixed(1)}%</div>
+                <div class="stat-label">Umidade Média</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <h4>Recomendações:</h4>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <h4>Análise por Período:</h4>
+            <table class="table">
+                <thead>
+                    <tr><th>Período</th><th>Umidade Média</th><th>Variação</th></tr>
+                </thead>
+                <tbody>
+                    ${timeAnalysis.map(period => `
+                        <tr>
+                            <td>${period.name}</td>
+                            <td>${period.avg.toFixed(1)}%</td>
+                            <td>${period.min.toFixed(1)}% - ${period.max.toFixed(1)}%</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+function analyzeHumidityByTime(data) {
+    const periods = {
+        'Madrugada (00-06h)': { values: [], min: 0, max: 6 },
+        'Manhã (06-12h)': { values: [], min: 6, max: 12 },
+        'Tarde (12-18h)': { values: [], min: 12, max: 18 },
+        'Noite (18-24h)': { values: [], min: 18, max: 24 }
+    };
+    
+    data.forEach(item => {
+        const hour = new Date(item.created_at).getHours();
+        const humidity = parseFloat(item.humidity);
+        
+        for (const [periodName, period] of Object.entries(periods)) {
+            if (hour >= period.min && hour < period.max) {
+                period.values.push(humidity);
+                break;
+            }
+        }
+    });
+    
+    return Object.entries(periods).map(([name, period]) => {
+        if (period.values.length === 0) {
+            return { name, avg: 0, min: 0, max: 0 };
+        }
+        
+        const avg = period.values.reduce((sum, val) => sum + val, 0) / period.values.length;
+        const min = Math.min(...period.values);
+        const max = Math.max(...period.values);
+        
+        return { name, avg, min, max };
+    });
+}
+
+function updateHumidityHistory(data) {
+    const container = document.getElementById('humidity-history');
+    
+    if (data.length === 0) {
+        container.innerHTML = '<p>Nenhum dado de umidade encontrado</p>';
+        return;
+    }
+    
+    let html = '<table class="table"><thead><tr>';
+    html += '<th>Data/Hora</th><th>Dispositivo</th><th>Local</th>';
+    html += '<th>Sensor</th><th>Umidade</th><th>Conforto</th><th>RSSI</th></tr></thead><tbody>';
+    
+    data.forEach(item => {
+        const humidity = parseFloat(item.humidity);
+        let comfortClass = 'status-online';
+        let comfortText = 'Ideal';
+        
+        if (humidity < 30 || humidity > 70) {
+            comfortClass = 'error';
+            comfortText = humidity < 30 ? 'Muito Seco' : 'Muito Úmido';
+        } else if (humidity < 40 || humidity > 60) {
+            comfortClass = 'status-offline';
+            comfortText = humidity < 40 ? 'Seco' : 'Úmido';
+        }
+        
+        html += `<tr>
+            <td>${formatDateTime(item.created_at)}</td>
+            <td><strong>${item.device_id}</strong></td>
+            <td>${item.location || 'N/A'}</td>
+            <td>${item.sensor_type || 'N/A'}</td>
+            <td><strong>${item.humidity}${item.unit}</strong></td>
+            <td class="${comfortClass}">${comfortText}</td>
+            <td>${item.rssi} dBm</td>
+        </tr>`;
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function updateDeviceFilter(data) {
+    const select = document.getElementById('device-filter');
+    const currentValue = select.value;
+    
+    // Obter dispositivos únicos
+    const devices = [...new Set(data.map(item => item.device_id))];
+    
+    // Manter apenas a opção "Todos"
+    select.innerHTML = '<option value="">Todos os dispositivos</option>';
+    
+    // Adicionar dispositivos
+    devices.forEach(deviceId => {
+        const option = document.createElement('option');
+        option.value = deviceId;
+        option.textContent = deviceId;
+        if (deviceId === currentValue) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+}
+
+function getDeviceColor(deviceId, alpha = 1) {
+    // Gerar cor consistente baseada no ID do dispositivo
+    let hash = 0;
+    for (let i = 0; i < deviceId.length; i++) {
+        hash = deviceId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    const hue = Math.abs(hash) % 360;
+    
+    if (alpha < 1) {
+        return `hsla(${hue}, 70%, 50%, ${alpha})`;
+    } else {
+        return `hsl(${hue}, 70%, 50%)`;
+    }
+}
+
+// Event listeners
+document.getElementById('hours-filter').addEventListener('change', loadHumidityData);
+document.getElementById('device-filter').addEventListener('change', loadHumidityData);
+document.getElementById('limit-filter').addEventListener('change', loadHumidityData);
+
+document.getElementById('auto-refresh').addEventListener('change', function() {
+    refreshEnabled = this.checked;
+    if (refreshEnabled) {
+        startAutoRefresh(loadHumidityData);
+    } else {
+        stopAutoRefresh();
+    }
+});
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    loadHumidityData();
+    
+    if (refreshEnabled) {
+        startAutoRefresh(loadHumidityData);
+    }
+});
+
+// Parar auto-refresh quando sair da página
+window.addEventListener('beforeunload', stopAutoRefresh);
+</script>
+{% endblock %}

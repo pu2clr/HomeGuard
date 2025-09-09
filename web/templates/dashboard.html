@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Principal - HomeGuard{% endblock %}
+
+{% block header %}HomeGuard - Dashboard Principal{% endblock %}
+
+{% block content %}
+<div class="grid">
+    <div class="stat-card">
+        <div class="stat-number" id="temp-devices">-</div>
+        <div class="stat-label">Sensores de Temperatura</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="humidity-devices">-</div>
+        <div class="stat-label">Sensores de Umidade</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="motion-devices">-</div>
+        <div class="stat-label">Sensores de Movimento</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="relay-devices">-</div>
+        <div class="stat-label">Controles de Relé</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Atividade Recente do Sistema</h3>
+    <div class="controls">
+        <select id="hours-filter">
+            <option value="1">Última hora</option>
+            <option value="6">Últimas 6 horas</option>
+            <option value="24" selected>Últimas 24 horas</option>
+            <option value="168">Última semana</option>
+        </select>
+        <button onclick="loadDashboardData()">Atualizar</button>
+        <label>
+            <input type="checkbox" id="auto-refresh" checked> Auto-atualizar (30s)
+        </label>
+    </div>
+    
+    <div class="stat-card" style="margin: 20px 0;">
+        <div class="stat-number" id="total-events">-</div>
+        <div class="stat-label">Total de Eventos</div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h3>Dispositivos de Temperatura</h3>
+        <div id="temperature-status">
+            <div class="loading">Carregando...</div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3>Dispositivos de Umidade</h3>
+        <div id="humidity-status">
+            <div class="loading">Carregando...</div>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <h3>Sensores de Movimento</h3>
+        <div id="motion-status">
+            <div class="loading">Carregando...</div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3>Últimas Ações de Relé</h3>
+        <div id="relay-status">
+            <div class="loading">Carregando...</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let refreshEnabled = true;
+
+async function loadDashboardData() {
+    const hours = document.getElementById('hours-filter').value;
+    
+    try {
+        // Carregar resumo geral
+        const summaryResponse = await fetch(`/api/dashboard/summary?hours=${hours}`);
+        const summary = await summaryResponse.json();
+        
+        document.getElementById('temp-devices').textContent = summary.temperature_devices || 0;
+        document.getElementById('humidity-devices').textContent = summary.humidity_devices || 0;
+        document.getElementById('motion-devices').textContent = summary.motion_devices || 0;
+        document.getElementById('relay-devices').textContent = summary.relay_devices || 0;
+        document.getElementById('total-events').textContent = summary.total_events || 0;
+        
+        // Carregar status dos dispositivos
+        await loadTemperatureStatus(hours);
+        await loadHumidityStatus(hours);
+        await loadMotionStatus(hours);
+        await loadRelayStatus(hours);
+        
+    } catch (error) {
+        console.error('Erro ao carregar dados do dashboard:', error);
+        showError('Erro ao carregar dados do dashboard');
+    }
+}
+
+async function loadTemperatureStatus(hours) {
+    try {
+        const response = await fetch(`/api/temperature/stats?hours=${hours}`);
+        const stats = await response.json();
+        
+        const container = document.getElementById('temperature-status');
+        
+        if (stats.length === 0) {
+            container.innerHTML = '<p>Nenhum dispositivo de temperatura ativo</p>';
+            return;
+        }
+        
+        let html = '<table class="table"><thead><tr>';
+        html += '<th>Dispositivo</th><th>Local</th><th>Sensor</th>';
+        html += '<th>Temp. Média</th><th>Min/Max</th><th>RSSI</th>';
+        html += '<th>Última Leitura</th><th>Status</th></tr></thead><tbody>';
+        
+        stats.forEach(device => {
+            const statusClass = getStatusClass(device.last_reading);
+            html += `<tr>
+                <td>${device.device_id}</td>
+                <td>${device.location || 'N/A'}</td>
+                <td>${device.sensor_type || 'N/A'}</td>
+                <td>${device.avg_temp}°C</td>
+                <td>${device.min_temp}°C / ${device.max_temp}°C</td>
+                <td>${device.avg_rssi} dBm</td>
+                <td>${formatDateTime(device.last_reading)}</td>
+                <td class="${statusClass}">${statusClass === 'status-online' ? 'Online' : 'Offline'}</td>
+            </tr>`;
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Erro ao carregar status de temperatura:', error);
+        document.getElementById('temperature-status').innerHTML = '<p class="error">Erro ao carregar dados</p>';
+    }
+}
+
+async function loadHumidityStatus(hours) {
+    try {
+        const response = await fetch(`/api/humidity/stats?hours=${hours}`);
+        const stats = await response.json();
+        
+        const container = document.getElementById('humidity-status');
+        
+        if (stats.length === 0) {
+            container.innerHTML = '<p>Nenhum dispositivo de umidade ativo</p>';
+            return;
+        }
+        
+        let html = '<table class="table"><thead><tr>';
+        html += '<th>Dispositivo</th><th>Local</th><th>Sensor</th>';
+        html += '<th>Umidade Média</th><th>Min/Max</th><th>RSSI</th>';
+        html += '<th>Última Leitura</th><th>Status</th></tr></thead><tbody>';
+        
+        stats.forEach(device => {
+            const statusClass = getStatusClass(device.last_reading);
+            html += `<tr>
+                <td>${device.device_id}</td>
+                <td>${device.location || 'N/A'}</td>
+                <td>${device.sensor_type || 'N/A'}</td>
+                <td>${device.avg_humidity}%</td>
+                <td>${device.min_humidity}% / ${device.max_humidity}%</td>
+                <td>${device.avg_rssi} dBm</td>
+                <td>${formatDateTime(device.last_reading)}</td>
+                <td class="${statusClass}">${statusClass === 'status-online' ? 'Online' : 'Offline'}</td>
+            </tr>`;
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Erro ao carregar status de umidade:', error);
+        document.getElementById('humidity-status').innerHTML = '<p class="error">Erro ao carregar dados</p>';
+    }
+}
+
+async function loadMotionStatus(hours) {
+    try {
+        const response = await fetch(`/api/motion/stats?hours=${hours}`);
+        const stats = await response.json();
+        
+        const container = document.getElementById('motion-status');
+        
+        if (stats.length === 0) {
+            container.innerHTML = '<p>Nenhum sensor de movimento ativo</p>';
+            return;
+        }
+        
+        let html = '<table class="table"><thead><tr>';
+        html += '<th>Dispositivo</th><th>Local</th><th>Detecções</th>';
+        html += '<th>Primeira Detecção</th><th>Última Detecção</th><th>Status</th></tr></thead><tbody>';
+        
+        stats.forEach(device => {
+            const statusClass = getStatusClass(device.last_detection);
+            html += `<tr>
+                <td>${device.device_id}</td>
+                <td>${device.location || 'N/A'}</td>
+                <td>${device.total_detections}</td>
+                <td>${formatDateTime(device.first_detection)}</td>
+                <td>${formatDateTime(device.last_detection)}</td>
+                <td class="${statusClass}">${statusClass === 'status-online' ? 'Online' : 'Offline'}</td>
+            </tr>`;
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Erro ao carregar status de movimento:', error);
+        document.getElementById('motion-status').innerHTML = '<p class="error">Erro ao carregar dados</p>';
+    }
+}
+
+async function loadRelayStatus(hours) {
+    try {
+        const response = await fetch(`/api/relay/data?hours=${hours}&limit=10`);
+        const data = await response.json();
+        
+        const container = document.getElementById('relay-status');
+        
+        if (data.length === 0) {
+            container.innerHTML = '<p>Nenhuma atividade de relé recente</p>';
+            return;
+        }
+        
+        let html = '<table class="table"><thead><tr>';
+        html += '<th>Data/Hora</th><th>Tópico</th><th>Comando</th></tr></thead><tbody>';
+        
+        data.forEach(activity => {
+            html += `<tr>
+                <td>${formatDateTime(activity.created_at)}</td>
+                <td>${activity.topic}</td>
+                <td><strong>${activity.message}</strong></td>
+            </tr>`;
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Erro ao carregar status de relé:', error);
+        document.getElementById('relay-status').innerHTML = '<p class="error">Erro ao carregar dados</p>';
+    }
+}
+
+// Event listeners
+document.getElementById('hours-filter').addEventListener('change', loadDashboardData);
+
+document.getElementById('auto-refresh').addEventListener('change', function() {
+    refreshEnabled = this.checked;
+    if (refreshEnabled) {
+        startAutoRefresh(loadDashboardData);
+    } else {
+        stopAutoRefresh();
+    }
+});
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardData();
+    
+    if (refreshEnabled) {
+        startAutoRefresh(loadDashboardData);
+    }
+});
+
+// Parar auto-refresh quando sair da página
+window.addEventListener('beforeunload', stopAutoRefresh);
+</script>
+{% endblock %}

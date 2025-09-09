@@ -1,0 +1,582 @@
+{% extends "base.html" %}
+
+{% block title %}DEBUG Painel de Temperatura - HomeGuard{% endblock %}
+
+{% block header %}🔍 DEBUG - Monitoramento de Temperatura{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Status do Debug</h3>
+    <div id="debug-info" style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px;">
+        <p><strong>Status:</strong> <span id="debug-status">Inicializando...</span></p>
+        <p><strong>Última atualização:</strong> <span id="debug-timestamp">-</span></p>
+        <p><strong>Total de registros:</strong> <span id="debug-records">-</span></p>
+        <p><strong>Dispositivos encontrados:</strong> <span id="debug-devices">-</span></p>
+        <p><strong>Erro (se houver):</strong> <span id="debug-error" style="color: red;">-</span></p>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Configurações de Visualização</h3>
+    <div class="controls">
+        <select id="hours-filter">
+            <option value="1">Última hora</option>
+            <option value="6">Últimas 6 horas</option>
+            <option value="24" selected>Últimas 24 horas</option>
+            <option value="168">Última semana</option>
+        </select>
+        
+        <select id="device-filter">
+            <option value="">Todos os dispositivos</option>
+        </select>
+        
+        <input type="number" id="limit-filter" placeholder="Limite de registros" value="50" min="10" max="500">
+        
+        <button onclick="loadTemperatureData()">🔄 Atualizar</button>
+        <button onclick="testAPIs()">🧪 Testar APIs</button>
+        
+        <label>
+            <input type="checkbox" id="auto-refresh" checked> Auto-atualizar (30s)
+        </label>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="stat-card">
+        <div class="stat-number" id="avg-temp">-</div>
+        <div class="stat-label">Temperatura Média</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="min-temp">-</div>
+        <div class="stat-label">Temperatura Mínima</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="max-temp">-</div>
+        <div class="stat-label">Temperatura Máxima</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-number" id="active-devices">-</div>
+        <div class="stat-label">Dispositivos Ativos</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Gráfico de Temperatura ao Longo do Tempo</h3>
+    <div style="height: 400px; position: relative;">
+        <canvas id="temperature-chart"></canvas>
+    </div>
+    <div id="chart-debug" style="background: #fff3cd; padding: 10px; margin-top: 10px; border-radius: 5px;">
+        <strong>Status do Gráfico:</strong> <span id="chart-status">Aguardando dados...</span>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Estatísticas por Dispositivo</h3>
+    <div id="device-stats">Carregando estatísticas...</div>
+</div>
+
+<div class="card">
+    <h3>Histórico de Leituras (Últimos 10)</h3>
+    <div id="temperature-history">Carregando histórico...</div>
+</div>
+
+<div class="card">
+    <h3>Log de Debug</h3>
+    <div id="debug-log" style="background: #f8f9fa; padding: 10px; border-radius: 5px; max-height: 300px; overflow-y: scroll; font-family: monospace; font-size: 12px;">
+        <div class="debug-entry">Debug iniciado...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let temperatureChart;
+let refreshEnabled = true;
+
+// Debug functions
+function debugLog(message) {
+    const timestamp = new Date().toLocaleTimeString();
+    const debugLog = document.getElementById('debug-log');
+    const entry = document.createElement('div');
+    entry.className = 'debug-entry';
+    entry.innerHTML = `<span style="color: #666;">[${timestamp}]</span> ${message}`;
+    debugLog.appendChild(entry);
+    debugLog.scrollTop = debugLog.scrollHeight;
+    console.log(`[DEBUG] ${message}`);
+}
+
+function updateDebugStatus(status, error = null) {
+    document.getElementById('debug-status').textContent = status;
+    document.getElementById('debug-timestamp').textContent = new Date().toLocaleString();
+    if (error) {
+        document.getElementById('debug-error').textContent = error;
+        debugLog(`ERRO: ${error}`);
+    }
+}
+
+async function testAPIs() {
+    debugLog('=== INÍCIO TESTE DAS APIs ===');
+    
+    // Teste 1: API de dados
+    try {
+        debugLog('Testando /api/temperature/data...');
+        const response1 = await fetch('/api/temperature/data?hours=1&limit=5');
+        debugLog(`Status da resposta: ${response1.status}`);
+        
+        if (!response1.ok) {
+            throw new Error(`HTTP ${response1.status}: ${response1.statusText}`);
+        }
+        
+        const data = await response1.json();
+        debugLog(`✅ API de dados OK - ${data.length} registros recebidos`);
+        
+        if (data.length > 0) {
+            debugLog(`Exemplo de registro: ${JSON.stringify(data[0])}`);
+            document.getElementById('debug-records').textContent = data.length;
+            
+            const devices = [...new Set(data.map(item => item.device_id))];
+            document.getElementById('debug-devices').textContent = devices.join(', ');
+        }
+        
+    } catch (error) {
+        debugLog(`❌ Erro na API de dados: ${error.message}`);
+        updateDebugStatus('Erro na API de dados', error.message);
+        return;
+    }
+    
+    // Teste 2: API de estatísticas
+    try {
+        debugLog('Testando /api/temperature/stats...');
+        const response2 = await fetch('/api/temperature/stats?hours=24');
+        debugLog(`Status da resposta: ${response2.status}`);
+        
+        if (!response2.ok) {
+            throw new Error(`HTTP ${response2.status}: ${response2.statusText}`);
+        }
+        
+        const stats = await response2.json();
+        debugLog(`✅ API de stats OK - ${stats.length} dispositivos`);
+        
+        if (stats.length > 0) {
+            debugLog(`Estatísticas: ${JSON.stringify(stats[0])}`);
+        }
+        
+    } catch (error) {
+        debugLog(`❌ Erro na API de stats: ${error.message}`);
+        updateDebugStatus('Erro na API de stats', error.message);
+        return;
+    }
+    
+    debugLog('=== TESTE DAS APIs CONCLUÍDO ===');
+    updateDebugStatus('APIs testadas com sucesso');
+}
+
+async function loadTemperatureData() {
+    debugLog('=== INÍCIO loadTemperatureData() ===');
+    updateDebugStatus('Carregando dados...');
+    
+    const hours = document.getElementById('hours-filter').value;
+    const limit = document.getElementById('limit-filter').value;
+    const deviceFilter = document.getElementById('device-filter').value;
+    
+    debugLog(`Parâmetros: hours=${hours}, limit=${limit}, device=${deviceFilter}`);
+    
+    try {
+        // 1. Carregar dados de temperatura
+        debugLog('Fazendo fetch para /api/temperature/data...');
+        let url = `/api/temperature/data?hours=${hours}&limit=${limit}`;
+        const response = await fetch(url);
+        
+        debugLog(`Response status: ${response.status}`);
+        debugLog(`Response headers: ${JSON.stringify([...response.headers.entries()])}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        debugLog(`✅ Dados recebidos: ${data.length} registros`);
+        
+        // Filtrar por dispositivo se selecionado
+        const filteredData = deviceFilter ? 
+            data.filter(item => item.device_id === deviceFilter) : data;
+        
+        debugLog(`Dados filtrados: ${filteredData.length} registros`);
+        
+        // 2. Carregar estatísticas
+        debugLog('Carregando estatísticas...');
+        await loadTemperatureStats(hours);
+        
+        // 3. Atualizar gráfico
+        debugLog('Atualizando gráfico...');
+        document.getElementById('chart-status').textContent = `Processando ${filteredData.length} registros...`;
+        updateTemperatureChart(filteredData);
+        
+        // 4. Atualizar histórico
+        debugLog('Atualizando histórico...');
+        updateTemperatureHistory(filteredData.slice(0, 10));
+        
+        // 5. Atualizar filtro de dispositivos
+        debugLog('Atualizando filtro de dispositivos...');
+        updateDeviceFilter(data);
+        
+        updateDebugStatus('Dados carregados com sucesso');
+        debugLog('=== FIM loadTemperatureData() ===');
+        
+    } catch (error) {
+        debugLog(`❌ ERRO CRÍTICO: ${error.message}`);
+        debugLog(`Stack trace: ${error.stack}`);
+        updateDebugStatus('Erro ao carregar dados', error.message);
+        showError('Erro ao carregar dados de temperatura: ' + error.message);
+    }
+}
+
+async function loadTemperatureStats(hours) {
+    try {
+        debugLog(`Carregando stats para ${hours} horas...`);
+        const response = await fetch(`/api/temperature/stats?hours=${hours}`);
+        const stats = await response.json();
+        
+        debugLog(`Stats recebidas: ${JSON.stringify(stats)}`);
+        
+        if (stats.length === 0) {
+            debugLog('Nenhuma estatística encontrada');
+            document.getElementById('avg-temp').textContent = '-';
+            document.getElementById('min-temp').textContent = '-';
+            document.getElementById('max-temp').textContent = '-';
+            document.getElementById('active-devices').textContent = '0';
+            document.getElementById('device-stats').innerHTML = '<p>Nenhum dispositivo ativo</p>';
+            return;
+        }
+        
+        // Calcular estatísticas globais
+        const avgTemp = (stats.reduce((sum, device) => sum + device.avg_temp, 0) / stats.length).toFixed(1);
+        const minTemp = Math.min(...stats.map(device => device.min_temp)).toFixed(1);
+        const maxTemp = Math.max(...stats.map(device => device.max_temp)).toFixed(1);
+        
+        debugLog(`Estatísticas calculadas: avg=${avgTemp}, min=${minTemp}, max=${maxTemp}`);
+        
+        document.getElementById('avg-temp').textContent = `${avgTemp}°C`;
+        document.getElementById('min-temp').textContent = `${minTemp}°C`;
+        document.getElementById('max-temp').textContent = `${maxTemp}°C`;
+        document.getElementById('active-devices').textContent = stats.length;
+        
+        // Atualizar tabela de estatísticas por dispositivo
+        updateDeviceStatsTable(stats);
+        
+    } catch (error) {
+        debugLog(`Erro ao carregar estatísticas: ${error.message}`);
+        console.error('Erro ao carregar estatísticas:', error);
+    }
+}
+
+function updateTemperatureChart(data) {
+    debugLog(`updateTemperatureChart chamada com ${data.length} registros`);
+    
+    try {
+        const ctx = document.getElementById('temperature-chart').getContext('2d');
+        
+        // Destruir gráfico existente de forma mais robusta
+        if (temperatureChart) {
+            debugLog('Destruindo gráfico existente...');
+            try {
+                temperatureChart.destroy();
+                temperatureChart = null;
+            } catch (e) {
+                debugLog(`Aviso ao destruir gráfico: ${e.message}`);
+            }
+        }
+        
+        if (data.length === 0) {
+            debugLog('Sem dados para o gráfico');
+            document.getElementById('chart-status').textContent = 'Sem dados para exibir';
+            return;
+        }
+        
+        // Agrupar dados por dispositivo
+        const deviceData = {};
+        data.forEach(item => {
+            if (!deviceData[item.device_id]) {
+                deviceData[item.device_id] = {
+                    label: `${item.device_id} (${item.location})`,
+                    data: [],
+                    borderColor: getDeviceColor(item.device_id),
+                    backgroundColor: getDeviceColor(item.device_id, 0.1),
+                    fill: false,
+                    tension: 0.4
+                };
+            }
+            
+            // Converter timestamp para Date object
+            const timestamp = new Date(item.created_at);
+            deviceData[item.device_id].data.push({
+                x: timestamp,
+                y: parseFloat(item.temperature)
+            });
+        });
+        
+        debugLog(`Dispositivos no gráfico: ${Object.keys(deviceData).join(', ')}`);
+        
+        // Ordenar dados por tempo
+        Object.values(deviceData).forEach(dataset => {
+            dataset.data.sort((a, b) => a.x - b.x);
+        });
+        
+        debugLog('Criando novo gráfico Chart.js...');
+        
+        // Verificar se date adapter está disponível
+        if (typeof Chart.registry.getController('time') === 'undefined') {
+            debugLog('⚠️ Date adapter não encontrado, usando linear scale');
+            // Fallback para escala linear se date adapter não estiver disponível
+            temperatureChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: Object.values(deviceData).map(dataset => ({
+                        ...dataset,
+                        data: dataset.data.map((point, index) => ({
+                            x: index,
+                            y: point.y
+                        }))
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Temperatura ao Longo do Tempo'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Sequência de Leituras'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Temperatura (°C)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        } else {
+            debugLog('✅ Date adapter encontrado, usando time scale');
+            temperatureChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: Object.values(deviceData)
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Temperatura ao Longo do Tempo'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    hour: 'HH:mm',
+                                    day: 'dd/MM'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Tempo'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Temperatura (°C)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        }
+        
+        debugLog('✅ Gráfico criado com sucesso!');
+        document.getElementById('chart-status').textContent = `Gráfico atualizado com ${data.length} pontos`;
+        
+    } catch (error) {
+        debugLog(`❌ Erro ao criar gráfico: ${error.message}`);
+        document.getElementById('chart-status').textContent = `Erro: ${error.message}`;
+        console.error('Erro no gráfico:', error);
+    }
+}
+
+function updateDeviceStatsTable(stats) {
+    debugLog(`Atualizando tabela de stats com ${stats.length} dispositivos`);
+    
+    const container = document.getElementById('device-stats');
+    
+    let html = '<table class="table"><thead><tr>';
+    html += '<th>Dispositivo</th><th>Local</th><th>Sensor</th><th>Leituras</th>';
+    html += '<th>Média</th><th>Mín</th><th>Máx</th><th>RSSI</th><th>Última Leitura</th>';
+    html += '</tr></thead><tbody>';
+    
+    stats.forEach(device => {
+        html += '<tr>';
+        html += `<td><strong>${device.device_id}</strong></td>`;
+        html += `<td>${device.location || '-'}</td>`;
+        html += `<td>${device.sensor_type || '-'}</td>`;
+        html += `<td>${device.total_readings}</td>`;
+        html += `<td>${device.avg_temp}°C</td>`;
+        html += `<td>${device.min_temp}°C</td>`;
+        html += `<td>${device.max_temp}°C</td>`;
+        html += `<td>${device.avg_rssi} dBm</td>`;
+        html += `<td>${new Date(device.last_reading).toLocaleString()}</td>`;
+        html += '</tr>';
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function updateTemperatureHistory(data) {
+    debugLog(`Atualizando histórico com ${data.length} registros`);
+    
+    const container = document.getElementById('temperature-history');
+    
+    if (data.length === 0) {
+        container.innerHTML = '<p>Nenhum dado de histórico disponível</p>';
+        return;
+    }
+    
+    let html = '<table class="table"><thead><tr>';
+    html += '<th>Timestamp</th><th>Dispositivo</th><th>Local</th><th>Temperatura</th><th>RSSI</th>';
+    html += '</tr></thead><tbody>';
+    
+    data.forEach(item => {
+        html += '<tr>';
+        html += `<td>${new Date(item.created_at).toLocaleString()}</td>`;
+        html += `<td>${item.device_id}</td>`;
+        html += `<td>${item.location || '-'}</td>`;
+        html += `<td><strong>${item.temperature}°C</strong></td>`;
+        html += `<td>${item.rssi} dBm</td>`;
+        html += '</tr>';
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+function updateDeviceFilter(data) {
+    const deviceFilter = document.getElementById('device-filter');
+    const currentValue = deviceFilter.value;
+    
+    // Obter lista única de dispositivos
+    const devices = [...new Set(data.map(item => item.device_id))];
+    
+    // Limpar opções existentes (exceto "Todos")
+    deviceFilter.innerHTML = '<option value="">Todos os dispositivos</option>';
+    
+    // Adicionar dispositivos encontrados
+    devices.forEach(deviceId => {
+        const option = document.createElement('option');
+        option.value = deviceId;
+        option.textContent = deviceId;
+        if (deviceId === currentValue) {
+            option.selected = true;
+        }
+        deviceFilter.appendChild(option);
+    });
+    
+    debugLog(`Filtro atualizado com dispositivos: ${devices.join(', ')}`);
+}
+
+function getDeviceColor(deviceId, alpha = 1) {
+    // Gerar cor consistente baseada no ID do dispositivo
+    let hash = 0;
+    for (let i = 0; i < deviceId.length; i++) {
+        hash = deviceId.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    const hue = Math.abs(hash) % 360;
+    
+    if (alpha < 1) {
+        return `hsla(${hue}, 70%, 50%, ${alpha})`;
+    } else {
+        return `hsl(${hue}, 70%, 50%)`;
+    }
+}
+
+// Event listeners
+document.getElementById('hours-filter').addEventListener('change', loadTemperatureData);
+document.getElementById('device-filter').addEventListener('change', loadTemperatureData);
+document.getElementById('limit-filter').addEventListener('change', loadTemperatureData);
+
+document.getElementById('auto-refresh').addEventListener('change', function() {
+    refreshEnabled = this.checked;
+    debugLog(`Auto-refresh ${refreshEnabled ? 'ativado' : 'desativado'}`);
+    if (refreshEnabled) {
+        startAutoRefresh(loadTemperatureData);
+    } else {
+        stopAutoRefresh();
+    }
+});
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', function() {
+    debugLog('DOM carregado, iniciando...');
+    
+    // Verificar se Chart.js está disponível
+    if (typeof Chart === 'undefined') {
+        debugLog('❌ Chart.js não encontrado!');
+        updateDebugStatus('Erro: Chart.js não carregado');
+        return;
+    } else {
+        debugLog('✅ Chart.js disponível');
+    }
+    
+    // Testar APIs primeiro
+    testAPIs().then(() => {
+        debugLog('Teste de APIs concluído, carregando dados...');
+        loadTemperatureData();
+    });
+    
+    if (refreshEnabled) {
+        debugLog('Iniciando auto-refresh...');
+        startAutoRefresh(loadTemperatureData);
+    }
+});
+
+// Parar auto-refresh quando sair da página
+window.addEventListener('beforeunload', function() {
+    debugLog('Página sendo fechada, parando auto-refresh...');
+    stopAutoRefresh();
+});
+
+debugLog('Script de debug carregado!');
+</script>
+{% endblock %}
