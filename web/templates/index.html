@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}HomeGuard - Visão Geral{% endblock %}
+
+{% block content %}
+<div class="metrics">
+    <div class="metric-card">
+        <h3>🏠 Total de Dispositivos</h3>
+        <div class="value">{{ stats.total_devices or 0 }}</div>
+    </div>
+    
+    <div class="metric-card">
+        <h3>📅 Eventos Hoje</h3>
+        <div class="value">{{ stats.events_today or 0 }}</div>
+    </div>
+    
+    <div class="metric-card">
+        <h3>🟢 Ativos (24h)</h3>
+        <div class="value">{{ stats.active_devices_24h or 0 }}</div>
+    </div>
+    
+    <div class="metric-card">
+        <h3>🕐 Último Evento</h3>
+        <div class="value" style="font-size: 1rem;">
+            {% if stats.last_event and stats.last_event != 'Nenhum' %}
+                {{ stats.last_event[:16] }}
+            {% else %}
+                Nunca
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<h2>🔍 Status dos Dispositivos</h2>
+
+{% if devices %}
+<div class="device-grid">
+    {% for device in devices %}
+    <div class="device-card {{ device.status }}">
+        <div class="device-status">
+            <div class="status-dot {{ device.status }}"></div>
+            <strong>{{ device.device_id }}</strong>
+        </div>
+        
+        <div style="margin-bottom: 0.5rem;">
+            <strong>Local:</strong> {{ device.location }}<br>
+            <strong>Tipo:</strong> {{ device.sensor_type }}<br>
+            <strong>Último Evento:</strong> {{ device.last_event }}
+        </div>
+        
+        <div style="font-size: 0.9rem; color: #666;">
+            <strong>Total de Eventos:</strong> {{ device.total_events }}<br>
+            <strong>RSSI:</strong> {{ device.rssi }} dBm<br>
+            {% if device.status == 'offline' %}
+                <strong>Offline há:</strong> {{ device.minutes_offline }} min
+            {% else %}
+                <strong>Status:</strong> ✅ Online
+            {% endif %}<br>
+            <strong>Última Atividade:</strong> {{ device.last_seen[:16] if device.last_seen else 'Nunca' }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    📡 Nenhum dispositivo encontrado no sistema. Verifique se o banco de dados contém registros.
+</div>
+{% endif %}
+
+<div style="margin-top: 2rem; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h3>ℹ️ Informações do Sistema</h3>
+    <p><strong>Última atualização:</strong> {{ current_time }}</p>
+    <p><strong>Banco de dados:</strong> ../db/homeguard.db</p>
+    <p><strong>Atualização automática:</strong> A cada 30 segundos</p>
+    
+    <button class="btn" onclick="location.reload()">🔄 Atualizar Agora</button>
+</div>
+{% endblock %}

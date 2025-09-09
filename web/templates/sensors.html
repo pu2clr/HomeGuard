@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensores DHT11 - HomeGuard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sensor-card {
+            transition: transform 0.2s;
+            border-left: 4px solid #007bff;
+        }
+        .sensor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .status-online { border-left-color: #28a745; }
+        .status-warning { border-left-color: #ffc107; }
+        .status-offline { border-left-color: #dc3545; }
+        .temp-high { color: #dc3545; font-weight: bold; }
+        .temp-low { color: #007bff; font-weight: bold; }
+        .temp-normal { color: #28a745; }
+        .humidity-high { color: #6f42c1; font-weight: bold; }
+        .humidity-low { color: #fd7e14; font-weight: bold; }
+        .humidity-normal { color: #20c997; }
+        .alert-badge {
+            font-size: 0.75em;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .metric-unit {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        .last-update {
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+        .refresh-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>HomeGuard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/sensors">
+                            <i class="fas fa-thermometer-half me-1"></i>Sensores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/events">
+                            <i class="fas fa-list me-1"></i>Eventos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/relays">
+                            <i class="fas fa-toggle-on me-1"></i>Relés
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/alerts">
+                            <i class="fas fa-exclamation-triangle me-1"></i>Alertas
+                            {% if alerts|length > 0 %}
+                            <span class="badge bg-danger ms-1">{{ alerts|length }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    <i class="fas fa-clock me-1"></i>{{ current_time }}
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-thermometer-half me-2 text-primary"></i>
+                    Sensores DHT11
+                </h1>
+                <p class="text-muted">Monitoramento de temperatura e umidade</p>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-primary" onclick="refreshData()">
+                    <i class="fas fa-sync-alt me-1"></i>Atualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Alertas Ativos -->
+        {% if alerts|length > 0 %}
+        <div class="row mb-4">
+            <div class="col">
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Alertas Ativos ({{ alerts|length }})
+                    </h4>
+                    <div class="row">
+                        {% for alert in alerts[:3] %}
+                        <div class="col-md-4 mb-2">
+                            <div class="alert alert-{{ 'danger' if alert.severity == 'danger' else 'warning' }} mb-0 p-2">
+                                <small>
+                                    <strong>{{ alert.device_name }}</strong><br>
+                                    {{ alert.message }}
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if alerts|length > 3 %}
+                    <hr>
+                    <a href="/alerts" class="btn btn-sm btn-outline-warning">
+                        Ver todos os {{ alerts|length }} alertas
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Sensores Grid -->
+        <div class="row">
+            {% for sensor in sensors %}
+            <div class="col-lg-6 col-xl-4 mb-4">
+                <div class="card sensor-card status-{{ sensor.status }}" data-device-id="{{ sensor.device_id }}">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-microchip me-2"></i>
+                                {{ sensor.device_name }}
+                            </h5>
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                {{ sensor.location }}
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-{{ sensor.status_color }} status-badge">
+                                <i class="fas fa-circle me-1"></i>{{ sensor.status|title }}
+                            </span>
+                            {% if sensor.temp_alert or sensor.humid_alert %}
+                            <br>
+                            <span class="badge bg-danger alert-badge mt-1">
+                                <i class="fas fa-exclamation-triangle"></i> Alerta
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Temperatura -->
+                        <div class="row mb-3">
+                            <div class="col-6 text-center">
+                                <div class="metric-value temp-{% if sensor.temp_alert %}{{ sensor.temp_alert.type }}{% else %}normal{% endif %}">
+                                    <i class="fas fa-thermometer-half me-2"></i>
+                                    <span class="temp-value">{{ sensor.temperature }}</span>
+                                    <span class="metric-unit">°C</span>
+                                </div>
+                                <small class="text-muted">Temperatura</small>
+                                {% if sensor.temp_alert %}
+                                <br><small class="text-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    {{ sensor.temp_alert.message }}
+                                </small>
+                                {% endif %}
+                            </div>
+                            <!-- Umidade -->
+                            <div class="col-6 text-center">
+                                <div class="metric-value humidity-{% if sensor.humid_alert %}{{ sensor.humid_alert.type }}{% else %}normal{% endif %}">
+                                    <i class="fas fa-tint me-2"></i>
+                                    <span class="humidity-value">{{ sensor.humidity }}</span>
+                                    <span class="metric-unit">%</span>
+                                </div>
+                                <small class="text-muted">Umidade</small>
+                                {% if sensor.humid_alert %}
+                                <br><small class="text-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    {{ sensor.humid_alert.message }}
+                                </small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Informações Adicionais -->
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <small class="text-muted">RSSI</small><br>
+                                <strong class="rssi-value">{{ sensor.rssi }} dBm</strong>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted">Leituras Hoje</small><br>
+                                <strong class="readings-value">{{ sensor.readings_today }}</strong>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted">Última</small><br>
+                                <strong class="minutes-value">{{ sensor.minutes_ago }}min</strong>
+                            </div>
+                        </div>
+
+                        <!-- Última Atualização -->
+                        <div class="mt-3 text-center last-update">
+                            <i class="fas fa-clock me-1"></i>
+                            Última leitura: <span class="last-reading-value">{{ sensor.last_reading }}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/sensor/{{ sensor.device_id }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-chart-line me-1"></i>Histórico
+                            </a>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="refreshSensor('{{ sensor.device_id }}')">
+                                <i class="fas fa-sync-alt me-1"></i>Atualizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Caso não tenha sensores -->
+        {% if sensors|length == 0 %}
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle fa-2x mb-3"></i>
+                    <h4>Nenhum sensor DHT11 encontrado</h4>
+                    <p class="mb-0">Aguardando dados dos sensores via MQTT...</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Refresh Button -->
+    <button class="btn btn-primary refresh-btn rounded-circle" onclick="refreshData()" title="Atualizar dados">
+        <i class="fas fa-sync-alt"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto refresh a cada 30 segundos
+        let refreshInterval = setInterval(refreshData, 30000);
+        let isRefreshing = false;
+
+        async function refreshData() {
+            if (isRefreshing) return;
+            isRefreshing = true;
+            
+            try {
+                console.log('🔄 Atualizando dados dos sensores...');
+                const response = await fetch('/api/sensors');
+                
+                if (response.ok) {
+                    const sensors = await response.json();
+                    updateSensorCards(sensors);
+                    console.log('✅ Dados atualizados com sucesso');
+                } else {
+                    console.error('❌ Erro ao buscar dados:', response.status);
+                    // Fallback para reload se API falhar
+                    location.reload();
+                }
+            } catch (error) {
+                console.error('❌ Erro de conexão:', error);
+                // Fallback para reload se há erro de conexão
+                location.reload();
+            } finally {
+                isRefreshing = false;
+            }
+        }
+
+        function updateSensorCards(sensors) {
+            // Se não há sensores, recarregar página para mostrar mensagem
+            if (sensors.length === 0) {
+                location.reload();
+                return;
+            }
+
+            sensors.forEach(sensor => {
+                updateSensorCard(sensor);
+            });
+        }
+
+        function updateSensorCard(sensor) {
+            const deviceId = sensor.device_id;
+            const card = document.querySelector(`[data-device-id="${deviceId}"]`);
+            
+            if (!card) {
+                // Se não encontrou o card, recarregar página (novo sensor)
+                location.reload();
+                return;
+            }
+
+            // Atualizar valores de temperatura
+            const tempElement = card.querySelector('.temp-value');
+            if (tempElement) {
+                tempElement.textContent = sensor.temperature;
+            }
+
+            // Atualizar valores de umidade  
+            const humidityElement = card.querySelector('.humidity-value');
+            if (humidityElement) {
+                humidityElement.textContent = sensor.humidity;
+            }
+
+            // Atualizar status
+            const statusBadge = card.querySelector('.status-badge');
+            if (statusBadge) {
+                statusBadge.className = `badge bg-${sensor.status_color}`;
+                statusBadge.innerHTML = `<i class="fas fa-circle me-1"></i>${sensor.status}`;
+            }
+
+            // Atualizar RSSI
+            const rssiElement = card.querySelector('.rssi-value');
+            if (rssiElement) {
+                rssiElement.textContent = `${sensor.rssi} dBm`;
+            }
+
+            // Atualizar leituras hoje
+            const readingsElement = card.querySelector('.readings-value');
+            if (readingsElement) {
+                readingsElement.textContent = sensor.readings_today;
+            }
+
+            // Atualizar minutos atrás
+            const minutesElement = card.querySelector('.minutes-value');
+            if (minutesElement) {
+                minutesElement.textContent = `${sensor.minutes_ago}min`;
+            }
+
+            // Atualizar última leitura
+            const lastReadingElement = card.querySelector('.last-reading-value');
+            if (lastReadingElement) {
+                lastReadingElement.textContent = sensor.last_reading;
+            }
+
+            // Atualizar classes CSS do card baseado no status
+            card.className = `card sensor-card status-${sensor.status}`;
+        }
+
+        async function refreshSensor(deviceId) {
+            console.log('🔄 Atualizando sensor específico:', deviceId);
+            try {
+                const response = await fetch('/api/sensors');
+                if (response.ok) {
+                    const sensors = await response.json();
+                    const sensor = sensors.find(s => s.device_id === deviceId);
+                    if (sensor) {
+                        updateSensorCard(sensor);
+                        console.log('✅ Sensor atualizado:', deviceId);
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Erro ao atualizar sensor:', error);
+                location.reload();
+            }
+        }
+
+        // Forçar refresh inicial após 3 segundos
+        setTimeout(() => {
+            console.log('🚀 Refresh inicial...');
+            refreshData();
+        }, 3000);
+
+        // Mostrar toast de notificação se houver alertas
+        {% if alerts|length > 0 %}
+        document.addEventListener('DOMContentLoaded', function() {
+            // Criar toast de alerta
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-warning border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {{ alerts|length }} alerta(s) ativo(s) detectado(s)!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar container de toast se não existir
+            if (!document.querySelector('.toast-container')) {
+                const container = document.createElement('div');
+                container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                container.style.zIndex = '1100';
+                document.body.appendChild(container);
+            }
+            
+            const container = document.querySelector('.toast-container');
+            container.innerHTML = toastHtml;
+            
+            const toast = new bootstrap.Toast(container.querySelector('.toast'));
+            toast.show();
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "database": {
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "database": "homeguard",
+    "user": "homeguard",
+    "password": "your_homeguard_password_here",
+    "charset": "utf8mb4",
+    "connection_timeout": 10,
+    "autocommit": true,
+    "pool_size": 10,
+    "pool_reset_session": true
+  },
+  "mqtt": {
+    "broker_host": "localhost",
+    "broker_port": 1883,
+    "topics": {
+      "motion_sensors": "homeguard/sensors/motion/+",
+      "dht11_sensors": "homeguard/sensors/dht11/+",
+      "alerts": "homeguard/alerts/+",
+      "relay_control": "homeguard/relay/control/+"
+    },
+    "username": "",
+    "password": "",
+    "keepalive": 60,
+    "qos": 1
+  },
+  "flask": {
+    "debug": true,
+    "host": "0.0.0.0",
+    "port": 5000,
+    "secret_key": "your_secret_key_here_change_this_in_production"
+  },
+  "sensor_config": {
+    "motion_sensors": {
+      "alert_threshold": 5,
+      "clear_threshold": 300
+    },
+    "dht11_sensors": {
+      "temp_min": 15.0,
+      "temp_max": 35.0,
+      "humidity_min": 30.0,
+      "humidity_max": 80.0
+    }
+  },
+  "web_config": {
+    "records_per_page": 50,
+    "max_chart_points": 100,
+    "auto_refresh_seconds": 30,
+    "data_retention_days": 30
+  }
+}

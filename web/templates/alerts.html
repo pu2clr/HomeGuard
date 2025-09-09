@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alertas - HomeGuard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .alert-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+        }
+        .alert-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .alert-danger-custom { border-left-color: #dc3545; }
+        .alert-warning-custom { border-left-color: #ffc107; }
+        .alert-info-custom { border-left-color: #0dcaf0; }
+        .severity-badge-danger { 
+            animation: pulse-danger 2s infinite;
+        }
+        .severity-badge-warning { 
+            animation: pulse-warning 3s infinite;
+        }
+        @keyframes pulse-danger {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .alert-type-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+        .no-alerts-container {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .filter-section {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>HomeGuard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sensors">
+                            <i class="fas fa-thermometer-half me-1"></i>Sensores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/events">
+                            <i class="fas fa-list me-1"></i>Eventos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/relays">
+                            <i class="fas fa-toggle-on me-1"></i>Relés
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/alerts">
+                            <i class="fas fa-exclamation-triangle me-1"></i>Alertas
+                            {% if alerts|length > 0 %}
+                            <span class="badge bg-danger ms-1">{{ alerts|length }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    <i class="fas fa-clock me-1"></i>{{ current_time }}
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                    Alertas do Sistema
+                </h1>
+                <p class="text-muted">Monitoramento de condições críticas</p>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-primary" onclick="refreshAlerts()">
+                    <i class="fas fa-sync-alt me-1"></i>Atualizar
+                </button>
+            </div>
+        </div>
+
+        {% if alerts|length > 0 %}
+        <!-- Estatísticas dos Alertas -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card border-danger">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-circle fa-2x text-danger mb-2"></i>
+                        <h5 class="card-title">Críticos</h5>
+                        <span class="fs-4 fw-bold text-danger" id="critical-count">
+                            {{ alerts|selectattr('severity', 'equalto', 'danger')|list|length }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-warning">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                        <h5 class="card-title">Avisos</h5>
+                        <span class="fs-4 fw-bold text-warning" id="warning-count">
+                            {{ alerts|selectattr('severity', 'equalto', 'warning')|list|length }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-info">
+                    <div class="card-body text-center">
+                        <i class="fas fa-thermometer-half fa-2x text-info mb-2"></i>
+                        <h5 class="card-title">Temperatura</h5>
+                        <span class="fs-4 fw-bold text-info" id="temp-alerts">
+                            {{ alerts|selectattr('alert_type', 'match', 'temperature_.*')|list|length }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-success">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tint fa-2x text-success mb-2"></i>
+                        <h5 class="card-title">Umidade</h5>
+                        <span class="fs-4 fw-bold text-success" id="humidity-alerts">
+                            {{ alerts|selectattr('alert_type', 'match', 'humidity_.*')|list|length }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Filtrar por Severidade:</label>
+                    <select class="form-select" id="severityFilter" onchange="filterAlerts()">
+                        <option value="">Todos</option>
+                        <option value="danger">Críticos</option>
+                        <option value="warning">Avisos</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Filtrar por Tipo:</label>
+                    <select class="form-select" id="typeFilter" onchange="filterAlerts()">
+                        <option value="">Todos</option>
+                        <option value="temperature">Temperatura</option>
+                        <option value="humidity">Umidade</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Filtrar por Dispositivo:</label>
+                    <select class="form-select" id="deviceFilter" onchange="filterAlerts()">
+                        <option value="">Todos</option>
+                        {% for device in alerts|map(attribute='device_name')|unique %}
+                        <option value="{{ device }}">{{ device }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Alertas -->
+        <div class="row">
+            <div class="col">
+                <div id="alertsList">
+                    {% for alert in alerts %}
+                    <div class="card mb-3 alert-item alert-{{ alert.severity }}-custom" 
+                         data-severity="{{ alert.severity }}"
+                         data-type="{{ alert.alert_type.split('_')[0] if '_' in alert.alert_type else alert.alert_type }}"
+                         data-device="{{ alert.device_name }}">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <!-- Ícone do Tipo de Alerta -->
+                                <div class="col-auto">
+                                    <div class="alert-type-icon 
+                                        {% if alert.severity == 'danger' %}bg-danger text-white{% else %}bg-warning text-dark{% endif %}">
+                                        {% if 'temperature' in alert.alert_type %}
+                                        <i class="fas fa-thermometer-half"></i>
+                                        {% elif 'humidity' in alert.alert_type %}
+                                        <i class="fas fa-tint"></i>
+                                        {% else %}
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Informações do Alerta -->
+                                <div class="col">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="card-title mb-1">
+                                                {{ alert.device_name }}
+                                                <span class="badge severity-badge-{{ alert.severity }} bg-{{ alert.severity }}">
+                                                    {{ 'Crítico' if alert.severity == 'danger' else 'Aviso' }}
+                                                </span>
+                                            </h5>
+                                            <p class="text-muted mb-1">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                {{ alert.location }}
+                                            </p>
+                                            <p class="card-text fw-bold mb-2">
+                                                {{ alert.message }}
+                                            </p>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <small class="text-muted">Valor Atual:</small><br>
+                                                    <strong class="text-{{ alert.severity }}">
+                                                        {{ alert.sensor_value }}
+                                                        {% if 'temperature' in alert.alert_type %}°C{% else %}%{% endif %}
+                                                    </strong>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <small class="text-muted">Tipo:</small><br>
+                                                    <span class="badge bg-secondary">
+                                                        {% if 'temperature_high' in alert.alert_type %}Temp. Alta
+                                                        {% elif 'temperature_low' in alert.alert_type %}Temp. Baixa
+                                                        {% elif 'humidity_high' in alert.alert_type %}Umid. Alta
+                                                        {% elif 'humidity_low' in alert.alert_type %}Umid. Baixa
+                                                        {% else %}{{ alert.alert_type|title }}
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <small class="text-muted">Gerado em:</small><br>
+                                                    <strong>{{ alert.timestamp }}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Ações -->
+                                        <div class="text-end">
+                                            <div class="btn-group-vertical btn-group-sm">
+                                                <a href="/sensor/{{ alert.device_id }}" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-chart-line me-1"></i>Ver Histórico
+                                                </a>
+                                                <button class="btn btn-outline-secondary btn-sm" 
+                                                        onclick="resolveAlert('{{ alert.device_id }}', '{{ alert.alert_type }}')"
+                                                        title="Marcar como resolvido">
+                                                    <i class="fas fa-check me-1"></i>Resolver
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Sem Alertas -->
+        <div class="no-alerts-container">
+            <div class="text-center">
+                <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+                <h2 class="text-success">Tudo em ordem!</h2>
+                <p class="text-muted fs-5">Nenhum alerta ativo no momento.</p>
+                <p class="text-muted">Os sensores estão operando dentro dos parâmetros normais.</p>
+                <div class="mt-4">
+                    <a href="/sensors" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-thermometer-half me-1"></i>Ver Sensores
+                    </a>
+                    <button class="btn btn-outline-success" onclick="refreshAlerts()">
+                        <i class="fas fa-sync-alt me-1"></i>Verificar Novamente
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function refreshAlerts() {
+            location.reload();
+        }
+
+        function filterAlerts() {
+            const severityFilter = document.getElementById('severityFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const deviceFilter = document.getElementById('deviceFilter').value;
+            
+            const alerts = document.querySelectorAll('#alertsList .alert-item');
+            
+            alerts.forEach(alert => {
+                let show = true;
+                
+                if (severityFilter && alert.dataset.severity !== severityFilter) {
+                    show = false;
+                }
+                
+                if (typeFilter && !alert.dataset.type.includes(typeFilter)) {
+                    show = false;
+                }
+                
+                if (deviceFilter && alert.dataset.device !== deviceFilter) {
+                    show = false;
+                }
+                
+                alert.style.display = show ? 'block' : 'none';
+            });
+            
+            // Atualizar contadores
+            updateCounters();
+        }
+
+        function updateCounters() {
+            const visibleAlerts = document.querySelectorAll('#alertsList .alert-item[style="display: block"], #alertsList .alert-item:not([style])');
+            
+            let criticalCount = 0;
+            let warningCount = 0;
+            let tempAlerts = 0;
+            let humidityAlerts = 0;
+            
+            visibleAlerts.forEach(alert => {
+                if (alert.dataset.severity === 'danger') criticalCount++;
+                if (alert.dataset.severity === 'warning') warningCount++;
+                if (alert.dataset.type === 'temperature') tempAlerts++;
+                if (alert.dataset.type === 'humidity') humidityAlerts++;
+            });
+            
+            document.getElementById('critical-count').textContent = criticalCount;
+            document.getElementById('warning-count').textContent = warningCount;
+            document.getElementById('temp-alerts').textContent = tempAlerts;
+            document.getElementById('humidity-alerts').textContent = humidityAlerts;
+        }
+
+        function resolveAlert(deviceId, alertType) {
+            if (confirm('Marcar este alerta como resolvido?')) {
+                // Aqui seria feita a chamada AJAX para resolver o alerta
+                fetch('/api/resolve_alert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        device_id: deviceId,
+                        alert_type: alertType
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remover o alerta da lista
+                        location.reload();
+                    } else {
+                        alert('Erro ao resolver alerta: ' + (data.error || 'Erro desconhecido'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro de comunicação com o servidor');
+                });
+            }
+        }
+
+        // Auto refresh a cada 60 segundos
+        setInterval(refreshAlerts, 60000);
+
+        // Mostrar notificação sonora se houver alertas críticos
+        {% if alerts|selectattr('severity', 'equalto', 'danger')|list|length > 0 %}
+        document.addEventListener('DOMContentLoaded', function() {
+            // Som de alerta (apenas se o usuário interagiu com a página)
+            document.addEventListener('click', function playAlertSound() {
+                try {
+                    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFApGn+DyvmYfCDGH0fPTgjMGHm6/7+OPWAoUXrTp66hVFA=');
+                    audio.volume = 0.1;
+                    audio.play().catch(e => console.log('Audio play failed:', e));
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
+                document.removeEventListener('click', playAlertSound);
+            }, { once: true });
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

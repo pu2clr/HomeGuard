@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor {{ device_id }} - Histórico - HomeGuard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 2rem;
+        }
+        .metric-card {
+            border-left: 4px solid #007bff;
+            transition: transform 0.2s;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .temp-card { border-left-color: #dc3545; }
+        .humidity-card { border-left-color: #20c997; }
+        .readings-card { border-left-color: #ffc107; }
+        .period-selector {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>HomeGuard
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sensors">
+                            <i class="fas fa-thermometer-half me-1"></i>Sensores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-chart-line me-1"></i>Histórico {{ device_id }}
+                        </a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    <i class="fas fa-clock me-1"></i>{{ current_time }}
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Header e Controles -->
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-chart-line me-2 text-primary"></i>
+                    Histórico do Sensor {{ device_id }}
+                </h1>
+                <p class="text-muted">Dados das últimas {{ hours }} horas</p>
+            </div>
+        </div>
+
+        <!-- Period Selector -->
+        <div class="row mb-4">
+            <div class="col">
+                <div class="period-selector">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <label class="form-label mb-0">Período:</label>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <a href="?hours=1" class="btn btn-sm {{ 'btn-primary' if hours == 1 else 'btn-outline-primary' }}">1h</a>
+                            <a href="?hours=6" class="btn btn-sm {{ 'btn-primary' if hours == 6 else 'btn-outline-primary' }}">6h</a>
+                            <a href="?hours=24" class="btn btn-sm {{ 'btn-primary' if hours == 24 else 'btn-outline-primary' }}">24h</a>
+                            <a href="?hours=72" class="btn btn-sm {{ 'btn-primary' if hours == 72 else 'btn-outline-primary' }}">3d</a>
+                            <a href="?hours=168" class="btn btn-sm {{ 'btn-primary' if hours == 168 else 'btn-outline-primary' }}">7d</a>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="refreshData()">
+                                <i class="fas fa-sync-alt me-1"></i>Atualizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if history|length > 0 %}
+        <!-- Estatísticas Resumidas -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card temp-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-thermometer-half fa-2x text-danger mb-2"></i>
+                        <h5 class="card-title">Temperatura</h5>
+                        <p class="card-text">
+                            <span class="fs-4 fw-bold" id="temp-avg">--</span>°C<br>
+                            <small class="text-muted">
+                                <span id="temp-min">--</span>°C - <span id="temp-max">--</span>°C
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card humidity-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tint fa-2x text-info mb-2"></i>
+                        <h5 class="card-title">Umidade</h5>
+                        <p class="card-text">
+                            <span class="fs-4 fw-bold" id="humidity-avg">--</span>%<br>
+                            <small class="text-muted">
+                                <span id="humidity-min">--</span>% - <span id="humidity-max">--</span>%
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card readings-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-list-ol fa-2x text-warning mb-2"></i>
+                        <h5 class="card-title">Leituras</h5>
+                        <p class="card-text">
+                            <span class="fs-4 fw-bold">{{ history|length }}</span><br>
+                            <small class="text-muted">registros</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                        <h5 class="card-title">Frequência</h5>
+                        <p class="card-text">
+                            <span class="fs-4 fw-bold" id="freq-avg">--</span><br>
+                            <small class="text-muted">min/leitura</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row">
+            <!-- Gráfico de Temperatura -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-thermometer-half me-2 text-danger"></i>
+                            Temperatura (°C)
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="temperatureChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico de Umidade -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-tint me-2 text-info"></i>
+                            Umidade (%)
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="humidityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico Combinado -->
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-area me-2 text-success"></i>
+                            Visão Combinada
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="combinedChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Dados Raw -->
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-table me-2"></i>
+                            Dados Detalhados
+                        </h5>
+                        <button class="btn btn-sm btn-outline-primary" onclick="downloadCSV()">
+                            <i class="fas fa-download me-1"></i>Exportar CSV
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th class="text-center">Temperatura (°C)</th>
+                                        <th class="text-center">Umidade (%)</th>
+                                        <th class="text-center">Δ Temp</th>
+                                        <th class="text-center">Δ Umid</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataTable">
+                                    {% for reading in history|reverse %}
+                                    <tr>
+                                        <td>{{ reading.timestamp }}</td>
+                                        <td class="text-center">{{ reading.temperature }}</td>
+                                        <td class="text-center">{{ reading.humidity }}</td>
+                                        <td class="text-center" id="temp-delta-{{ loop.index }}">--</td>
+                                        <td class="text-center" id="humidity-delta-{{ loop.index }}">--</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Sem Dados -->
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle fa-2x mb-3"></i>
+                    <h4>Nenhum dado encontrado</h4>
+                    <p class="mb-0">Não há leituras disponíveis para o período selecionado.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dados do sensor
+        const sensorData = {{ history | tojson }};
+
+        // Configurar gráficos
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sensorData.length > 0) {
+                calculateStatistics();
+                createTemperatureChart();
+                createHumidityChart();
+                createCombinedChart();
+                calculateDeltas();
+            }
+        });
+
+        function calculateStatistics() {
+            const temps = sensorData.map(d => d.temperature);
+            const humidities = sensorData.map(d => d.humidity);
+
+            // Temperatura
+            const tempAvg = (temps.reduce((a, b) => a + b, 0) / temps.length).toFixed(1);
+            const tempMin = Math.min(...temps).toFixed(1);
+            const tempMax = Math.max(...temps).toFixed(1);
+
+            document.getElementById('temp-avg').textContent = tempAvg;
+            document.getElementById('temp-min').textContent = tempMin;
+            document.getElementById('temp-max').textContent = tempMax;
+
+            // Umidade
+            const humidityAvg = (humidities.reduce((a, b) => a + b, 0) / humidities.length).toFixed(1);
+            const humidityMin = Math.min(...humidities).toFixed(1);
+            const humidityMax = Math.max(...humidities).toFixed(1);
+
+            document.getElementById('humidity-avg').textContent = humidityAvg;
+            document.getElementById('humidity-min').textContent = humidityMin;
+            document.getElementById('humidity-max').textContent = humidityMax;
+
+            // Frequência média
+            if (sensorData.length > 1) {
+                const firstTime = new Date(sensorData[0].timestamp);
+                const lastTime = new Date(sensorData[sensorData.length - 1].timestamp);
+                const totalMinutes = (lastTime - firstTime) / (1000 * 60);
+                const avgFreq = (totalMinutes / sensorData.length).toFixed(1);
+                document.getElementById('freq-avg').textContent = avgFreq;
+            }
+        }
+
+        function createTemperatureChart() {
+            const ctx = document.getElementById('temperatureChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sensorData.map(d => new Date(d.timestamp).toLocaleTimeString()),
+                    datasets: [{
+                        label: 'Temperatura (°C)',
+                        data: sensorData.map(d => d.temperature),
+                        borderColor: 'rgb(220, 53, 69)',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function createHumidityChart() {
+            const ctx = document.getElementById('humidityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sensorData.map(d => new Date(d.timestamp).toLocaleTimeString()),
+                    datasets: [{
+                        label: 'Umidade (%)',
+                        data: sensorData.map(d => d.humidity),
+                        borderColor: 'rgb(32, 201, 151)',
+                        backgroundColor: 'rgba(32, 201, 151, 0.1)',
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCombinedChart() {
+            const ctx = document.getElementById('combinedChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sensorData.map(d => new Date(d.timestamp).toLocaleTimeString()),
+                    datasets: [{
+                        label: 'Temperatura (°C)',
+                        data: sensorData.map(d => d.temperature),
+                        borderColor: 'rgb(220, 53, 69)',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        yAxisID: 'y',
+                        tension: 0.1
+                    }, {
+                        label: 'Umidade (%)',
+                        data: sensorData.map(d => d.humidity),
+                        borderColor: 'rgb(32, 201, 151)',
+                        backgroundColor: 'rgba(32, 201, 151, 0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Temperatura (°C)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Umidade (%)'
+                            },
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    }
+                }
+            });
+        }
+
+        function calculateDeltas() {
+            for (let i = 1; i < sensorData.length; i++) {
+                const current = sensorData[i];
+                const previous = sensorData[i - 1];
+                
+                const tempDelta = (current.temperature - previous.temperature).toFixed(1);
+                const humidityDelta = (current.humidity - previous.humidity).toFixed(1);
+                
+                const tempElement = document.getElementById(`temp-delta-${sensorData.length - i}`);
+                const humidityElement = document.getElementById(`humidity-delta-${sensorData.length - i}`);
+                
+                if (tempElement) {
+                    tempElement.textContent = (tempDelta > 0 ? '+' : '') + tempDelta;
+                    tempElement.className = tempDelta > 0 ? 'text-center text-danger' : 
+                                          tempDelta < 0 ? 'text-center text-primary' : 'text-center text-muted';
+                }
+                
+                if (humidityElement) {
+                    humidityElement.textContent = (humidityDelta > 0 ? '+' : '') + humidityDelta;
+                    humidityElement.className = humidityDelta > 0 ? 'text-center text-success' : 
+                                              humidityDelta < 0 ? 'text-center text-warning' : 'text-center text-muted';
+                }
+            }
+        }
+
+        function refreshData() {
+            location.reload();
+        }
+
+        function downloadCSV() {
+            const headers = ['Timestamp', 'Temperature', 'Humidity'];
+            const csvContent = [
+                headers.join(','),
+                ...sensorData.map(d => `"${d.timestamp}",${d.temperature},${d.humidity}`)
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `sensor_{{ device_id }}_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Auto refresh a cada 5 minutos
+        setInterval(refreshData, 300000);
+    </script>
+</body>
+</html>
