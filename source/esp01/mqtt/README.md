@@ -7,7 +7,7 @@ This directory contains MQTT-based modules for the HomeGuard system using ESP-01
 ### 1. Relay Control Module (Basic)
 - **Location**: `relay/relay.ino`
 - **Purpose**: Simple relay control with text-based MQTT commands
-- **IP Address**: 192.168.18.192
+- **IP Address**: 192.168.1.192
 - **MQTT Topics**: 
   - Commands: `home/relay1/cmnd`
   - Status: `home/relay1/stat`
@@ -16,7 +16,7 @@ This directory contains MQTT-based modules for the HomeGuard system using ESP-01
 ### 2. Advanced Relay Control Module
 - **Location**: `advanced_relay/advanced_relay.ino`
 - **Purpose**: Enhanced relay control with JSON messaging and advanced features
-- **IP Address**: 192.168.18.192 (same as basic relay - use only one)
+- **IP Address**: 192.168.1.192 (same as basic relay - use only one)
 - **MQTT Topics**:
   - Commands: `home/relay1/cmnd`
   - Status: `home/relay1/status`
@@ -29,7 +29,7 @@ This directory contains MQTT-based modules for the HomeGuard system using ESP-01
 ### 3. Motion Detection Module  
 - **Location**: `motion_detector/motion_detector.ino`
 - **Purpose**: PIR motion sensor monitoring with event reporting
-- **IP Address**: 192.168.18.193
+- **IP Address**: 192.168.1.193
 - **MQTT Topics**:
   - Commands: `home/motion1/cmnd`
   - Status: `home/motion1/status`
@@ -39,7 +39,7 @@ This directory contains MQTT-based modules for the HomeGuard system using ESP-01
 
 ## MQTT Broker Configuration
 
-- **IP**: 192.168.18.198
+- **IP**: 192.168.1.102
 - **Port**: 1883
 - **Username**: homeguard
 - **Password**: pu2clr123456
@@ -49,41 +49,41 @@ This directory contains MQTT-based modules for the HomeGuard system using ESP-01
 
 ### Monitor All Devices
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "#" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "#" -v
 ```
 
 ### Control Relay (Basic)
 ```bash
 # Turn ON
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
 
 # Turn OFF
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
 ```
 
 ### Control Advanced Relay
 ```bash
 # Basic control (compatible with basic relay)
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "TOGGLE" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "OFF" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "TOGGLE" -u homeguard -P pu2clr123456
 
 # Advanced features
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "LOCATION_Kitchen" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "HEARTBEAT_ON" -u homeguard -P pu2clr123456
 
 # Monitor all advanced relay topics
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/relay1/#" -v
 ```
 
 ### Monitor Motion Detector
 ```bash
 # Subscribe to all motion events
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion1/#" -v
 
 # Request status
-mosquitto_pub -h 192.168.18.198 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/motion1/cmnd -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ## Hardware Requirements

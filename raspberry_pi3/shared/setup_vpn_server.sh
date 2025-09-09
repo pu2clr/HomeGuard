@@ -276,7 +276,7 @@ cat > ~/HomeGuard_Remote_Access_Guide.md << 'EOF'
 Once connected to VPN, access services at:
 
 ### MQTT Broker:
-- **Host**: 192.168.18.198 (or your Pi's IP)
+- **Host**: 192.168.1.102 (or your Pi's IP)
 - **Port**: 1883
 - **User**: homeguard
 - **Pass**: pu2clr123456
@@ -284,13 +284,13 @@ Once connected to VPN, access services at:
 ### HomeGuard Devices:
 - **Motion Detector**: 192.168.18.193
 - **Relay Controller**: 192.168.18.192
-- **Audio System**: 192.168.18.198 (Pi IP)
+- **Audio System**: 192.168.1.102 (Pi IP)
 
 ### Example Remote Commands:
 ```bash
 # From mobile/desktop with VPN connected:
-mosquitto_pub -h 192.168.18.198 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
-mosquitto_pub -h 192.168.18.198 -t home/audio/cmnd -m "DOGS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/relay1/cmnd -m "ON" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t home/audio/cmnd -m "DOGS" -u homeguard -P pu2clr123456
 ```
 
 ## 🛠️ Management Commands

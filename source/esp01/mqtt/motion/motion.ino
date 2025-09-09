@@ -17,11 +17,11 @@
   - Robust reconnection with backoff
 
   MQTT Commands:
-  - mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t
+  - mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t
   "home/motion/MOTION_01/#" -v
-  - mosquitto_pub -h 192.168.18.198 -t home/motion/MOTION_01/command -m "STATUS"
+  - mosquitto_pub -h 192.168.1.102 -t home/motion/MOTION_01/command -m "STATUS"
   -u homeguard -P pu2clr123456
-  - mosquitto_pub -h 192.168.18.198 -t home/motion/MOTION_01/command -m "ENABLE"
+  - mosquitto_pub -h 192.168.1.102 -t home/motion/MOTION_01/command -m "ENABLE"
   -u homeguard -P pu2clr123456
 */
 
@@ -29,18 +29,18 @@
 #define DEBUG 1
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID "MOTION_00"         // Unique device ID
-#define DEVICE_NAME "Maker"     // Device display name
-#define DEVICE_LOCATION "Espaço Maker" // Location name
+#define DEVICE_ID "MOTION_IR04"         // Unique device ID
+#define DEVICE_NAME "area_servico"     // Device display name
+#define DEVICE_LOCATION "Area de Servico" // Location name
 
 #define LOCAL_IP_1 192
 #define LOCAL_IP_2 168
-#define LOCAL_IP_3 18
-#define LOCAL_IP_4 115
+#define LOCAL_IP_3 1 
+#define LOCAL_IP_4 134
 
 #define GATEWAY_1 192
 #define GATEWAY_2 168
-#define GATEWAY_3 18
+#define GATEWAY_3 1 
 #define GATEWAY_4 1
 
 #define SUBNET_1 255
@@ -48,12 +48,12 @@
 #define SUBNET_3 255
 #define SUBNET_4 0
 
-#define MQTT_SERVER "192.168.18.198"
+#define MQTT_SERVER "192.168.1.102"
 #define MQTT_PORT 1883
 #define MQTT_USER "homeguard"    // <-- troque por placeholder ao commitar
 #define MQTT_PASS "pu2clr123456" // <-- troque por placeholder ao commitar
-#define WIFI_SSID "APRC"         // <-- troque por placeholder ao commitar
-#define WIFI_PASS "Ap69Rc642023" // <-- troque por placeholder ao commitar
+#define WIFI_SSID "Homeguard"         // <-- troque por placeholder ao commitar
+#define WIFI_PASS "pu2clr123456" // <-- troque por placeholder ao commitar
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
@@ -266,7 +266,7 @@ void publishEvent(bool motion) {
   payload += "\"ts\":\"" + getTimestamp() + "\",";
   payload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
   payload += "\"name\":\"" + String(DEVICE_NAME_STR) + "\",";
-  payload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\"";
+  payload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
   payload += "\"sensor_type\":\"REGULAR_IR_SENSOR\",";
   payload += "\"ip\":\"" + WiFi.localIP().toString() + "\"";
   payload += "}";
@@ -284,6 +284,7 @@ void publishHeartbeat() {
   unsigned long uptime = (millis() - bootTime) / 1000;
 
   String payload = "{";
+  payload += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
   payload += "\"uptime\":" + String(uptime) + ",";
   payload += "\"rssi\":" + String(WiFi.RSSI());
   payload += "}";

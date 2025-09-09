@@ -101,7 +101,7 @@ PersistentKeepalive = 25
 ### MQTT Client Configuration:
 
 #### Configuração HomeGuard:
-- **Host**: 192.168.18.198
+- **Host**: 192.168.1.102
 - **Port**: 1883
 - **Username**: homeguard
 - **Password**: pu2clr123456
@@ -254,7 +254,7 @@ home/motion1/cmnd      # Configurar sensor
 
 ### MQTT Not Working:
 1. Verify VPN is connected first
-2. Check MQTT broker IP (192.168.18.198)
+2. Check MQTT broker IP (192.168.1.102)
 3. Test with mosquitto_sub/pub commands
 4. Verify credentials
 

@@ -4,7 +4,7 @@
 # Test script for the advanced_relay.ino with JSON messaging
 
 # MQTT Configuration
-BROKER="192.168.18.198"
+BROKER="192.168.1.102"
 USERNAME="homeguard"
 PASSWORD="pu2clr123456"
 TOPIC_BASE="home/relay1"

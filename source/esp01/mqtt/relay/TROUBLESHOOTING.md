@@ -1,8 +1,8 @@
 # Guia de Troubleshooting - ESP01 HomeGuard
 
 ## Status do Diagnóstico
-✅ ESP01 está acessível na rede (IP 192.168.18.192)  
-✅ Broker MQTT está funcionando (192.168.18.198:1883)  
+✅ ESP01 está acessível na rede (IP 192.168.1.192)  
+✅ Broker MQTT está funcionando (192.168.1.102:1883)  
 ✅ Autenticação MQTT está funcionando (usuário: homeguard)  
 ❌ ESP01 não está respondendo aos comandos MQTT  
 
@@ -27,12 +27,12 @@ const char* password = "YOUR_PASSWORD"; // ← Confirme se está correto
 **Problema**: Conflito de IP ou configuração de rede incorreta.
 **Solução**:
 - Teste primeiro sem IP estático (comente as linhas de WiFi.config)
-- Verifique se o IP 192.168.18.192 não está sendo usado por outro dispositivo
+- Verifique se o IP 192.168.1.192 não está sendo usado por outro dispositivo
 
 ### 4. **Configurações MQTT Incorretas no Código**
 **Verificar no código**:
 ```cpp
-const char* mqtt_server = "192.168.18.198"; // ← Confirme se está correto
+const char* mqtt_server = "192.168.1.102"; // ← Confirme se está correto
 const char* mqtt_user = "homeguard";        // ← Confirme se está correto  
 const char* mqtt_pass = "pu2clr123456";     // ← Confirme se está correto
 ```
@@ -66,7 +66,7 @@ const char* mqtt_pass = "pu2clr123456";     // ← Confirme se está correto
 Monitor serial deve mostrar:
 ```
 Wi-Fi connected!
-IP Address: 192.168.18.192
+IP Address: 192.168.1.192
 RSSI: -XX dBm
 ```
 
@@ -80,7 +80,7 @@ Subscribed to: homeguard/relay/ESP01_RELAY_001/command (success: 1)
 ### Passo 4: Testar Comandos
 Execute:
 ```bash
-mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
   -t "homeguard/relay/ESP01_RELAY_001/command" -m "STATUS"
 ```
 
@@ -100,27 +100,27 @@ MQTT Command received: 'STATUS' on topic: homeguard/relay/ESP01_RELAY_001/comman
 ### Test MQTT:
 ```bash
 # Monitor todos os tópicos do ESP01:
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/#" -v
 
 # Enviar comandos:
-mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/command" -m "STATUS"
 
-mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/command" -m "ON"
 
-mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 \
+mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
   -t "home/relay/ESP01_RELAY_001/command" -m "OFF"
 ```
 
 ### Verificar IP do ESP01:
 ```bash
-# Deve responder em 192.168.18.192:
-ping 192.168.18.192
+# Deve responder em 192.168.1.192:
+ping 192.168.1.192
 
 # Verificar se há conflito de MAC/IP:
-arp -a | grep 192.168.18.192
+arp -a | grep 192.168.1.192
 ```
 
 ## Configuração Temporária Simplificada

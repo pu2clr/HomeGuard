@@ -65,7 +65,7 @@ IPAddress primaryDNS(8, 8, 8, 8);
 IPAddress secondaryDNS(8, 8, 4, 4);
 
 // MQTT Configuration
-const char* MQTT_BROKER = "192.168.18.198";
+const char* MQTT_BROKER = "192.168.1.102";
 const char* MQTT_USERNAME = "homeguard";
 const char* MQTT_PASSWORD = "pu2clr123456";
 

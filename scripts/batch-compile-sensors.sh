@@ -176,13 +176,13 @@ The script will guide you through:
 ### Basic connectivity test:
 ```bash
 # Replace motion_garagem with the appropriate topic for your sensor
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_garagem/#" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_garagem/#" -v
 ```
 
 ### Device status check:
 ```bash
 # Replace motion_garagem with the appropriate topic for your sensor
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### Network ping test:
@@ -227,7 +227,7 @@ arduino-cli monitor -p /dev/tty.usbserial-XXXX -c baudrate=115200
 ### Network Issues:
 - ✅ WiFi network "YOUR_SSID" available
 - ✅ IP address not conflicting with other devices
-- ✅ MQTT broker running on 192.168.18.198
+- ✅ MQTT broker running on 192.168.1.102
 
 ### Motion Detection Issues:
 - ✅ PIR sensor connected to GPIO2
@@ -240,14 +240,14 @@ arduino-cli monitor -p /dev/tty.usbserial-XXXX -c baudrate=115200
 ```bash
 for topic in motion_garagem motion_area_servico motion_varanda motion_mezanino motion_adhoc; do
   echo "Checking $topic..."
-  mosquitto_pub -h 192.168.18.198 -t "home/$topic/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+  mosquitto_pub -h 192.168.1.102 -t "home/$topic/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
   sleep 2
 done
 ```
 
 ### Monitor all sensors:
 ```bash
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_+/+" -v
 ```
 
 EOF
@@ -269,7 +269,7 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-BROKER="192.168.18.198"
+BROKER="192.168.1.102"
 USERNAME="homeguard"
 PASSWORD="pu2clr123456"
 

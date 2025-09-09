@@ -73,7 +73,7 @@ nano mqtt_relay_config.py
 ```python
 # mqtt_relay_config.py (mesmo arquivo)
 MQTT_CONFIG = {
-    'broker_host': '192.168.18.198',  # Mesmo IP
+    'broker_host': '192.168.1.102',  # Mesmo IP
     'broker_port': 1883,              # Mesma porta
     # ... resto igual
 }

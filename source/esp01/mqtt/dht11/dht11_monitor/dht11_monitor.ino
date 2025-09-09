@@ -3,9 +3,9 @@
   Compatible with Flask Dashboard MQTT System
   
   QUICK CONFIG: Uncomment ONE line below for your ESP01:
-  // #define SENSOR_001  // Sala (192.168.18.195)
-  // #define SENSOR_002  // Cozinha (192.168.18.196)  
-  // #define SENSOR_003  // Quarto (192.168.18.197)
+  // #define SENSOR_001  // Sala (192.168.1.195)
+  // #define SENSOR_002  // Cozinha (192.168.1.196)  
+  // #define SENSOR_003  // Quarto (192.168.1.197)
   
   Hardware connections:
   - DHT11 VCC -> 3.3V
@@ -22,32 +22,32 @@
   - Restart: sudo systemctl restart mosquitto
 
   Testing Commands:
-  - Monitor all topics: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "#" -v
-  - Monitor temperature: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/temperature/ESP01_DHT11_001/data" -v
-  - Monitor humidity: mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/humidity/ESP01_DHT11_001/data" -v
+  - Monitor all topics: mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "#" -v
+  - Monitor temperature: mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/temperature/ESP01_DHT11_001/data" -v
+  - Monitor humidity: mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/humidity/ESP01_DHT11_001/data" -v
 
 */
 
 // ======== DHT Hardware Configuration ========
 #define DHT_PIN 2  // GPIO2 for DHT data pin
 // Selecione o tipo de sensor: DHT11 ou DHT22
-#define DHT_SENSOR_TYPE DHT22  // Altere para DHT22 se usar o sensor branco
+#define DHT_SENSOR_TYPE DHT11  // Altere para DHT22 se usar o sensor branco
 #define STATUS_LED_PIN 0       // GPIO0 for status LED (optional)
 
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID "ESP01_DHT22_BRANCO"            // Unique device ID
-#define DEVICE_NAME "corredor"                // Device display name
-#define DEVICE_LOCATION "Corredor Ventilado"  // Location name
+#define DEVICE_ID "DHT11_01"            // Unique device ID
+#define DEVICE_NAME "Maker"                // Device display name
+#define DEVICE_LOCATION "Maker Space"  // Location name
 
 #define LOCAL_IP_1 192  // Device local IP
 #define LOCAL_IP_2 168
-#define LOCAL_IP_3 18
-#define LOCAL_IP_4 153
+#define LOCAL_IP_3 1
+#define LOCAL_IP_4 81
 
 #define GATEWAY_1 192  // Your network gateway
 #define GATEWAY_2 168
-#define GATEWAY_3 18
+#define GATEWAY_3 1
 #define GATEWAY_4 1
 
 #define SUBNET_1 255  // Your network subnet
@@ -55,12 +55,12 @@
 #define SUBNET_3 255
 #define SUBNET_4 0
 
-#define MQTT_SERVER "192.168.18.198"  // MQTT broker IP
+#define MQTT_SERVER "192.168.1.102"  // MQTT broker IP
 #define MQTT_PORT 1883                // MQTT broker port
 #define MQTT_USER "homeguard"         // MQTT username
 #define MQTT_PASS "pu2clr123456"      // MQTT password
-#define WIFI_SSID "APRC"              // WiFi SSID
-#define WIFI_PASS "Ap69Rc642023"      // WiFi password
+#define WIFI_SSID "Homeguard"              // WiFi SSID
+#define WIFI_PASS "pu2clr123456"      // WiFi password
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>

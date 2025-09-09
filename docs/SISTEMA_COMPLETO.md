@@ -88,7 +88,7 @@ home/motion_garagem/        # Exemplo para garagem
 ping 192.168.18.201
 
 # Verificar MQTT
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 ```
 
 ### **Teste Todos os Sensores**
@@ -100,7 +100,7 @@ mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u hom
 ### **Monitoramento Contínuo**
 ```bash
 # Ver todos os eventos de movimento
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_+/motion" -v
 ```
 
 ## 🔄 **PROCESSO DE UPLOAD**
@@ -169,10 +169,10 @@ HomeGuard/
 
 # 3. Testar o sensor
 ping 192.168.18.201
-mosquitto_pub -h 192.168.18.198 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
+mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u homeguard -P pu2clr123456
 
 # 4. Monitorar eventos
-mosquitto_sub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/motion_garagem/motion" -v
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/motion_garagem/motion" -v
 ```
 
 ## 🔥 **CARACTERÍSTICAS AVANÇADAS**

@@ -299,7 +299,7 @@ VPN Settings:
 - Allowed IPs: 10.200.200.0/24, 192.168.18.0/24
 
 MQTT Settings:
-- Host: 192.168.18.198 (via VPN)
+- Host: 192.168.1.102 (via VPN)
 - Keep-alive: 60 seconds
 - Clean Session: true
 ```

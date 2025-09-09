@@ -18,24 +18,24 @@
 
   Exemplo de comandos mosquitto:
   # Ajustar limiar para 700
-  mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sound_monitor/threshold" -m "700"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sound_monitor/threshold" -m "700"
 
   # Ligar relé
-  mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sound_monitor/relay" -m "ON"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sound_monitor/relay" -m "ON"
 
   # Desligar relé
-  mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sound_monitor/relay" -m "OFF"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sound_monitor/relay" -m "OFF"
 
   # Modo automático (aciona relé por som)
-  mosquitto_pub -h 192.168.18.198 -u homeguard -P pu2clr123456 -t "home/sound_monitor/relay" -m "AUTO"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/sound_monitor/relay" -m "AUTO"
 */
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-#define WIFI_SSID     "APRC"
-#define WIFI_PASSWORD "Ap69Rc642023"
-#define MQTT_BROKER   "192.168.18.198"
+#define WIFI_SSID     "Homeguard"
+#define WIFI_PASSWORD "pu2clr123456"
+#define MQTT_BROKER   "192.168.1.102"
 #define MQTT_PORT     1883
 #define MQTT_USER     "homeguard"
 #define MQTT_PASS     "pu2clr123456"
