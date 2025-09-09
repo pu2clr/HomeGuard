@@ -235,8 +235,15 @@ create VIEW vw_relay_activity as
 SELECT 
     created_at,
     topic,
-	message  -- ON ou OFF
+    message,  -- ON ou OFF
+    CASE 
+        WHEN message = 'ON' THEN 'Ligado'
+        WHEN message = 'OFF' THEN 'Desligado'
+        ELSE message 
+    END as status_brasileiro,
+    substr(topic, length('home/relay/') + 1, 
+           length(topic) - length('home/relay/') - length('/command')) as relay_id
 FROM activity 
-WHERE topic like  'home/relay/%/command' -- AND message = 'ON'
+WHERE topic like 'home/relay/%/command' -- AND message = 'ON'
 ORDER BY created_at DESC;
 
