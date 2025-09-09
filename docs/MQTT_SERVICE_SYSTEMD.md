@@ -37,6 +37,9 @@ pip3 install paho-mqtt
 # No Raspberry Pi, navegue até o projeto
 cd /home/homeguard/HomeGuard
 
+# (Opcional) Testar caminhos primeiro
+./scripts/test-paths.sh
+
 # Execute o script de configuração
 sudo ./scripts/setup-mqtt-service.sh
 ```
@@ -214,13 +217,37 @@ sudo journalctl -u homeguard-mqtt -p err
 ### **Logs da Aplicação**
 ```bash
 # Log específico da aplicação (se configurado)
-tail -f /home/pi/HomeGuard/logs/mqtt_service.log
+tail -f /home/homeguard/HomeGuard/logs/mqtt_service.log
 
 # Ver estatísticas do banco
-sqlite3 /home/pi/HomeGuard/db/homeguard.db "SELECT COUNT(*) as total_messages FROM activity;"
+sqlite3 /home/homeguard/HomeGuard/db/homeguard.db "SELECT COUNT(*) as total_messages FROM activity;"
 ```
 
 ## 🐛 Troubleshooting
+
+### **Problemas de Caminhos de Arquivos**
+
+#### **Erro: "mqtt_service.py não encontrado"**
+```bash
+# 1. Verificar estrutura de diretórios
+./scripts/test-paths.sh
+
+# 2. Verificar diretório atual
+pwd
+# Deve mostrar: /home/homeguard/HomeGuard
+
+# 3. Verificar se arquivo existe
+ls -la web/mqtt_service.py
+
+# 4. Se não existir, procurar arquivo
+find /home/homeguard -name "mqtt_service.py" 2>/dev/null
+
+# 5. Recriar projeto se necessário
+cd /home/homeguard
+rm -rf HomeGuard
+git clone https://github.com/pu2clr/HomeGuard.git
+cd HomeGuard
+```
 
 ### **Serviço Não Inicia**
 
@@ -318,7 +345,7 @@ watch 'ps aux | grep mqtt_service; echo ""; free -h; echo ""; df -h /'
 sudo ufw allow from 192.168.1.0/24 to any port 1883
 
 # Logs de acesso
-sudo auditctl -w /home/pi/HomeGuard -p rwxa -k homeguard_access
+sudo auditctl -w /home/homeguard/HomeGuard -p rwxa -k homeguard_access
 ```
 
 ## 📈 Otimização

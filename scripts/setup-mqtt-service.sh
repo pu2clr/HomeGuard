@@ -48,7 +48,7 @@ fi
 
 # Configurações
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$SCRIPT_DIR"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"  # Diretório pai do scripts/ = raiz do projeto
 SERVICE_NAME="homeguard-mqtt"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 USER="homeguard"  # Usuário do sistema HomeGuard
@@ -65,6 +65,16 @@ MQTT_SERVICE_PATH="$PROJECT_DIR/web/mqtt_service.py"
 if [[ ! -f "$MQTT_SERVICE_PATH" ]]; then
     error "Arquivo mqtt_service.py não encontrado: $MQTT_SERVICE_PATH"
     error "Certifique-se de estar no diretório correto do projeto HomeGuard"
+    error ""
+    error "Estrutura esperada:"
+    error "  $PROJECT_DIR/"
+    error "  ├── web/"
+    error "  │   └── mqtt_service.py"
+    error "  └── scripts/"
+    error "      └── setup-mqtt-service.sh"
+    error ""
+    error "Diretórios encontrados:"
+    ls -la "$PROJECT_DIR/" 2>/dev/null || error "Diretório $PROJECT_DIR não existe"
     exit 1
 fi
 

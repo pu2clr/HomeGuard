@@ -17,7 +17,7 @@ NC='\033[0m'
 
 # Configurações
 SERVICE_NAME="homeguard-mqtt"
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"  # Diretório pai do scripts/
 
 log() {
     echo -e "${GREEN}[$(date '+%H:%M:%S')]${NC} $1"
