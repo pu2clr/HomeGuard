@@ -72,7 +72,12 @@ log "✓ Arquivo mqtt_service.py encontrado: $MQTT_SERVICE_PATH"
 
 # Verificar se usuário homeguard existe
 if ! id "$USER" &>/dev/null; then
-    warn "Usuário '$USER' não encontrado"
+    error "Usuário '$USER' não encontrado!"
+    error ""
+    error "SOLUÇÃO: Execute primeiro o script de criação de usuário:"
+    error "sudo ./scripts/create-homeguard-user.sh"
+    error ""
+    warn "Ou, se preferir usar outro usuário existente:"
     read -p "Digite o nome do usuário para executar o serviço: " USER
     if ! id "$USER" &>/dev/null; then
         error "Usuário '$USER' não existe"
