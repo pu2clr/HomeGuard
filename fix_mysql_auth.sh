@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 # Detectar IP do cliente (seu Mac)
 CLIENT_IP=$(who am i 2>/dev/null | awk '{print $5}' | tr -d '()')
 if [[ -z "$CLIENT_IP" ]]; then
-    CLIENT_IP="192.168.18.205"  # IP detectado do erro
+    CLIENT_IP="192.168.1.205"  # IP detectado do erro
 fi
 
 echo -e "${BLUE}🔍 IP do cliente detectado: ${CLIENT_IP}${NC}"

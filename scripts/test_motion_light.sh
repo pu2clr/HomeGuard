@@ -54,8 +54,8 @@ echo ""
 
 echo "🔧 Troubleshooting:"
 echo "   - Ensure both ESP-01S devices are powered and connected"
-echo "   - Motion detector should be at IP 192.168.18.193"
-echo "   - Relay controller should be at IP 192.168.18.192"
+echo "   - Motion detector should be at IP 192.168.1.193"
+echo "   - Relay controller should be at IP 192.168.1.192"
 echo "   - MQTT broker should be running at 192.168.1.102"
 echo ""
 

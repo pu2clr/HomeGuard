@@ -71,7 +71,7 @@ compile_sensor() {
     local sensor_key="$1"
     IFS=',' read -r location ip topic <<< "${SENSORS[$sensor_key]}"
     
-    print_info "Compiling $location (IP: 192.168.18.$ip)..."
+    print_info "Compiling $location (IP: 192.168.1.$ip)..."
     
     # Create sensor-specific directory
     local sensor_dir="$BUILD_DIR/${sensor_key}_motion_sensor"
@@ -131,7 +131,7 @@ EOF
 
     for sensor_key in $(echo "${!SENSORS[@]}" | tr ' ' '\n' | sort); do
         IFS=',' read -r location ip topic <<< "${SENSORS[$sensor_key]}"
-        echo "| $location | 192.168.18.$ip | firmware/${location}_motion_sensor.bin | home/$topic |" >> "$instructions_file"
+        echo "| $location | 192.168.1.$ip | firmware/${location}_motion_sensor.bin | home/$topic |" >> "$instructions_file"
     done
 
     cat >> "$instructions_file" << 'EOF'
@@ -188,7 +188,7 @@ mosquitto_pub -h 192.168.1.102 -t "home/motion_garagem/cmnd" -m "STATUS" -u home
 ### Network ping test:
 ```bash
 # Replace with the appropriate IP for your sensor
-ping 192.168.18.201
+ping 192.168.1.201
 ```
 
 ## 🏠 MQTT Topic Structure
@@ -274,11 +274,11 @@ USERNAME="homeguard"
 PASSWORD="pu2clr123456"
 
 declare -A SENSOR_IPS=(
-    ["motion_garagem"]="192.168.18.201"
-    ["motion_area_servico"]="192.168.18.202"
-    ["motion_varanda"]="192.168.18.203"
-    ["motion_mezanino"]="192.168.18.204"
-    ["motion_adhoc"]="192.168.18.205"
+    ["motion_garagem"]="192.168.1.201"
+    ["motion_area_servico"]="192.168.1.202"
+    ["motion_varanda"]="192.168.1.203"
+    ["motion_mezanino"]="192.168.1.204"
+    ["motion_adhoc"]="192.168.1.205"
 )
 
 echo -e "${BLUE}🧪 Testing all HomeGuard Motion Sensors${NC}"

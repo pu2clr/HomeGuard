@@ -94,7 +94,7 @@ DNS = 8.8.8.8
 [Peer]
 PublicKey = [SERVER_PUBLIC_KEY]
 Endpoint = YOUR_EXTERNAL_IP:51820
-AllowedIPs = 10.200.200.0/24, 192.168.18.0/24
+AllowedIPs = 10.200.200.0/24, 192.168.1.0/24
 PersistentKeepalive = 25
 ```
 
@@ -260,6 +260,6 @@ home/motion1/cmnd      # Configurar sensor
 
 ### Can't Access HomeGuard:
 1. Ping HomeGuard devices through VPN
-2. Check device IPs (192.168.18.x)
+2. Check device IPs (192.168.1.x)
 3. Verify MQTT broker is running
 4. Check device heartbeats

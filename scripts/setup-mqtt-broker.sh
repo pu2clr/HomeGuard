@@ -299,8 +299,8 @@ print_status "Backup system configured"
 # Configure firewall
 echo -e "${BLUE}🔥 Configuring firewall...${NC}"
 if command -v ufw &> /dev/null; then
-    sudo ufw allow from 192.168.18.0/24 to any port 1883 comment 'MQTT HomeGuard'
-    sudo ufw allow from 192.168.18.0/24 to any port 8883 comment 'MQTT SSL HomeGuard'
+    sudo ufw allow from 192.168.1.0/24 to any port 1883 comment 'MQTT HomeGuard'
+    sudo ufw allow from 192.168.1.0/24 to any port 8883 comment 'MQTT SSL HomeGuard'
     print_status "UFW firewall configured"
 else
     print_warning "UFW not installed. Please configure firewall manually."

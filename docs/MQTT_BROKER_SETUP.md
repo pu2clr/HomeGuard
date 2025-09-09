@@ -211,8 +211,8 @@ sudo ufw allow 1883/tcp comment 'MQTT'
 sudo ufw allow 8883/tcp comment 'MQTT SSL'
 
 # Allow from specific network only (more secure)
-sudo ufw allow from 192.168.18.0/24 to any port 1883
-sudo ufw allow from 192.168.18.0/24 to any port 8883
+sudo ufw allow from 192.168.1.0/24 to any port 1883
+sudo ufw allow from 192.168.1.0/24 to any port 8883
 
 # Check status
 sudo ufw status
@@ -221,8 +221,8 @@ sudo ufw status
 ### 2. iptables Rules (alternative)
 ```bash
 # Allow MQTT from local network only
-sudo iptables -A INPUT -s 192.168.18.0/24 -p tcp --dport 1883 -j ACCEPT
-sudo iptables -A INPUT -s 192.168.18.0/24 -p tcp --dport 8883 -j ACCEPT
+sudo iptables -A INPUT -s 192.168.1.0/24 -p tcp --dport 1883 -j ACCEPT
+sudo iptables -A INPUT -s 192.168.1.0/24 -p tcp --dport 8883 -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 1883 -j DROP
 sudo iptables -A INPUT -p tcp --dport 8883 -j DROP
 

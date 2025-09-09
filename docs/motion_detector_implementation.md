@@ -8,7 +8,7 @@ Created a motion detection sketch for ESP-01S based on the working `mqtt.ino` co
 ### 1. Main Arduino Sketch
 **File:** `/source/esp01/mqtt/motion_detector.ino`
 - **Based on:** Working `mqtt.ino` configuration
-- **IP:** 192.168.18.193 (different from relay: 192.168.18.192)  
+- **IP:** 192.168.1.193 (different from relay: 192.168.1.192)  
 - **Function:** PIR motion sensor integration with MQTT reporting
 
 ### 2. Documentation

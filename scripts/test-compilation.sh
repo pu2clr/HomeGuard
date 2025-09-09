@@ -57,7 +57,7 @@ compile_sketch() {
     
     print_info "Compiling sketch for $selected_location..."
     print_info "Location: $selected_location"
-    print_info "IP: 192.168.18.$selected_ip"
+    print_info "IP: 192.168.1.$selected_ip"
     print_info "MQTT Topic: $selected_topic"
     
     # Build flags for ESP8266
