@@ -32,7 +32,7 @@
 // ======== ESP01 Configuration (CHANGE FOR EACH DEVICE) ========
 // Uncomment ONE line below:
 // #define RELAY_001  // Luz da Sala
-// #define RELAY_002  // Luz da Área de Serviço
+#define RELAY_002  // Luz da Área de Serviço
 // #define RELAY_003  // Bomba d'Água
 
 #include <ESP8266WiFi.h>
@@ -45,12 +45,12 @@ const char *RELAY_NAME = "Luz da Sala";
 const char *RELAY_LOCATION = "Sala";
 IPAddress local_IP(192, 168, 1, 70);
 #elif defined(RELAY_002)
-const char *DEVICE_ID = "ESP01_RELAY_002";
+const char *DEVICE_ID = "RELAY_002";
 const char *RELAY_NAME = "Área de Serviço";
 const char *RELAY_LOCATION = "AreaServico";
 IPAddress local_IP(192, 168, 1, 71);
 #elif defined(RELAY_003)
-const char *DEVICE_ID = "ESP01_RELAY_003";
+const char *DEVICE_ID = "RELAY_003";
 const char *RELAY_NAME = "Bomba d'Água";
 const char *RELAY_LOCATION = "Externa";
 IPAddress local_IP(192, 168, 1, 72);
