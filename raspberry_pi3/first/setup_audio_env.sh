@@ -15,8 +15,8 @@ sudo apt-get install -y python3 python3-pip python3-dev python3-setuptools
 sudo apt-get install -y libsdl2-mixer-2.0-0 libsdl2-2.0-0 libasound2-dev libportaudio2 libportmidi-dev libfreetype6-dev
 
 # Instala dependências Python necessárias globalmente
-sudo pip3 install --upgrade pip
-sudo pip3 install pygame paho-mqtt schedule
+sudo apt-get install -y python3-pygame python3-paho-mqtt python3-schedule || true
+sudo pip3 install --break-system-packages pygame paho-mqtt schedule
 
 # Mensagem final
 echo "\n✅ Ambiente Python para áudio configurado com sucesso!"
