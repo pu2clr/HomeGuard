@@ -36,14 +36,14 @@
 
 
 // ======== User Parameters (Edit these for your device) ========
-#define DEVICE_ID "DHT11_01"            // Unique device ID
-#define DEVICE_NAME "Maker"                // Device display name
-#define DEVICE_LOCATION "Maker Space"  // Location name
+#define DEVICE_ID "DHT11_0X"            // Unique device ID
+#define DEVICE_NAME "lab"                // Device display name
+#define DEVICE_LOCATION "Laboratorio"  // Location name
 
 #define LOCAL_IP_1 192  // Device local IP
 #define LOCAL_IP_2 168
 #define LOCAL_IP_3 1
-#define LOCAL_IP_4 81
+#define LOCAL_IP_4 85
 
 #define GATEWAY_1 192  // Your network gateway
 #define GATEWAY_2 168
