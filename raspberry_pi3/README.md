@@ -216,6 +216,19 @@ mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 \
 ### Debug Mode
 Adicionar `"debug": true` nas configurações JSON para logs detalhados.
 
+
+
+## Exemplo de comandos cvlc 
+
+cvlc --gain=0.5 --play-and-exit alerta.mp3   # 50% do volume
+cvlc --gain=1.0 --play-and-exit alerta.mp3   # volume normal
+cvlc --gain=2.0 --play-and-exit alerta.mp3   # volume dobrado
+
+cvlc --volume 256 --play-and-exit alerta.mp3   # 50% do máximo
+cvlc --volume 512 --play-and-exit alerta.mp3   # volume máximo
+
+
+
 ---
 
 **Versão**: 2.0 (Dual Pi3 Architecture)  
