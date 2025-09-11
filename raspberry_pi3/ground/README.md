@@ -41,6 +41,35 @@ Este diretório contém o serviço de simulação de presença por áudio para o
 - Programação de sons por horário ou por detecção de movimento.
 - Controle remoto via MQTT para ativar/desativar simulação.
 
+## Exemplos de comandos MQTT
+
+- **Ativar simulação de presença (modo home):**
+  ```bash
+  mosquitto_pub -h <BROKER> -t home/audio/ground/cmnd -m "MODE_HOME"
+  ```
+- **Ativar modo ausente:**
+  ```bash
+  mosquitto_pub -h <BROKER> -t home/audio/ground/cmnd -m "MODE_AWAY"
+  ```
+- **Forçar execução de rotina (exemplo: atividade matinal):**
+  ```bash
+  mosquitto_pub -h <BROKER> -t home/audio/ground/cmnd -m "RUN_ROUTINE:morning_activity"
+  ```
+- **Parar qualquer áudio em reprodução:**
+  ```bash
+  mosquitto_pub -h <BROKER> -t home/audio/ground/cmnd -m "STOP"
+  ```
+- **Ajustar volume (exemplo: 0.5):**
+  ```bash
+  mosquitto_pub -h <BROKER> -t home/audio/ground/cmnd -m "VOLUME:0.5"
+  ```
+- **Recarregar configuração:**
+  ```bash
+  mosquitto_pub -h <BROKER> -t home/audio/ground/cmnd -m "RELOAD_CONFIG"
+  ```
+
+Troque `home/audio/ground/cmnd` por `home/audio/first/cmnd` para comandos no serviço do primeiro andar.
+
 ## Personalização
 - Adicione arquivos de áudio em `audio_files/`.
 - Programe eventos em `audio_schedule.json`.

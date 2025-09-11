@@ -41,6 +41,35 @@ Este diretório contém o serviço de simulação de presença por áudio para o
 - Programação de sons por horário ou por detecção de movimento.
 - Controle remoto via MQTT para ativar/desativar simulação.
 
+## Exemplos de comandos MQTT
+
+- **Ativar simulação de presença (modo home):**
+  ```bash
+  mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "MODE_HOME"
+  ```
+- **Ativar modo ausente:**
+  ```bash
+  mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "MODE_AWAY"
+  ```
+- **Forçar execução de rotina (exemplo: rotina matinal):**
+  ```bash
+  mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "RUN_ROUTINE:morning_routine"
+  ```
+- **Parar qualquer áudio em reprodução:**
+  ```bash
+  mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "STOP"
+  ```
+- **Ajustar volume (exemplo: 0.5):**
+  ```bash
+  mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "VOLUME:0.5"
+  ```
+- **Recarregar configuração:**
+  ```bash
+  mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "RELOAD_CONFIG"
+  ```
+
+Troque `home/audio/first/cmnd` por `home/audio/ground/cmnd` para comandos no serviço do térreo.
+
 ## Personalização
 - Adicione arquivos de áudio em `audio_files/`.
 - Programe eventos em `audio_schedule.json`.
