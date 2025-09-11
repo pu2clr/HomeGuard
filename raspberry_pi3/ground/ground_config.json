@@ -15,21 +15,21 @@
   "schedules": {
     "morning_activity": {
       "time": "07:00",
-      "sounds": ["dogs", "footsteps", "tv_radio"],
+      "sounds": ["dogs", "footsteps"],
       "duration": 20,
       "description": "Atividade matinal no térreo",
       "enabled": true
     },
     "lunch_time": {
       "time": "12:00",
-      "sounds": ["footsteps", "doors", "tv_radio"],
+      "sounds": ["footsteps", "doors"],
       "duration": 45,
       "description": "Almoço e atividade",
       "enabled": true
     },
     "afternoon_tv": {
       "time": "15:30",
-      "sounds": ["tv_radio", "footsteps"],
+      "sounds": ["shower", "footsteps"],
       "duration": 60,
       "description": "TV da tarde",
       "enabled": true
