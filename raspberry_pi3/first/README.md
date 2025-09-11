@@ -70,6 +70,63 @@ Este diretório contém o serviço de simulação de presença por áudio para o
 
 Troque `home/audio/first/cmnd` por `home/audio/ground/cmnd` para comandos no serviço do térreo.
 
+## Categorias de Som Disponíveis
+
+O serviço aceita comandos MQTT para as seguintes categorias de som (pré-definidas em `audio_first.py`):
+
+- `footsteps`   — Passos no corredor/quartos
+- `doors`       — Portas dos quartos
+- `toilets`     — Banheiro
+- `shower`      — Chuveiro
+- `bedroom`     — Sons de quarto
+- `alerts`      — Alertas de segurança
+
+Para cada categoria, coloque arquivos de áudio (WAV, MP3, etc) na subpasta correspondente em `audio_files/`.
+
+### Exemplo de estrutura de diretórios:
+```
+audio_files/
+  footsteps/
+    passo1.wav
+    passo2.wav
+  doors/
+    porta1.wav
+  toilets/
+    descarga1.wav
+  shower/
+    chuveiro1.wav
+  bedroom/
+    cama1.wav
+  alerts/
+    alarme1.wav
+```
+
+## Como adicionar novas categorias de som
+
+1. **Edite o arquivo `audio_first.py`**
+   - Adicione a nova categoria em `audio_categories`:
+     ```python
+     'dogs': [],  # Exemplo de nova categoria
+     ```
+2. **Crie a pasta correspondente em `audio_files/`**
+   - Exemplo: `audio_files/dogs/`
+3. **Adicione arquivos de áudio na nova pasta**
+4. **Reinicie o serviço de áudio**
+5. **Envie o comando MQTT com o nome da nova categoria:**
+   ```bash
+   mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "dogs"
+   ```
+
+> O nome do comando deve ser igual ao nome da categoria definida em `audio_first.py` e ao nome da pasta em `audio_files/`.
+
+## Dicas
+- Sempre use letras minúsculas para nomes de categorias.
+- Se o comando não for reconhecido, verifique se a categoria existe em `audio_first.py` e se há arquivos de áudio na pasta correspondente.
+- Para testar rapidamente, use:
+  ```bash
+  mosquitto_pub -h <BROKER> -u homeguard -P pu2clr123456 -t home/audio/first/cmnd -m "footsteps"
+  ```
+
 ## Personalização
 - Adicione arquivos de áudio em `audio_files/`.
 - Programe eventos em `audio_schedule.json`.

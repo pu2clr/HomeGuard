@@ -4,10 +4,10 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/pi/HomeGuard/raspberry_pi3/first
-ExecStart=/usr/bin/python3 /home/pi/HomeGuard/raspberry_pi3/first/audio_first.py
+WorkingDirectory=/home/homeguard/HomeGuard/raspberry_pi3/first
+ExecStart=/usr/bin/python3 /home/homeguard/HomeGuard/raspberry_pi3/first/audio_first.py
 Restart=always
-User=pi
+User=homeguard
 
 [Install]
 WantedBy=multi-user.target
