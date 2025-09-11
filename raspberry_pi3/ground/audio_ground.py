@@ -5,6 +5,7 @@ Térreo: cachorro, portas, passos, alertas, tv_radio
 """
 
 import sys
+import json
 import os
 import threading
 import random
@@ -32,6 +33,16 @@ class GroundFloorAudioSimulator(BaseAudioPresenceSimulator):
             }
         }
         super().__init__(floor_config)
+        # Carregar programação de áudio agendada
+        self.audio_schedule = self.load_audio_schedule()
+
+    def load_audio_schedule(self):
+        try:
+            with open('audio_schedule.json', 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"⚠️  Falha ao carregar audio_schedule.json: {e}")
+            return {}
 
     def get_default_config(self):
         """Ground floor specific configuration"""

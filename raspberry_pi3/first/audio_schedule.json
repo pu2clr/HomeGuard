@@ -1,0 +1,19 @@
+{
+  "description": "Programação de áudio agendada para simulação de presença no primeiro andar.",
+  "examples": [
+    {
+      "name": "Rotina matinal",
+      "time": "07:15",
+      "sounds": ["shower", "footsteps", "doors"],
+      "duration": 15,
+      "enabled": true
+    },
+    {
+      "name": "Descanso da tarde",
+      "time": "14:00",
+      "sounds": ["bedroom", "footsteps"],
+      "duration": 30,
+      "enabled": true
+    }
+  ]
+}

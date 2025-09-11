@@ -38,14 +38,14 @@ class BaseAudioPresenceSimulator:
         
         # MQTT Topics
         self.topics = {
-            'cmd': f'homeguard/audio/{self.floor}/cmnd',
-            'status': f'homeguard/audio/{self.floor}/status',
-            'events': f'homeguard/audio/{self.floor}/events',
-            'heartbeat': f'homeguard/audio/{self.floor}/heartbeat',
-            'coordination': 'homeguard/audio/coordination',
-            'motion_trigger': 'homeguard/motion/+/detected',
-            'relay_trigger': 'homeguard/relay/+/status',
-            'emergency': 'homeguard/emergency/+'
+            'cmd': f'home/audio/{self.floor}/cmnd',
+            'status': f'home/audio/{self.floor}/status',
+            'events': f'home/audio/{self.floor}/events',
+            'heartbeat': f'home/audio/{self.floor}/heartbeat',
+            'coordination': 'home/audio/coordination',
+            'motion_trigger': 'home/motion/+/detected',
+            'relay_trigger': 'home/relay/+/status',
+            'emergency': 'home/emergency/+'
         }
         
         # Audio system

@@ -1,0 +1,19 @@
+{
+  "description": "Programação de áudio agendada para simulação de presença no térreo.",
+  "examples": [
+    {
+      "name": "Atividade matinal",
+      "time": "07:00",
+      "sounds": ["dogs", "footsteps", "tv_radio"],
+      "duration": 20,
+      "enabled": true
+    },
+    {
+      "name": "TV da tarde",
+      "time": "15:30",
+      "sounds": ["tv_radio", "footsteps"],
+      "duration": 60,
+      "enabled": true
+    }
+  ]
+}

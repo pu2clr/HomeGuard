@@ -1,0 +1,13 @@
+[Unit]
+Description=HomeGuard Audio Simulator - Térreo
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi/HomeGuard/raspberry_pi3/ground
+ExecStart=/usr/bin/python3 /home/pi/HomeGuard/raspberry_pi3/ground/audio_ground.py
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
