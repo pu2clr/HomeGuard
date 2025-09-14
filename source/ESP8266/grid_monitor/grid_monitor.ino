@@ -176,6 +176,24 @@ void sendGridStatus(bool forceUpdate = false) {
   }
 }
 
+// ======== Send device information ========
+void sendDeviceInfo() {
+  String info = "{";
+  info += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
+  info += "\"device_name\":\"" + String(DEVICE_NAME_STR) + "\",";
+  info += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
+  info += "\"sensor_type\":\"ZMPT101B\",";
+  info += "\"ip\":\"" + WiFi.localIP().toString() + "\",";
+  info += "\"rssi\":" + String(WiFi.RSSI()) + ",";
+  info += "\"uptime\":" + String(millis()) + ",";
+  info += "\"grid_status\":\"" + String(gridOnline ? "online" : "offline") + "\",";
+  info += "\"sensor_value\":" + String(sensorValue) + ",";
+  info += "\"ligth_status\":\"" + String( (sensorValue < GRID_THRESHOLD)? "ON" : "OFF" ) + "\",";
+  info += "\"failed_readings\":" + String(device_status.failed_readings) + ",";
+  info += "\"firmware\":\"HomeGuard_GRID_v1.0\"";
+  info += "}";
+  client.publish(TOPIC_INFO.c_str(), info.c_str(), true);
+}
 
 // ======== Read ZMPT101B sensor ========
 void readGridSensor() {
@@ -209,8 +227,8 @@ void readGridSensor() {
     }
     Serial.printf("Grid: %s (Valor: %d)\n", gridOnline ? "ONLINE" : "OFFLINE", sensorValue);
     // Enviar status imediatamente ao detectar falta de energia
-    if (previousGridOnline && !gridOnline) {
-      sendGridStatus(true);
+    if (!previousGridOnline && gridOnline) {
+      sendDeviceInfo();
       Serial.println("Status enviado: Falta de energia detectada!");
     }
   }
@@ -219,25 +237,6 @@ void readGridSensor() {
 }
 
 
-
-// ======== Send device information ========
-void sendDeviceInfo() {
-  String info = "{";
-  info += "\"device_id\":\"" + String(DEVICE_ID_STR) + "\",";
-  info += "\"device_name\":\"" + String(DEVICE_NAME_STR) + "\",";
-  info += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
-  info += "\"sensor_type\":\"ZMPT101B\",";
-  info += "\"ip\":\"" + WiFi.localIP().toString() + "\",";
-  info += "\"rssi\":" + String(WiFi.RSSI()) + ",";
-  info += "\"uptime\":" + String(millis()) + ",";
-  info += "\"grid_status\":\"" + String(gridOnline ? "online" : "offline") + "\",";
-  info += "\"sensor_value\":" + String(sensorValue) + ",";
-  info += "\"ligth_status\":\"" + String( (sensorValue < GRID_THRESHOLD)? "ON" : "OFF" ) + "\",";
-  info += "\"failed_readings\":" + String(device_status.failed_readings) + ",";
-  info += "\"firmware\":\"HomeGuard_GRID_v1.0\"";
-  info += "}";
-  client.publish(TOPIC_INFO.c_str(), info.c_str(), true);
-}
 
 // ======== Process MQTT commands ========
 void callback(char* topic, byte* payload, unsigned int length) {
