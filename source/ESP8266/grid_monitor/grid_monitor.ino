@@ -14,13 +14,13 @@
 
   MQTT Interaction Examples (using mosquitto):
   # Monitor grid status:
-  mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/status" -v
+  mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/GRID_MONITOR/status" -v
 
   # Monitor device info:
-  mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/info" -v
+  mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/GRID_MONITOR/info" -v
 
   # Command relay ON:
-  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "ON"
+  mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/GRID_MONITOR/command" -m "ON"
 
   # Command relay OFF:
   mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "OFF"
@@ -28,6 +28,28 @@
   # Return relay to automatic mode:
   mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/grid/ESP8266_GRID_MONITOR/command" -m "AUTO"
 */
+
+/*
+ * HomeGuard Grid Monitor - ESP8266
+ *
+ * IMPORTANTE: Acionamento de Relé com Transistor NPN
+ * -------------------------------------------------
+ * O ESP8266 opera com GPIOs de 3.3V e baixa corrente, enquanto a maioria dos módulos relé espera sinal de 5V e consome mais corrente do que o pino pode fornecer.
+ * Para acionar o relé de forma segura e confiável, utilize um transistor NPN (ex: 2N2222, BC547, BC337) como driver:
+ *
+ *   GPIO5 ----[1kΩ]----|>B   2N2222/BC547 NPN
+ *                     |      (ou similar)
+ *                    C|----- IN do módulo relé
+ *                     |
+ *                    E|
+ *                     |
+ *                   GND (comum ao ESP e ao relé)
+ *
+ * O VCC do relé deve ser 5V e o GND do relé deve ser comum ao ESP.
+ * NÃO acione o relé diretamente do GPIO!
+ *
+ * Veja detalhes em RELAY_DRIVER_NPN.md
+ */
 
 // ======== User Parameters (Edit these for your device) ========
 
@@ -38,13 +60,13 @@
 // Device local IP
 #define LOCAL_IP_1       192
 #define LOCAL_IP_2       168
-#define LOCAL_IP_3       18
+#define LOCAL_IP_3       1
 #define LOCAL_IP_4       90
 
 // Network Getway IP
 #define GATEWAY_1        192
 #define GATEWAY_2        168
-#define GATEWAY_3        18
+#define GATEWAY_3        1
 #define GATEWAY_4        1
 
 // Network Subnet IP
@@ -67,7 +89,7 @@
 #define ZMPT_PIN         A0                        // Analog pin for ZMPT101B
 #define RELAY_PIN        5                         // GPIO5 for relay control
 #define STATUS_LED_PIN   LED_BUILTIN               // Built-in LED for status indication
-#define GRID_THRESHOLD   300                       // Threshold for grid detection (adjust experimentally)
+#define GRID_THRESHOLD   950                       // Threshold for grid detection (adjust experimentally)
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
@@ -108,6 +130,7 @@ unsigned long lastDataSend = 0;
 int failedReadings = 0;
 bool relayManualOverride = false; // Se true, ignora controle automático
 bool relayManualState = false;    // Estado desejado do relé via comando
+int sensorValue;
 
 // Timing intervals
 const unsigned long READING_INTERVAL = 10000;     // 10 seconds
@@ -125,37 +148,6 @@ struct DeviceStatus {
   unsigned long last_reading_time;
 } device_status;
 
-// ======== Read ZMPT101B sensor ========
-void readGridSensor() {
-  int sensorValue = analogRead(ZMPT_PIN);
-  gridOnline = sensorValue > GRID_THRESHOLD;
-  if (sensorValue < 0) {
-    failedReadings++;
-    device_status.grid_ok = false;
-    Serial.println("Erro ao ler ZMPT101B!");
-  } else {
-    failedReadings = 0;
-    device_status.grid_ok = gridOnline;
-    device_status.last_grid_online = gridOnline;
-    device_status.last_reading_time = millis();
-    // Controle do relé: automático (falta de energia) ou manual (override)
-    if (relayManualOverride) {
-      digitalWrite(RELAY_PIN, relayManualState ? HIGH : LOW);
-      Serial.printf("Relay manual mode: %s (GPIO%d = %s)\n", 
-                   relayManualState ? "ON" : "OFF", RELAY_PIN, relayManualState ? "HIGH" : "LOW");
-    } else {
-      digitalWrite(RELAY_PIN, gridOnline ? LOW : HIGH); // HIGH aciona relé (luz emergência)
-      Serial.printf("Relay auto mode: Grid %s -> Relay %s (GPIO%d = %s)\n", 
-                   gridOnline ? "ONLINE" : "OFFLINE", 
-                   gridOnline ? "OFF" : "ON",
-                   RELAY_PIN,
-                   gridOnline ? "LOW" : "HIGH");
-    }
-    Serial.printf("Grid: %s (Valor: %d)\n", gridOnline ? "ONLINE" : "OFFLINE", sensorValue);
-  }
-  device_status.failed_readings = failedReadings;
-  lastReading = millis();
-}
 
 // ======== Send grid status to MQTT ========
 void sendGridStatus(bool forceUpdate = false) {
@@ -171,7 +163,8 @@ void sendGridStatus(bool forceUpdate = false) {
     statusPayload += "\"location\":\"" + String(DEVICE_LOCATION_STR) + "\",";
     statusPayload += "\"sensor_type\":\"ZMPT101B\",";
     statusPayload += "\"grid_status\":\"" + String(gridOnline ? "online" : "offline") + "\",";
-    statusPayload += "\"sensor_value\":" + String(analogRead(ZMPT_PIN)) + ",";
+    statusPayload += "\"sensor_value\":" + String(sensorValue) + ",";
+    statusPayload += "\"ligth_status\":\"" + String( (sensorValue < GRID_THRESHOLD)? "ON" : "OFF" ) + "\",";
     statusPayload += "\"rssi\":" + String(WiFi.RSSI()) + ",";
     statusPayload += "\"uptime\":" + String(millis()) + ",";
     statusPayload += "\"timestamp\":\"" + String(millis()) + "\"";
@@ -182,6 +175,50 @@ void sendGridStatus(bool forceUpdate = false) {
     Serial.printf("Status da rede enviado via MQTT: %s\n", gridOnline ? "ONLINE" : "OFFLINE");
   }
 }
+
+
+// ======== Read ZMPT101B sensor ========
+void readGridSensor() {
+  const int NUM_SAMPLES = 20;           // Número de amostras
+  const int SAMPLE_DELAY_MS = 2;        // Intervalo entre amostras (ms)
+  int maxValue = 0;
+  for (int i = 0; i < NUM_SAMPLES; i++) {
+    int val = analogRead(ZMPT_PIN);
+    if (val > maxValue) maxValue = val;
+    delay(SAMPLE_DELAY_MS);
+  }
+  int sensorValue = maxValue;
+  bool previousGridOnline = gridOnline;
+  gridOnline = sensorValue > GRID_THRESHOLD;
+  if (sensorValue < 0) {
+    failedReadings++;
+    device_status.grid_ok = false;
+    Serial.println("Erro ao ler ZMPT101B!");
+  } else {
+    failedReadings = 0;
+    device_status.grid_ok = gridOnline;
+    device_status.last_grid_online = gridOnline;
+    device_status.last_reading_time = millis();
+    // Controle do relé: automático (falta de energia) ou manual (override)
+    if (relayManualOverride) {
+      digitalWrite(RELAY_PIN, relayManualState ? HIGH : LOW);
+      Serial.printf("Relay manual mode: %s (GPIO%d = %s)\n", relayManualState ? "ON" : "OFF", RELAY_PIN, relayManualState ? "HIGH" : "LOW");
+    } else {
+      digitalWrite(RELAY_PIN, gridOnline ? LOW : HIGH); // HIGH aciona relé (luz emergência)
+      Serial.printf("Relay auto mode: Grid %s -> Relay %s (GPIO%d = %s)\n", gridOnline ? "ONLINE" : "OFFLINE", gridOnline ? "OFF" : "ON", RELAY_PIN, gridOnline ? "LOW" : "HIGH");
+    }
+    Serial.printf("Grid: %s (Valor: %d)\n", gridOnline ? "ONLINE" : "OFFLINE", sensorValue);
+    // Enviar status imediatamente ao detectar falta de energia
+    if (previousGridOnline && !gridOnline) {
+      sendGridStatus(true);
+      Serial.println("Status enviado: Falta de energia detectada!");
+    }
+  }
+  device_status.failed_readings = failedReadings;
+  lastReading = millis();
+}
+
+
 
 // ======== Send device information ========
 void sendDeviceInfo() {
@@ -194,6 +231,8 @@ void sendDeviceInfo() {
   info += "\"rssi\":" + String(WiFi.RSSI()) + ",";
   info += "\"uptime\":" + String(millis()) + ",";
   info += "\"grid_status\":\"" + String(gridOnline ? "online" : "offline") + "\",";
+  info += "\"sensor_value\":" + String(sensorValue) + ",";
+  info += "\"ligth_status\":\"" + String( (sensorValue < GRID_THRESHOLD)? "ON" : "OFF" ) + "\",";
   info += "\"failed_readings\":" + String(device_status.failed_readings) + ",";
   info += "\"firmware\":\"HomeGuard_GRID_v1.0\"";
   info += "}";
@@ -204,6 +243,10 @@ void sendDeviceInfo() {
 void callback(char* topic, byte* payload, unsigned int length) {
   (void)topic; // Suppress unused parameter warning
   
+  // Serial.println("Teste: ");
+  // Serial.println(topic);
+  // Serial.println((char *) payload);
+
   String command;
   for (unsigned int i = 0; i < length; i++) {
     command += (char)payload[i];
@@ -274,7 +317,11 @@ void setup() {
   
   digitalWrite(RELAY_PIN, LOW);  // Relé ligado inicialmente (grid ainda não verificada)
   Serial.printf("Relay initialized on GPIO%d: %s\n", RELAY_PIN, "ON (LOW)");
-  
+  digitalWrite(RELAY_PIN, HIGH);  
+  delay(1000);
+  digitalWrite(RELAY_PIN, LOW);  
+   
+
   digitalWrite(STATUS_LED_PIN, HIGH); // LED off initially (inverted logic)
   
   device_status.online = false;
