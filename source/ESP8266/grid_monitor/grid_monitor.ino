@@ -164,7 +164,7 @@ void sendGridStatus(bool forceUpdate = false) {
     statusPayload += "\"sensor_type\":\"ZMPT101B\",";
     statusPayload += "\"grid_status\":\"" + String(gridOnline ? "online" : "offline") + "\",";
     statusPayload += "\"sensor_value\":" + String(sensorValue) + ",";
-    statusPayload += "\"ligth_status\":\"" + String( (sensorValue < GRID_THRESHOLD)? "ON" : "OFF" ) + "\",";
+    statusPayload += "\"ligth_status\":\"" + String( (gridOnline )? "ON" : "OFF" ) + "\",";
     statusPayload += "\"rssi\":" + String(WiFi.RSSI()) + ",";
     statusPayload += "\"uptime\":" + String(millis()) + ",";
     statusPayload += "\"timestamp\":\"" + String(millis()) + "\"";
@@ -188,7 +188,7 @@ void sendDeviceInfo() {
   info += "\"uptime\":" + String(millis()) + ",";
   info += "\"grid_status\":\"" + String(gridOnline ? "online" : "offline") + "\",";
   info += "\"sensor_value\":" + String(sensorValue) + ",";
-  info += "\"ligth_status\":\"" + String( (sensorValue < GRID_THRESHOLD)? "ON" : "OFF" ) + "\",";
+  info += "\"ligth_status\":\"" + String( (gridOnline)? "ON" : "OFF" ) + "\",";
   info += "\"failed_readings\":" + String(device_status.failed_readings) + ",";
   info += "\"firmware\":\"HomeGuard_GRID_v1.0\"";
   info += "}";
