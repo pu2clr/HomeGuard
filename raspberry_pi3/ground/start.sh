@@ -1,0 +1,1 @@
+nohup python3 audio_ground.py > saida.log 2>&1 &
