@@ -24,11 +24,17 @@ DEVICE_ID = 'GRID_MONITOR_C3'
 TOPIC_STATUS = b'home/grid/GRID_MONITOR_C3/status'
 TOPIC_COMMAND = b'home/grid/GRID_MONITOR_C3/command'
 
-# Pinos do ESP32-C3 (ajuste conforme seu modelo)
+
+# ESP32-C3 pins (adjust according to your board)
 ZMPT_PIN = 0      # ADC0 (GPIO0)
-RELAY_PIN = 7     # GPIO7 (verifique no seu Super Mini)
-LED_PIN = 8       # GPIO8 (LED onboard, se existir)
-GRID_THRESHOLD = 950  # Ajuste conforme seu sensor
+RELAY_PIN = 7     # GPIO7 (check your Super Mini)
+LED_PIN = 8       # GPIO8 (onboard LED, if available)
+
+# IMPORTANT: ADC resolution varies by platform!
+# ESP8266: 10 bits (0-1023)
+# ESP32-C3: 12 bits (0-4095)
+# You must adjust GRID_THRESHOLD and logic according to your platform and sensor.
+GRID_THRESHOLD = 950  # Adjust for your sensor and platform
 
 adc = machine.ADC(machine.Pin(ZMPT_PIN))
 adc.atten(machine.ADC.ATTN_11DB)  # Faixa completa 0-3.3V
@@ -60,10 +66,12 @@ def mqtt_callback(topic, msg):
         relay_manual_override = True
         relay_manual_state = True
         relay.value(1)
+        print('Relay:', "1")
     elif cmd == 'OFF':
         relay_manual_override = True
         relay_manual_state = False
         relay.value(0)
+        print('Relay:', "0")
     elif cmd == 'AUTO':
         relay_manual_override = False
     elif cmd == 'STATUS':
@@ -98,6 +106,7 @@ def main():
                 max_val = val
             time.sleep_ms(2)
         grid_online = max_val > GRID_THRESHOLD
+        # print('Leitura:', max_val)
         # Controle do relé
         if relay_manual_override:
             relay.value(1 if relay_manual_state else 0)
@@ -113,3 +122,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

@@ -58,21 +58,28 @@ Se aparecer erro de memória ou conexão, tente novamente ou use uma rede WiFi e
 
 **Dica:** Se o pacote não funcionar, confira se o arquivo está no mesmo diretório do seu `main.py` e se o nome do arquivo e do import estão corretos.
 
-## Configuração de pinos
-- Ajuste os pinos no início do `main.py` conforme seu modelo Super Mini.
+
+## Pin configuration
+- Adjust the pins at the beginning of `main.py` according to your Super Mini model.
 - ZMPT_PIN: ADC0 (GPIO0)
 - RELAY_PIN: GPIO7
 - LED_PIN: GPIO8
 
-## Uso
-- O monitor conecta ao WiFi, escuta comandos MQTT e publica status.
-- Comandos suportados: ON, OFF, AUTO, STATUS
-- O relé é acionado automaticamente em falta de energia ou manualmente via MQTT.
+## Usage
+- The monitor connects to WiFi, listens for MQTT commands, and publishes status.
+- Supported commands: ON, OFF, AUTO, STATUS
+- The relay is triggered automatically in case of power failure or manually via MQTT.
 
-## Sistemas operacionais suportados
-- Linux, Windows, macOS (para upload do firmware e uso do Thonny)
+## Supported operating systems
+- Linux, Windows, macOS (for firmware upload and Thonny usage)
 
-## Dicas
-- Consulte a documentação do ESP32-C3 Super Mini para mapear os pinos corretamente.
-- Teste o sensor ZMPT101B e ajuste o limiar GRID_THRESHOLD conforme sua rede.
-- O arquivo deve ser nomeado como `main.py` para execução automática no ESP32-C3.
+## Tips
+- Check the ESP32-C3 Super Mini documentation to correctly map the pins.
+- Test the ZMPT101B sensor and adjust the GRID_THRESHOLD according to your grid.
+- The file must be named `main.py` for automatic execution on ESP32-C3.
+
+## ADC Resolution Note
+- **Important:** The ADC resolution varies by platform:
+    - ESP8266: 10 bits (0-1023)
+    - ESP32-C3: 12 bits (0-4095)
+- You must adjust the threshold (GRID_THRESHOLD) and logic according to the platform and sensor used. Always calibrate for your hardware.
