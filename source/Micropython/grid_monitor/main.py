@@ -24,17 +24,13 @@ DEVICE_ID = 'GRID_MONITOR_C3'
 TOPIC_STATUS = b'home/grid/GRID_MONITOR_C3/status'
 TOPIC_COMMAND = b'home/grid/GRID_MONITOR_C3/command'
 
-
-# ESP32-C3 pins (adjust according to your board)
+# Pinos do ESP32-C3 (ajuste conforme seu modelo)
 ZMPT_PIN = 0      # ADC0 (GPIO0)
-RELAY_PIN = 7     # GPIO7 (check your Super Mini)
-LED_PIN = 8       # GPIO8 (onboard LED, if available)
+RELAY_PIN = 5     # GPIO7 (verifique no seu Super Mini)
+LED_PIN = 8       # GPIO8 (LED onboard, se existir)
+GRID_THRESHOLD = 2700  # Ajuste conforme seu sensor
 
-# IMPORTANT: ADC resolution varies by platform!
-# ESP8266: 10 bits (0-1023)
-# ESP32-C3: 12 bits (0-4095)
-# You must adjust GRID_THRESHOLD and logic according to your platform and sensor.
-GRID_THRESHOLD = 950  # Adjust for your sensor and platform
+count = 1
 
 adc = machine.ADC(machine.Pin(ZMPT_PIN))
 adc.atten(machine.ADC.ATTN_11DB)  # Faixa completa 0-3.3V
@@ -61,17 +57,17 @@ def connect_wifi():
 def mqtt_callback(topic, msg):
     global relay_manual_override, relay_manual_state, client
     cmd = msg.decode().strip().upper()
-    print('Comando MQTT recebido:', cmd)
+    # print('Comando MQTT recebido:', cmd)
     if cmd == 'ON':
         relay_manual_override = True
         relay_manual_state = True
         relay.value(1)
-        print('Relay:', "1")
+        # print('Relay:', "1")
     elif cmd == 'OFF':
         relay_manual_override = True
         relay_manual_state = False
         relay.value(0)
-        print('Relay:', "0")
+        # print('Relay:', "0")
     elif cmd == 'AUTO':
         relay_manual_override = False
     elif cmd == 'STATUS':
@@ -84,17 +80,17 @@ def publish_status(client):
         'online' if grid_online else 'offline',
         'on' if relay.value() else 'off')
     client.publish(TOPIC_STATUS, status)
-    print('Status publicado:', status)
+    # print('Status publicado:', status)
 
 # Loop principal
 def main():
-    global grid_online, client
+    global grid_online, client, count
     connect_wifi()
     client = MQTTClient(DEVICE_ID, MQTT_SERVER, port=MQTT_PORT, user=MQTT_USER, password=MQTT_PASS)
     client.set_callback(mqtt_callback)
     client.connect()
     client.subscribe(TOPIC_COMMAND)
-    print('MQTT conectado e inscrito em', TOPIC_COMMAND)
+    # print('MQTT conectado e inscrito em', TOPIC_COMMAND)
     last_grid_online = None
     while True:
         client.check_msg()
@@ -104,9 +100,12 @@ def main():
             val = adc.read()
             if val > max_val:
                 max_val = val
-            time.sleep_ms(2)
+            time.sleep_ms(10)
         grid_online = max_val > GRID_THRESHOLD
-        # print('Leitura:', max_val)
+        
+        # print('Leitura ', count, ':',  max_val)
+        count = count + 1
+        # time.sleep(1)
         # Controle do relé
         if relay_manual_override:
             relay.value(1 if relay_manual_state else 0)
