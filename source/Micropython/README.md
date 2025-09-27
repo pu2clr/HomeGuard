@@ -1,22 +1,23 @@
-# Grid Monitor com ESP32-C3 e MicroPython
 
-Este projeto implementa um monitor de rede elétrica com ESP32-C3 usando MicroPython. Ele aciona um relé, monitora a rede elétrica via sensor analógico (ex: ZMPT101B) e publica eventos via MQTT.
+# Grid Monitor with ESP32-C3 and MicroPython
 
-## Estrutura de Pastas
+This project implements a power grid monitor using ESP32-C3 and MicroPython. It controls a relay, monitors the grid via an analog sensor (e.g., ZMPT101B), and publishes events via MQTT.
+
+## Folder Structure
 
 ```
 Micropython/
 └── grid_monitor/
-    └── main.py   # Script principal para o ESP32-C3
+    └── main.py   # Main script for ESP32-C3
 ```
 
-## Instalação do MicroPython no ESP32-C3
+## Installing MicroPython on ESP32-C3
 
-### 1. Baixar o firmware MicroPython
-- Acesse: https://micropython.org/download/esp32c3/
-- Baixe o arquivo `.bin` mais recente para ESP32-C3.
+### 1. Download MicroPython firmware
+- Go to: https://micropython.org/download/esp32c3/
+- Download the latest `.bin` file for ESP32-C3.
 
-### 2. Instalar o firmware
+### 2. Install the firmware
 #### Linux/macOS:
 ```bash
 pip install esptool
@@ -24,59 +25,85 @@ esptool.py --chip esp32c3 erase_flash
 esptool.py --chip esp32c3 --baud 460800 write_flash -z 0x0 <firmware.bin>
 ```
 #### Windows:
-- Instale Python e esptool via `pip install esptool`
-- Use o prompt de comando com os comandos acima.
+- Install Python and esptool via `pip install esptool`
+- Use the command prompt with the commands above.
 
-### 3. Usar a IDE Thonny
-- Baixe em https://thonny.org/
-- Abra Thonny, selecione "MicroPython (ESP32)" como interpretador.
-- Conecte o ESP32-C3 via USB, selecione a porta correta.
-- Faça upload do arquivo `main.py` da pasta `grid_monitor` para o ESP32-C3.
+### 3. Using Thonny IDE
+- Download from https://thonny.org/
+- Open Thonny, select "MicroPython (ESP32)" as the interpreter.
+- Connect ESP32-C3 via USB, select the correct port.
+- Upload the `main.py` file from the `grid_monitor` folder to ESP32-C3.
 
-## Dependências MicroPython
-O firmware MicroPython para ESP32-C3 normalmente não inclui o gerenciador de pacotes `upip`. Por isso, a instalação do pacote MQTT deve ser feita manualmente:
 
-### Instalação manual do pacote MQTT (micropython-umqtt.simple)
+## MQTT Module: micropython-umqtt.simple-1.3.4
 
-1. Baixe o arquivo `micropython-umqtt.simple.py` em:
-    https://github.com/micropython/micropython-lib/blob/master/micropython/umqtt.simple/umqtt/simple.py
-    (Clique em "Raw" e salve como `micropython-umqtt.simple.py`)
-2. Abra a IDE Thonny, conecte o ESP32-C3 e selecione o interpretador MicroPython.
-3. No menu "Arquivos" da Thonny, envie o arquivo `micropython-umqtt.simple.py` para o ESP32-C3 (pasta raiz ou junto do seu `main.py`).
-4. No seu `main.py`, importe normalmente:
-    ```python
-    from micropython_umqtt_simple import MQTTClient
-    ```
+This project requires the MQTT communication module `micropython-umqtt.simple-1.3.4` for ESP32-C3. This module is a MicroPython library for MQTT protocol, allowing the device to publish and subscribe to topics on an MQTT broker.
 
-Se preferir, renomeie o arquivo para `umqtt_simple.py` e importe como:
-```python
-from umqtt_simple import MQTTClient
+**Origin:**
+- Official repository: https://github.com/micropython/micropython-lib/tree/master/micropython/umqtt.simple
+- Version used: 1.3.4 (folder: `micropython-umqtt.simple-1.3.4`)
+
+**Why is it needed?**
+- The default MicroPython firmware for ESP32-C3 does not include MQTT libraries.
+- This module enables reliable MQTT communication for automation and monitoring.
+
+**How to add the module to ESP32-C3:**
+
+### Using Thonny IDE
+1. Open Thonny and connect your ESP32-C3.
+2. In Thonny, go to the Files panel.
+3. Right-click the folder `micropython-umqtt.simple-1.3.4` and select "Upload to /" (or drag and drop to the device).
+4. Ensure the folder is present on the ESP32-C3 filesystem.
+5. In your `main.py`, import as:
+   ```python
+   from micropython_umqtt_simple import MQTTClient
+   ```
+
+### Using Shell (Linux/macOS)
+Assuming your ESP32-C3 is mounted as a USB device or accessible via ampy:
+```bash
+ampy --port /dev/ttyUSB0 put micropython-umqtt.simple-1.3.4
 ```
-### Como instalar o pacote MQTT no ESP32-C3
+Or use rshell:
+```bash
+rshell
+cp -r micropython-umqtt.simple-1.3.4 /pyboard/
+```
+Replace `/dev/ttyUSB0` and `/pyboard/` with your actual device path.
 
-Se aparecer erro de memória ou conexão, tente novamente ou use uma rede WiFi estável.
+**Note:**
+- The module folder must be in the root or accessible path for imports.
+- If you rename the main file to `umqtt_simple.py`, import as:
+   ```python
+   from umqtt_simple import MQTTClient
+   ```
 
-**Dica:** Se o pacote não funcionar, confira se o arquivo está no mesmo diretório do seu `main.py` e se o nome do arquivo e do import estão corretos.
+If you have issues, check that the folder and files are present on the ESP32-C3 and the import path is correct.
 
 
-## Pin configuration
+
+## Pin Configuration
 - Adjust the pins at the beginning of `main.py` according to your Super Mini model.
 - ZMPT_PIN: ADC0 (GPIO0)
 - RELAY_PIN: GPIO7
 - LED_PIN: GPIO8
+
 
 ## Usage
 - The monitor connects to WiFi, listens for MQTT commands, and publishes status.
 - Supported commands: ON, OFF, AUTO, STATUS
 - The relay is triggered automatically in case of power failure or manually via MQTT.
 
-## Supported operating systems
+
+## Supported Operating Systems
 - Linux, Windows, macOS (for firmware upload and Thonny usage)
+
 
 ## Tips
 - Check the ESP32-C3 Super Mini documentation to correctly map the pins.
 - Test the ZMPT101B sensor and adjust the GRID_THRESHOLD according to your grid.
 - The file must be named `main.py` for automatic execution on ESP32-C3.
+
 
 ## ADC Resolution Note
 - **Important:** The ADC resolution varies by platform:
