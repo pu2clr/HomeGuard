@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="350" viewBox="0 0 600 350" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .label { font: bold 16px sans-serif; }
+    .desc { font: 13px sans-serif; }
+    .wire { stroke: #222; stroke-width: 3; }
+    .sw { stroke: #222; stroke-width: 2; fill: #fff; }
+    .relay { stroke: #0077cc; stroke-width: 2; fill: #eaf6ff; }
+    .esp { fill: #ffe; stroke: #888; stroke-width: 2; }
+    .lamp { fill: #fffbe0; stroke: #888; stroke-width: 2; }
+  </style>
+  <!-- Fase -->
+  <line x1="60" y1="60" x2="60" y2="300" class="wire" />
+  <text x="30" y="50" class="label">Fase</text>
+
+  <!-- Interruptor Mecânico -->
+  <rect x="100" y="80" width="60" height="40" class="sw" />
+  <text x="130" y="75" class="label" text-anchor="middle">Switch</text>
+  <text x="130" y="105" class="desc" text-anchor="middle">(Three-way)</text>
+  <line x1="60" y1="100" x2="100" y2="100" class="wire" />
+  <line x1="160" y1="100" x2="250" y2="100" class="wire" />
+
+  <!-- Relé de Contato Seco -->
+  <rect x="100" y="180" width="60" height="40" class="relay" />
+  <text x="130" y="175" class="label" text-anchor="middle">Relay</text>
+  <text x="130" y="205" class="desc" text-anchor="middle">(Dry Contact)</text>
+  <line x1="60" y1="200" x2="100" y2="200" class="wire" />
+  <line x1="160" y1="200" x2="250" y2="200" class="wire" />
+
+  <!-- Junção dos fios -->
+  <line x1="250" y1="100" x2="250" y2="200" class="wire" />
+  <circle cx="250" cy="100" r="5" fill="#222" />
+  <circle cx="250" cy="200" r="5" fill="#222" />
+
+  <!-- Lâmpada -->
+  <ellipse cx="350" cy="150" rx="30" ry="20" class="lamp" />
+  <text x="350" y="145" class="label" text-anchor="middle">Lamp</text>
+  <line x1="250" y1="150" x2="320" y2="150" class="wire" />
+  <line x1="380" y1="150" x2="540" y2="150" class="wire" />
+
+  <!-- Neutro -->
+  <line x1="540" y1="60" x2="540" y2="300" class="wire" />
+  <text x="510" y="50" class="label">Neutro</text>
+  <line x1="540" y1="150" x2="540" y2="300" class="wire" />
+
+  <!-- ESP8266/ESP32 -->
+  <rect x="100" y="250" width="60" height="40" class="esp" />
+  <text x="130" y="245" class="label" text-anchor="middle">ESP</text>
+  <text x="130" y="265" class="desc" text-anchor="middle">(MQTT/Control)</text>
+  <line x1="160" y1="270" x2="160" y2="200" class="wire" />
+  <circle cx="160" cy="200" r="5" fill="#0077cc" />
+
+  <!-- Legenda -->
+  <rect x="370" y="250" width="200" height="70" fill="#fff" stroke="#888" stroke-width="1" />
+  <text x="380" y="270" class="desc">- Switch: Three-way wall switch</text>
+  <text x="380" y="290" class="desc">- Relay: Dry contact relay (parallel)</text>
+  <text x="380" y="310" class="desc">- ESP: Microcontroller (MQTT)</text>
+  <text x="380" y="330" class="desc">- Lamp: Light fixture</text>
+</svg>

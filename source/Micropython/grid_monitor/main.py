@@ -3,6 +3,15 @@ Micropython Grid Monitor para ESP32-C3
 - Monitora rede elétrica via sensor analógico (ex: ZMPT101B)
 - Aciona relé para ligar/desligar lâmpada
 - Publica eventos via MQTT
+
+Examples of MQTT commands to control the device:
+
+mosquitto_sub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/#" -v
+mosquitto_pub -h 100.87.71.125  -u homeguard -P pu2clr123456 -t "home/grid/GRID_MONITOR_C3B/command" -m "OFF"
+mosquitto_pub -h 100.87.71.125  -u homeguard -P pu2clr123456 -t "home/grid/GRID_MONITOR_C3B/command" -m "ON"
+mosquitto_pub -h 100.87.71.125  -u homeguard -P pu2clr123456 -t "home/grid/GRID_MONITOR_C3B/command" -m "AUTO"    
+
+
 """
 
 import machine
@@ -19,10 +28,10 @@ MQTT_SERVER = '192.168.1.102'
 MQTT_PORT = 1883
 MQTT_USER = 'homeguard'
 MQTT_PASS = 'pu2clr123456'
-DEVICE_ID = 'GRID_MONITOR_C3'
+DEVICE_ID = 'GRID_MONITOR_C3B'
 
-TOPIC_STATUS = b'home/grid/GRID_MONITOR_C3/status'
-TOPIC_COMMAND = b'home/grid/GRID_MONITOR_C3/command'
+TOPIC_STATUS = b'home/grid/GRID_MONITOR_C3B/status'
+TOPIC_COMMAND = b'home/grid/GRID_MONITOR_C3B/command'
 
 # Pinos do ESP32-C3 (ajuste conforme seu modelo)
 ZMPT_PIN = 0      # ADC0 (GPIO0)
