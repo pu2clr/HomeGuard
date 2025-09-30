@@ -4,6 +4,12 @@
 	(generator_version "8.0")
 	(uuid "c92431b2-4ccf-4b32-a5ad-af2bebad1d9a")
 	(paper "A4")
+	(title_block
+		(title "Relay driver for ESP32-C3")
+		(date "2025-09-29")
+		(rev "1.0")
+		(company "Ricardo Lima Caratti")
+	)
 	(lib_symbols
 		(symbol "Device:R"
 			(pin_numbers hide)
@@ -2207,7 +2213,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "02e43282-3ea7-418a-ac2d-48cb1c2cd1f6")
-		(property "Reference" "Q1"
+		(property "Reference" "2N2222"
 			(at 71.12 88.8999 0)
 			(effects
 				(font
@@ -2291,7 +2297,7 @@
 		(instances
 			(project ""
 				(path "/c92431b2-4ccf-4b32-a5ad-af2bebad1d9a"
-					(reference "Q1")
+					(reference "2N2222")
 					(unit 1)
 				)
 			)

@@ -110,3 +110,9 @@ If you have issues, check that the folder and files are present on the ESP32-C3 
     - ESP8266: 10 bits (0-1023)
     - ESP32-C3: 12 bits (0-4095)
 - You must adjust the threshold (GRID_THRESHOLD) and logic according to the platform and sensor used. Always calibrate for your hardware.
+
+
+# References
+
+* [ESP32-C3 SuperMini Antenna Mod](https://www.elektormagazine.com/labs/esp32-c3-supermini-antenna-mod)
+* [Simple Antenna Makes For Better ESP32-C3 WiFi](https://hackaday.com/2025/04/07/simple-antenna-makes-for-better-esp32-c3-wifi/)
