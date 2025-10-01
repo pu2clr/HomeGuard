@@ -100,6 +100,10 @@ def main():
     client.connect()
     client.subscribe(TOPIC_COMMAND)
     # print('MQTT conectado e inscrito em', TOPIC_COMMAND)
+    # Check initial status
+    relay.value(1) # Turn LED ON 
+    time.sleep(2)
+    relay.value(0) # Turn LED OFF 
     last_grid_online = None
     while True:
         client.check_msg()
