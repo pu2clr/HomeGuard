@@ -34,12 +34,14 @@ TOPIC_STATUS = b'home/grid/GRID_MONITOR_C3B/status'
 TOPIC_COMMAND = b'home/grid/GRID_MONITOR_C3B/command'
 
 # Pinos do ESP32-C3 (ajuste conforme seu modelo)
+ADC_SAMPLES = 20  # Aumentado para 20 amostras (melhor estabilidade)
+SAMPLE_DELAY = 20        # Mantido em 20ms para estabilidade
 ZMPT_PIN = 0      # ADC0 (GPIO0)
 RELAY_PIN = 5     # GPIO7 (verifique no seu Super Mini)
 LED_PIN = 8       # GPIO8 (LED onboard, se existir)
 GRID_THRESHOLD = 2800  # Ajuste conforme seu sensor
 
-count = 1
+# count = 1
 
 adc = machine.ADC(machine.Pin(ZMPT_PIN))
 adc.atten(machine.ADC.ATTN_11DB)  # Faixa completa 0-3.3V
@@ -109,15 +111,16 @@ def main():
         client.check_msg()
         # Múltiplas leituras para robustez
         max_val = 0
-        for _ in range(20):
+        for _ in range(ADC_SAMPLES):
             val = adc.read()
             if val > max_val:
                 max_val = val
-            time.sleep_ms(20)
+            time.sleep_ms(SAMPLE_DELAY)
+            
         grid_online = max_val > GRID_THRESHOLD
         
-        print('Leitura ', count, ':',  max_val)
-        count = count + 1
+        # print('Leitura ', count, ':',  max_val)
+        # count = count + 1
         # time.sleep(1)
         # Controle do relé
         if relay_manual_override:
