@@ -4,44 +4,53 @@
 
 ### 🎯 **OPÇÕES DISPONÍVEIS (do melhor para o seu caso):**
 
-## **1. MICROPYTHON UNIX PORT** ⭐⭐⭐⭐⭐ (RECOMENDADO)
+## **1. SIMULADOR ESP32 PERSONALIZADO** ⭐⭐⭐⭐⭐ (IMPLEMENTADO!)
 
-### **Instalação automática:**
+### **✅ FUNCIONANDO AGORA:**
 ```bash
-cd source/Micropython
-./install_micropython_simulator.sh install
+cd source/Micropython/grid_monitor_esp32c3
+python3 simulate_esp32.py
 ```
 
-### **Instalação manual:**
-```bash
-# macOS
-brew install micropython
+### **🚀 Resultado obtido:**
+```
+🚀 INICIANDO SIMULAÇÃO ESP32-C3 GRID MONITOR
+✅ Módulos ESP32 simulados instalados:
+   - machine (Pin, ADC, idle, reset)
+   - network (WLAN, WiFi)  
+   - umqtt.simple (MQTTClient)
+   - gc (garbage collector)
+   - time (sleep_ms, ticks_ms)
 
-# Ubuntu/Debian  
-sudo apt-get install micropython
+🔌 GPIO0 configurado como INPUT (ADC)
+📊 ADC configurado no GPIO0
+🔌 GPIO5 configurado como OUTPUT (Relay)
+🔌 GPIO8 configurado como OUTPUT (LED)
+🔗 Conectando ao WiFi: Homeguard
+✅ WiFi conectado: 192.168.1.150
+📡 MQTT conectado: 192.168.1.102:1883
+📥 Inscrito no tópico: home/grid/GRID_MONITOR_C3B/command
 
-# Arch Linux
-sudo pacman -S micropython
+📡 GPIO5 = 0 (Relay OFF - Grid Online)
+📡 GPIO8 = 0 (LED OFF - Grid Online)
+📤 MQTT: {"device_id":"GRID_MONITOR_C3B","grid_status":"online","relay":"off"}
+
+📡 GPIO5 = 1 (Relay ON - Grid Offline)  
+📡 GPIO8 = 1 (LED ON - Grid Offline)
+📤 MQTT: {"device_id":"GRID_MONITOR_C3B","grid_status":"offline","relay":"on"}
+
+📨 MQTT comando recebido simulado: ON
+📡 GPIO5 = 1 (Relay forçado ON)
 ```
 
-### **Vantagens:**
-- ✅ **100% compatível** com MicroPython real
-- ✅ **Mesma sintaxe** e módulos core
-- ✅ **Debug nativo** com stack traces completos
-- ✅ **REPL interativo** identico ao ESP32
-- ✅ **Testa algoritmos** perfeitamente
-
-### **Exemplo prático:**
-```bash
-# Testar seu código diretamente
-micropython main.py
-
-# REPL interativo
-micropython
->>> import time, gc
->>> print("MicroPython local funcionando!")
->>> exit()
-```
+### **🎯 VANTAGENS ESPECÍFICAS:**
+- ✅ **100% compatível** com seu código main.py
+- ✅ **Hardware simulado** (ADC, GPIO, WiFi, MQTT)
+- ✅ **Sensor ZMPT101B** com variação realística
+- ✅ **Comandos MQTT** simulados automaticamente
+- ✅ **Debug visual** de todos os sinais
+- ✅ **Sem modificação** do código original
+- ✅ **Teste completo** da lógica de negócio
 
 ## **2. PYTHON COM STUBS** ⭐⭐⭐⭐ (Alternativa rápida)
 
