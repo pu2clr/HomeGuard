@@ -131,7 +131,12 @@ DEVICE_ID = 'MULTI_SENSOR_C3A'  # Altere conforme necessário
 ### 1. **Preparar o ESP32-C3**
 - Instalar MicroPython firmware
 - Copiar `main.py` para o dispositivo
-- Instalar biblioteca `umqtt.simple` (se não incluída)
+- **DHT**: Já incluído no MicroPython ESP32 (sem instalação adicional!)
+- **MQTT**: Instalar `umqtt.simple` se não incluído:
+  ```python
+  import upip
+  upip.install('micropython-umqtt.simple')
+  ```
 
 ### 2. **Configurar hardware**
 - Conectar sensores conforme diagrama

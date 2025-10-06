@@ -33,6 +33,11 @@ Criei um script MicroPython integrado para ESP32-C3 que combina:
 # Copiar apenas estes arquivos para o ESP32-C3:
 - main.py          # Script principal
 - config.json      # Configurações (opcional)
+
+# ✅ DHT11/DHT22: Já incluído no MicroPython ESP32!
+# ✅ MQTT: Pode precisar instalar uma vez:
+#   import upip
+#   upip.install('micropython-umqtt.simple')
 ```
 
 ### 3. **Conectar Hardware**

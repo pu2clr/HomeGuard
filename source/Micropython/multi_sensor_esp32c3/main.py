@@ -39,9 +39,28 @@ mosquitto_pub -h 192.168.1.102 -u homeguard -P pu2clr123456 -t "home/multisensor
 import machine
 import time
 import network
-import dht
 import json
 from umqtt.simple import MQTTClient
+
+# DHT Import - Para ESP32-C3 real
+try:
+    import dht  # Módulo nativo do MicroPython ESP32
+except ImportError:
+    # Se não tiver módulo nativo, tentar instalar
+    try:
+        import upip
+        upip.install('micropython-dht')
+        import dht
+    except:
+        print("ERRO: Módulo DHT não encontrado! Instale micropython-dht")
+        # Fallback para simulação local
+        try:
+            from dht_simple import DHT11, DHT22
+            class dht:
+                DHT11 = DHT11
+                DHT22 = DHT22
+        except:
+            raise ImportError("Módulo DHT não disponível")
 
 # ===== CONFIGURAÇÕES DE REDE WiFi =====
 WIFI_SSID = 'Homeguard'
