@@ -28,10 +28,10 @@ MQTT_SERVER = '192.168.1.102'
 MQTT_PORT = 1883
 MQTT_USER = 'homeguard'
 MQTT_PASS = 'pu2clr123456'
-DEVICE_ID = 'GRID_MONITOR_C3B'
+DEVICE_ID = 'GRID_MONITOR_C3A'
 
-TOPIC_STATUS = b'home/grid/GRID_MONITOR_C3B/status'
-TOPIC_COMMAND = b'home/grid/GRID_MONITOR_C3B/command'
+TOPIC_STATUS = b'home/grid/GRID_MONITOR_C3A/status'
+TOPIC_COMMAND = b'home/grid/GRID_MONITOR_C3A/command'
 
 # Pinos do ESP32-C3 (ajuste conforme seu modelo)
 ADC_SAMPLES = 20  # Aumentado para 20 amostras (melhor estabilidade)
